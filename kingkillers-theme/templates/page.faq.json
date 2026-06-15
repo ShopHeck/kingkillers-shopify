@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "kk-faq",
+      "settings": {
+        "eyebrow": "FAQ",
+        "heading": "Frequently Asked Questions",
+        "subtext": "Find answers to commonly asked questions about sizing, orders, shipping, and sponsorships."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
