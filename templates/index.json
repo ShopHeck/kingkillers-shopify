@@ -90,6 +90,7 @@
     "story": {
       "type": "kk-founder-story",
       "settings": {
+        "image": "shopify://shop_images/victory-shot.jpg",
         "badge_initials": "HECK",
         "badge_meta": "Tampa, FL · Est. 2021",
         "eyebrow": "Who Are the King Killers?",
@@ -102,6 +103,34 @@
     },
     "faq": {
       "type": "kk-faq",
+      "blocks": {
+        "qa_EBzP47": {
+          "type": "qa",
+          "settings": {
+            "question": "What is King Killers Apparel?",
+            "answer": "<p>King Killers is a fighter-owned combat sports clothing brand based in Tampa / St. Petersburg, Florida, founded in 2021. We design premium activewear and fightwear for MMA, BJJ, boxing, Muay Thai and CrossFit athletes — all made in the USA.</p>"
+          }
+        },
+        "qa_tfpPJ9": {
+          "type": "qa",
+          "settings": {
+            "question": "Affiliate Program Details",
+            "answer": "<p>You can join the King Killers Community through our affiliate hub - <a href=\"/pages/influencers\" target=\"_blank\" title=\"Community\">Join the King Killers Community</a></p>"
+          }
+        },
+        "qa_wA83VN": {
+          "type": "qa",
+          "settings": {
+            "question": "What is King Killers Apparel?",
+            "answer": "<p>King Killers is a fighter-owned combat sports clothing brand based in Tampa / St. Petersburg, Florida, founded in 2021. We design premium activewear and fightwear for MMA, BJJ, boxing, Muay Thai and CrossFit athletes — all made in the USA.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "qa_EBzP47",
+        "qa_tfpPJ9",
+        "qa_wA83VN"
+      ],
       "settings": {
         "eyebrow": "Questions",
         "heading": "Before You Gear Up",
