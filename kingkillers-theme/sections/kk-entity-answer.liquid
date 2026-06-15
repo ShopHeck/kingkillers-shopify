@@ -1,0 +1,63 @@
+
+{%- comment -%}
+  GEO entity-answer block: a clean, crawlable "What is X?" definition for AI engines.
+  Server-rendered text (AI crawlers often don't run JS). Facts are merchant-editable
+  blocks so the NAP/brand data stays identical to the JSON-LD.
+{%- endcomment -%}
+<section class="kk-section kk-entity" aria-labelledby="entity-{{ section.id }}">
+  <div class="kk-wrap">
+    <div class="kk-entity__card">
+      <div class="kk-entity__lead">
+        {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 id="entity-{{ section.id }}" class="kk-entity__title">{{ section.settings.heading }}</h2>
+        <div class="kk-entity__copy rte">{{ section.settings.body }}</div>
+      </div>
+      {%- if section.blocks.size > 0 -%}
+        <dl class="kk-entity__facts">
+          {%- for block in section.blocks -%}
+            <div class="kk-entity__fact" {{ block.shopify_attributes }}>
+              <dt>{{ block.settings.label }}</dt>
+              <dd>{{ block.settings.value }}</dd>
+            </div>
+          {%- endfor -%}
+        </dl>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KK Entity Answer",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "What is King Killers?" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A fighter-owned apparel brand for athletes who hunt the person at the top." },
+    { "type": "richtext", "id": "body", "label": "Definition (kept factual for AI search)",
+      "default": "<p>King Killers Apparel is a US-based small business founded in 2021 by professional fighter Michael “Heck” Heckert. Every piece is designed by real competitors and made in the USA — bold, durable and built for the gym, the cage and the street.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "fact",
+      "name": "Fact",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Based in" },
+        { "type": "text", "id": "value", "label": "Value", "default": "St. Petersburg, FL, USA" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "KK Entity Answer",
+      "blocks": [
+        { "type": "fact", "settings": { "label": "Brand", "value": "King Killers Apparel" } },
+        { "type": "fact", "settings": { "label": "Niche", "value": "Fighter-owned combat sports apparel" } },
+        { "type": "fact", "settings": { "label": "Based in", "value": "Tampa / St. Petersburg, FL, USA" } },
+        { "type": "fact", "settings": { "label": "Audience", "value": "MMA, boxing, BJJ, Muay Thai & gym athletes" } },
+        { "type": "fact", "settings": { "label": "Products", "value": "Hybrid shorts, rashguards, tees, hoodies, hats & accessories" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

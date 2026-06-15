@@ -1,0 +1,75 @@
+
+.kk-story { background: var(--bg-elev); border-top: 1px solid var(--line); }
+.kk-story__inner {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 56px;
+  align-items: center;
+}
+.kk-story__media { position: relative; }
+.kk-story__frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 90% at 70% 0%, rgba(225,19,19,0.4), transparent 60%),
+    linear-gradient(160deg, #1c1c20, #0c0c0e);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px;
+  overflow: hidden;
+}
+.kk-story__frame::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 30% 20%, rgba(225,19,19,0.5) 0 10px, transparent 11px),
+    radial-gradient(circle at 75% 40%, rgba(255,255,255,0.18) 0 6px, transparent 7px),
+    radial-gradient(circle at 55% 70%, rgba(225,19,19,0.35) 0 8px, transparent 9px);
+  opacity: 0.7;
+}
+.kk-story__initials {
+  position: relative;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.kk-story__role { position: relative; color: var(--ink-dim); font-size: 0.9rem; margin-top: 8px; }
+.kk-story__belt {
+  position: relative;
+  align-self: flex-start;
+  margin-top: 14px;
+  font-family: var(--display); font-weight: 800;
+  font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
+  background: var(--blood); color: #fff;
+  padding: 6px 12px; border-radius: 999px;
+}
+
+.kk-story__text {
+  color: var(--ink-dim);
+  line-height: 1.7;
+  font-size: 1.02rem;
+  margin: 0 0 16px;
+  max-width: 56ch;
+}
+.kk-story__quote {
+  margin: 22px 0 28px;
+  padding: 18px 24px;
+  border-left: 3px solid var(--blood);
+  background: var(--bg-card);
+  border-radius: 0 10px 10px 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+@media (max-width: 880px) {
+  .kk-story__inner { grid-template-columns: 1fr; gap: 36px; }
+  .kk-story__frame { aspect-ratio: 16 / 10; }
+}

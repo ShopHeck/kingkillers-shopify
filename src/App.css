@@ -1,0 +1,152 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #070707;
+  --bg-elev: #101012;
+  --bg-card: #16161a;
+  --ink: #f4f4f5;
+  --ink-dim: #a8a8b0;
+  --ink-faint: #74747e;
+  --blood: #e11313;
+  --blood-bright: #f51a1a;
+  --blood-deep: #a30c0c;
+  --gold: #f5c451;
+  --line: rgba(255,255,255,0.08);
+  --line-strong: rgba(255,255,255,0.16);
+  --max: 1240px;
+  --display: 'Archivo', 'Inter', sans-serif;
+  --radius: 14px;
+  --shadow: 0 24px 60px -20px rgba(0,0,0,0.7);
+}
+
+html, body { background: var(--bg); }
+main { display: block; }
+
+.kk-wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.kk-eyebrow {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--blood);
+  margin: 0 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.kk-eyebrow::before {
+  content: '';
+  width: 26px;
+  height: 2px;
+  background: var(--blood);
+  display: inline-block;
+}
+
+.kk-section {
+  padding: clamp(64px, 9vw, 120px) 0;
+  position: relative;
+}
+
+.kk-h2 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  margin: 0 0 18px;
+  text-transform: uppercase;
+}
+
+.kk-lead {
+  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  line-height: 1.6;
+  color: var(--ink-dim);
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* Buttons */
+.kk-btn {
+  --pad-y: 16px;
+  --pad-x: 30px;
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.92rem;
+  border: none;
+  border-radius: 10px;
+  padding: var(--pad-y) var(--pad-x);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+  will-change: transform;
+}
+.kk-btn:active { transform: translateY(1px) scale(0.99); }
+
+.kk-btn--primary {
+  background: var(--blood);
+  color: #fff;
+  box-shadow: 0 10px 30px -8px rgba(225,19,19,0.6);
+}
+.kk-btn--primary:hover {
+  background: var(--blood-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -8px rgba(225,19,19,0.7);
+}
+.kk-btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--line-strong);
+}
+.kk-btn--ghost:hover {
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+.kk-btn--full { width: 100%; }
+
+:focus-visible {
+  outline: 3px solid var(--blood);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.kk-skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--blood);
+  color: #fff;
+  padding: 12px 18px;
+  z-index: 300;
+  border-radius: 0 0 8px 0;
+  font-weight: 700;
+  text-decoration: none;
+}
+.kk-skip:focus { left: 0; }
+
+::selection { background: var(--blood); color: #fff; }
+
+/* Reveal-on-scroll utility */
+.kk-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1);
+}
+.kk-reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kk-reveal { opacity: 1; transform: none; }
+}

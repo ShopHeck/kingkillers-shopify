@@ -1,0 +1,63 @@
+
+.kk-pc {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.kk-pc:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--hue) 50%, transparent);
+  box-shadow: var(--shadow);
+}
+.kk-pc__media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background:
+    radial-gradient(130% 120% at 30% 10%, color-mix(in srgb, var(--hue) 55%, #111), #0d0d10 70%);
+  overflow: hidden;
+}
+.kk-pc__splatter {
+  position: absolute; inset: 0;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(circle at 28% 32%, rgba(255,255,255,0.85) 0 8px, transparent 9px),
+    radial-gradient(circle at 64% 24%, color-mix(in srgb, var(--hue) 80%, #fff) 0 5px, transparent 6px),
+    radial-gradient(circle at 78% 64%, rgba(255,255,255,0.6) 0 11px, transparent 12px),
+    radial-gradient(circle at 40% 76%, color-mix(in srgb, var(--hue) 70%, #000) 0 7px, transparent 8px),
+    radial-gradient(circle at 18% 64%, rgba(255,255,255,0.4) 0 4px, transparent 5px);
+  transition: transform 0.5s cubic-bezier(.2,.7,.2,1);
+}
+.kk-pc:hover .kk-pc__splatter { transform: scale(1.08) rotate(2deg); }
+
+.kk-pc__badge {
+  position: absolute; top: 12px; left: 12px;
+  font-family: var(--display); font-weight: 800;
+  font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+  background: #070707; color: #fff;
+  padding: 5px 9px; border-radius: 6px;
+  border: 1px solid var(--line-strong);
+}
+.kk-pc__save {
+  position: absolute; top: 12px; right: 12px;
+  font-family: var(--display); font-weight: 800;
+  font-size: 0.6rem; letter-spacing: 0.08em;
+  background: var(--blood); color: #fff;
+  padding: 5px 9px; border-radius: 6px;
+}
+
+.kk-pc__info { padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 7px; }
+.kk-pc__stars { color: var(--gold); font-size: 0.82rem; display: inline-flex; gap: 6px; align-items: center; }
+.kk-pc__rev { color: var(--ink-faint); font-size: 0.74rem; }
+.kk-pc__name {
+  font-family: var(--display); font-weight: 800;
+  font-size: 1.02rem; margin: 2px 0 0; line-height: 1.15;
+}
+.kk-pc__sub { font-size: 0.8rem; color: var(--ink-faint); margin: 0; }
+.kk-pc__pricerow { display: flex; align-items: baseline; gap: 9px; margin-top: 2px; }
+.kk-pc__price { font-family: var(--display); font-weight: 800; font-size: 1.18rem; }
+.kk-pc__was { color: var(--ink-faint); text-decoration: line-through; font-size: 0.9rem; }
+.kk-pc__cta { --pad-y: 12px; margin-top: 8px; font-size: 0.82rem; }

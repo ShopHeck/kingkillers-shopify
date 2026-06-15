@@ -1,0 +1,164 @@
+
+.kk-hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 80px 0 60px;
+  contain: layout paint;
+}
+
+.kk-hero__bg { position: absolute; inset: 0; z-index: 0; }
+.kk-hero__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+}
+.kk-hero__glow--a {
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, rgba(225,19,19,0.45), transparent 70%);
+  top: -120px; right: -80px;
+  animation: kk-float 14s ease-in-out infinite;
+}
+.kk-hero__glow--b {
+  width: 460px; height: 460px;
+  background: radial-gradient(circle, rgba(120,10,10,0.5), transparent 70%);
+  bottom: -160px; left: -100px;
+  animation: kk-float 18s ease-in-out infinite reverse;
+}
+.kk-hero__grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 80%);
+}
+
+@keyframes kk-float {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(20px, 28px); }
+}
+
+.kk-hero__ghostword {
+  position: absolute;
+  left: 50%;
+  bottom: -2%;
+  transform: translateX(-50%);
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(5rem, 22vw, 20rem);
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,0.06);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.kk-hero__inner { position: relative; z-index: 2; max-width: 880px; }
+.kk-hero__eyebrow { animation: kk-rise 0.7s 0.05s both; }
+
+.kk-hero__title {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(2.8rem, 8.4vw, 6.4rem);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  margin: 0 0 22px;
+  animation: kk-rise 0.8s 0.12s both;
+}
+.kk-hero__title-accent {
+  color: var(--blood);
+  text-shadow: 0 0 42px rgba(225,19,19,0.45);
+}
+
+.kk-hero__sub {
+  font-size: clamp(1.04rem, 1.8vw, 1.3rem);
+  line-height: 1.6;
+  color: var(--ink-dim);
+  max-width: 56ch;
+  margin: 0 0 34px;
+  animation: kk-rise 0.8s 0.2s both;
+}
+
+.kk-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 38px;
+  animation: kk-rise 0.8s 0.28s both;
+}
+
+.kk-hero__bullets {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  margin: 0; padding: 0;
+  animation: kk-rise 0.8s 0.36s both;
+}
+.kk-hero__bullets li {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.9rem;
+  color: var(--ink-dim);
+  font-weight: 500;
+}
+.kk-hero__check {
+  display: grid; place-items: center;
+  width: 20px; height: 20px;
+  background: rgba(225,19,19,0.16);
+  color: var(--blood);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.kk-hero__scroll {
+  position: absolute;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.66rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+.kk-hero__scrollline {
+  width: 1px; height: 38px;
+  background: linear-gradient(var(--blood), transparent);
+  animation: kk-scrollpulse 2s ease-in-out infinite;
+}
+@keyframes kk-scrollpulse {
+  0%,100% { opacity: 0.3; transform: scaleY(0.6); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes kk-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kk-hero__glow, .kk-hero__scrollline { animation: none; }
+  .kk-hero__eyebrow, .kk-hero__title, .kk-hero__sub,
+  .kk-hero__cta, .kk-hero__bullets { animation: none; }
+}
+
+@media (max-width: 640px) {
+  .kk-hero { min-height: auto; padding: 56px 0 48px; }
+  .kk-hero__scroll { display: none; }
+}

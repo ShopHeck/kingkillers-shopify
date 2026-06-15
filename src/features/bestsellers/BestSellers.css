@@ -1,0 +1,18 @@
+
+.kk-best { background: var(--bg); }
+.kk-best__head { max-width: 60ch; margin: 0 auto 48px; text-align: center; }
+.kk-best__head .kk-eyebrow { justify-content: center; }
+.kk-best__head .kk-lead { margin: 0 auto; }
+.kk-best__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.kk-best__foot { text-align: center; margin-top: 44px; }
+
+@media (max-width: 900px) {
+  .kk-best__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .kk-best__grid { grid-template-columns: 1fr; }
+}

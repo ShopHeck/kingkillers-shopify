@@ -1,0 +1,50 @@
+
+.kk-rev { background: var(--bg-elev); border-top: 1px solid var(--line); }
+.kk-rev__head { text-align: center; margin-bottom: 44px; }
+.kk-rev__head .kk-eyebrow { justify-content: center; }
+.kk-rev__score {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.kk-rev__big { font-family: var(--display); font-weight: 900; font-size: 2.2rem; }
+.kk-rev__bigstars { color: var(--gold); font-size: 1.4rem; letter-spacing: 2px; }
+.kk-rev__count { color: var(--ink-faint); font-size: 0.84rem; }
+
+.kk-rev__grid {
+  columns: 3;
+  column-gap: 20px;
+}
+.kk-rev__card {
+  break-inside: avoid;
+  margin: 0 0 20px;
+  padding: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.kk-rev__stars { color: var(--gold); font-size: 0.95rem; letter-spacing: 2px; margin-bottom: 12px; }
+.kk-rev__quote {
+  margin: 0 0 18px;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.kk-rev__meta { display: flex; align-items: center; gap: 12px; }
+.kk-rev__avatar {
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--blood);
+  color: #fff;
+  font-family: var(--display);
+  font-weight: 800;
+}
+.kk-rev__name { display: block; font-weight: 700; font-size: 0.86rem; }
+.kk-rev__tag { display: block; color: var(--ink-faint); font-size: 0.76rem; }
+
+@media (max-width: 900px) { .kk-rev__grid { columns: 2; } }
+@media (max-width: 560px) { .kk-rev__grid { columns: 1; } }

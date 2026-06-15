@@ -1,0 +1,52 @@
+
+<footer class="kk-footer" aria-label="Site footer">
+  <div class="kk-wrap kk-footer__top">
+    <div class="kk-footer__brand">
+      <span class="kk-logo"><span class="kk-logo__mark" aria-hidden="true">K</span><span class="kk-logo__text">KING<span>KILLERS</span></span></span>
+      <p class="kk-footer__tag">{{ settings.brand_description }}</p>
+      <p class="kk-footer__slogan">{{ settings.brand_slogan }} ⚔</p>
+      <div class="kk-footer__social">
+        {%- if settings.social_instagram != blank -%}<a href="{{ settings.social_instagram }}" aria-label="Instagram" rel="me">IG</a>{%- endif -%}
+        {%- if settings.social_facebook != blank -%}<a href="{{ settings.social_facebook }}" aria-label="Facebook" rel="me">FB</a>{%- endif -%}
+        {%- if settings.social_trustpilot != blank -%}<a href="{{ settings.social_trustpilot }}" aria-label="Trustpilot" rel="me">TP</a>{%- endif -%}
+      </div>
+    </div>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'menu' -%}
+        <nav class="kk-footer__col" {{ block.shopify_attributes }} aria-label="{{ block.settings.title }}">
+          <h2 class="kk-footer__h">{{ block.settings.title }}</h2>
+          <ul>
+            {%- for link in block.settings.menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="kk-wrap kk-footer__bottom">
+    <span>© {{ 'now' | date: '%Y' }} {{ settings.brand_name }} · {{ settings.nap_city }}, {{ settings.nap_region }} {{ settings.nap_zip }}</span>
+    <span>{{ settings.nap_email }} · {{ settings.nap_phone }}</span>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    { "name": "Footer", "blocks": [ { "type": "menu" }, { "type": "menu" } ] }
+  ]
+}
+{% endschema %}

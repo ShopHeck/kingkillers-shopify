@@ -1,0 +1,40 @@
+
+.kk-finalcta {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(225,19,19,0.22), transparent 60%),
+    var(--bg);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.kk-finalcta__bg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(4rem, 16vw, 14rem);
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,0.045);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.kk-finalcta__inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+.kk-finalcta__eyebrow { justify-content: center; }
+.kk-finalcta__title { margin-bottom: 18px; }
+.kk-finalcta__sub {
+  color: var(--ink-dim);
+  font-size: 1.06rem;
+  line-height: 1.6;
+  margin: 0 auto 30px;
+  max-width: 50ch;
+}
+.kk-finalcta__btns {
+  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.kk-finalcta__fine { color: var(--ink-faint); font-size: 0.82rem; margin: 0; }

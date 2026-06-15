@@ -1,0 +1,85 @@
+
+{%- comment -%}
+  LCP hero. The background image is the LCP element, so it's preloaded
+  (preload:true -> eager + fetchpriority high + Link preload header). Height is reserved
+  in CSS via min-height + aspect-ratio on the media to keep CLS at 0.
+{%- endcomment -%}
+<section class="kk-hero" aria-labelledby="hero-{{ section.id }}">
+  <div class="kk-hero__media" aria-hidden="true">
+    {% render 'responsive-image',
+       image: section.settings.image,
+       sizes: '100vw',
+       preload: true,
+       widths: '640, 960, 1280, 1600, 1920, 2400',
+       class: 'kk-hero__img' %}
+    <span class="kk-hero__scrim"></span>
+    <span class="kk-hero__grid"></span>
+  </div>
+
+  {%- if section.settings.ghost_word != blank -%}
+    <div class="kk-hero__ghost" aria-hidden="true">{{ section.settings.ghost_word }}</div>
+  {%- endif -%}
+
+  <div class="kk-wrap kk-hero__inner">
+    {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    <h1 id="hero-{{ section.id }}" class="kk-hero__title">{{ section.settings.heading }}</h1>
+    {%- if section.settings.sub != blank -%}<div class="kk-hero__sub rte">{{ section.settings.sub }}</div>{%- endif -%}
+
+    <div class="kk-hero__cta">
+      {%- if section.settings.cta1_label != blank -%}
+        <a class="kk-btn kk-btn--primary" href="{{ section.settings.cta1_url }}">{{ section.settings.cta1_label }}</a>
+      {%- endif -%}
+      {%- if section.settings.cta2_label != blank -%}
+        <a class="kk-btn kk-btn--ghost" href="{{ section.settings.cta2_url }}">{{ section.settings.cta2_label }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="kk-hero__proof">
+        {%- for block in section.blocks -%}
+          <li {{ block.shopify_attributes }}><span class="kk-hero__check" aria-hidden="true">✓</span>{{ block.settings.text }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KK Hero",
+  "tag": "section",
+  "enabled_on": { "templates": ["index"] },
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background image (LCP — preloaded)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Fighter Owned · Made in the USA" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Gear Built to Outlast the Fight." },
+    { "type": "richtext", "id": "sub", "label": "Subheading",
+      "default": "<p>Combat-sports apparel engineered for athletes who hunt the people at the top. Train, fight and live in gear forged by real fighters.</p>" },
+    { "type": "text", "id": "ghost_word", "label": "Decorative background word", "default": "KILL KINGS" },
+    { "type": "text", "id": "cta1_label", "label": "Primary button", "default": "Shop Best Sellers" },
+    { "type": "url", "id": "cta1_url", "label": "Primary link" },
+    { "type": "text", "id": "cta2_label", "label": "Secondary button", "default": "Who Are the King Killers?" },
+    { "type": "url", "id": "cta2_url", "label": "Secondary link" }
+  ],
+  "blocks": [
+    {
+      "type": "proof",
+      "name": "Proof point",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "4.8★ from 200+ verified athletes" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "KK Hero",
+      "blocks": [
+        { "type": "proof", "settings": { "text": "4.8★ from 200+ verified athletes" } },
+        { "type": "proof", "settings": { "text": "Free shipping over $100" } },
+        { "type": "proof", "settings": { "text": "30-day money-back guarantee" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

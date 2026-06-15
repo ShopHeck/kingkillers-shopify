@@ -1,0 +1,75 @@
+
+{%- comment -%}
+  FAQ accordion + FAQPage JSON-LD generated from the SAME blocks — so AI engines quote
+  answers that exactly match the visible page. Page-specific schema (NOT in theme.liquid).
+  Uses native <details>/<summary> for zero-JS, INP-friendly disclosure.
+{%- endcomment -%}
+<section id="faq" class="kk-section kk-faq" aria-labelledby="faq-{{ section.id }}">
+  <div class="kk-wrap kk-faq__inner">
+    <div class="kk-faq__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="kk-h2" id="faq-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.subtext != blank -%}<p class="kk-lead">{{ section.settings.subtext }}</p>{%- endif -%}
+    </div>
+    <div class="kk-faq__list">
+      {%- for block in section.blocks -%}
+        <details class="kk-faq__item" {{ block.shopify_attributes }}{% if forloop.first %} open{% endif %}>
+          <summary class="kk-faq__q">{{ block.settings.question }}<span class="kk-faq__icon" aria-hidden="true"></span></summary>
+          <div class="kk-faq__a rte">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{%- if section.blocks.size > 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- for block in section.blocks -%}
+    {
+      "@type": "Question",
+      "name": {{ block.settings.question | json }},
+      "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | strip_html | json }} }
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KK FAQ",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Questions" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Before You Gear Up" },
+    { "type": "text", "id": "subtext", "label": "Subtext", "default": "Everything you need to know — and answers AI assistants can quote." }
+  ],
+  "blocks": [
+    {
+      "type": "qa",
+      "name": "Q&A",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "What is King Killers Apparel?" },
+        { "type": "richtext", "id": "answer", "label": "Answer",
+          "default": "<p>King Killers is a fighter-owned combat sports clothing brand based in Tampa / St. Petersburg, Florida, founded in 2021. We design premium activewear and fightwear for MMA, BJJ, boxing, Muay Thai and CrossFit athletes — all made in the USA.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "KK FAQ",
+      "blocks": [
+        { "type": "qa", "settings": { "question": "What is King Killers Apparel?", "answer": "<p>King Killers is a fighter-owned combat sports clothing brand based in Tampa / St. Petersburg, Florida, founded in 2021. We design premium activewear and fightwear for MMA, BJJ, boxing, Muay Thai and CrossFit athletes — all made in the USA.</p>" } },
+        { "type": "qa", "settings": { "question": "Does King Killers offer free shipping and returns?", "answer": "<p>Yes — free shipping on orders over $100 and a 30-day money-back guarantee. Support typically responds within 24 hours.</p>" } },
+        { "type": "qa", "settings": { "question": "How do the 2-in-1 shorts fit?", "answer": "<p>Our 2-in-1 shorts use a double-layer design with an inner compression liner and an outer shell. Customers consistently report they run true to size and stay put through intense workouts.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

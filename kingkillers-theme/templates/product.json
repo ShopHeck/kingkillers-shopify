@@ -1,0 +1,9 @@
+
+{
+  "sections": {
+    "main":    { "type": "main-product" },
+    "related": { "type": "kk-featured-products", "settings": { "eyebrow": "Complete the Kit", "heading": "Pairs Well With", "products_to_show": 4 } },
+    "faq":     { "type": "kk-faq" }
+  },
+  "order": ["main", "related", "faq"]
+}

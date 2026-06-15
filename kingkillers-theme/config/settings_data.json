@@ -1,0 +1,26 @@
+
+{
+  "current": {
+    "brand_name": "King Killers Apparel",
+    "brand_slogan": "Real Kings Kill Kings",
+    "brand_description": "Fighter-owned combat sports apparel based in Tampa / St. Petersburg, Florida. Made in the USA.",
+    "founder_name": "Michael Heckert",
+    "founding_year": "2021",
+    "price_range": "$19 - $69",
+    "nap_city": "St. Petersburg",
+    "nap_region": "FL",
+    "nap_zip": "33702",
+    "nap_email": "sales@kingkillers.co",
+    "nap_phone": "+1-620-704-7510",
+    "twitter_handle": "@kingkillersco",
+    "free_ship_threshold": 100,
+    "enable_google_font": true,
+    "theme_color": "#070707",
+    "sections": {
+      "header": { "type": "header", "blocks": {}, "block_order": [] },
+      "footer": { "type": "footer", "blocks": {}, "block_order": [] }
+    },
+    "content_for_index": []
+  },
+  "presets": {}
+}

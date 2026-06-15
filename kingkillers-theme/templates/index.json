@@ -1,0 +1,14 @@
+
+{
+  "sections": {
+    "hero":     { "type": "kk-hero" },
+    "trust":    { "type": "kk-trust" },
+    "entity":   { "type": "kk-entity-answer" },
+    "cats":     { "type": "kk-category-bento" },
+    "best":     { "type": "kk-featured-products", "settings": { "collection": "best-sellers", "products_to_show": 4, "cta_url": "/collections/all" } },
+    "story":    { "type": "kk-founder-story" },
+    "faq":      { "type": "kk-faq" },
+    "finalcta": { "type": "kk-final-cta" }
+  },
+  "order": ["hero", "trust", "entity", "cats", "best", "story", "faq", "finalcta"]
+}

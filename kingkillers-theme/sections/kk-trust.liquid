@@ -1,0 +1,40 @@
+
+<section class="kk-trust" aria-label="Why athletes trust King Killers">
+  <div class="kk-wrap kk-trust__grid">
+    {%- for block in section.blocks -%}
+      <div class="kk-trust__cell" {{ block.shopify_attributes }}>
+        <span class="kk-trust__k">{{ block.settings.title }}</span>
+        <span class="kk-trust__v">{{ block.settings.text }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KK Trust strip",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Trust item",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Fighter Owned" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Run by real BJJ, boxing & MMA competitors" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "KK Trust strip",
+      "blocks": [
+        { "type": "item", "settings": { "title": "Fighter Owned", "text": "Run by real BJJ, boxing & MMA competitors" } },
+        { "type": "item", "settings": { "title": "Made in the USA", "text": "Designed & sold exclusively by King Killers" } },
+        { "type": "item", "settings": { "title": "4.8★ Rated", "text": "200+ reviews across Trustpilot & site" } },
+        { "type": "item", "settings": { "title": "Guaranteed", "text": "30-day money-back, no questions asked" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
