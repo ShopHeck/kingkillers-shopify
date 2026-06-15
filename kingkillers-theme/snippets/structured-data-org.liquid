@@ -1,4 +1,3 @@
-
 {%- comment -%}
   Organization + WebSite + Store JSON-LD. SITE-WIDE, so it lives in theme.liquid.
   All NAP/brand facts come from theme settings -> identical in copy AND schema (GEO).
@@ -49,7 +48,7 @@
       "publisher": { "@id": {{ org_id | json }} },
       "potentialAction": {
         "@type": "SearchAction",
-        "target": {{ shop.url | append: '/search?q={search_term_string}' | json }},
+        "target": "{{ shop.url }}/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     },
