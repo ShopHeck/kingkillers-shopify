@@ -4,7 +4,7 @@
   Product & Breadcrumb JSON-LD bound to live product data. Exposes @app blocks so apps
   (reviews, upsells) can inject cleanly without breaking OS 2.0.
 {%- endcomment -%}
-<section class="kk-pdp kk-section" aria-labelledby="pdp-title">
+<section class="kk-pdp kk-section" aria-labelledby="pdp-title" data-pdp>
   <div class="kk-wrap kk-pdp__grid">
     <div class="kk-pdp__gallery">
       {% render 'responsive-image', image: product.featured_media.preview_image,
@@ -27,29 +27,44 @@
         </span>
       {%- endif -%}
       <h1 id="pdp-title" class="kk-pdp__title">{{ product.title }}</h1>
-      <div class="kk-pdp__price">
-        {{ product.price | money }}
-        {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
+      <div class="kk-pdp__price" data-pdp-price>
+        <span>{{ product.selected_or_first_available_variant.price | money }}</span>
+        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}<s>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>{%- endif -%}
       </div>
 
       {% form 'product', product, class: 'kk-pdp__form', novalidate: 'novalidate' %}
         {%- unless product.has_only_default_variant -%}
-          <select name="id" class="kk-pdp__variants" aria-label="Variant">
+          <select name="id" class="kk-pdp__variants" aria-label="Variant" data-pdp-variant>
             {%- for variant in product.variants -%}
-              <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+              <option value="{{ variant.id }}" data-price="{{ variant.price | money }}" data-compare="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money }}{% endif %}" data-available="{{ variant.available }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
                 {{ variant.title }} – {{ variant.price | money }}{% unless variant.available %} (Sold out){% endunless %}
               </option>
             {%- endfor -%}
           </select>
         {%- else -%}
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-pdp-variant>
         {%- endunless -%}
-        <button type="submit" class="kk-btn kk-btn--primary kk-btn--full" {% unless product.available %}disabled{% endunless %}>
+        <button type="submit" class="kk-btn kk-btn--primary kk-btn--full" data-pdp-submit {% unless product.available %}disabled{% endunless %}>
           {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
         </button>
       {% endform %}
 
       <p class="kk-pdp__reassure">✓ Free shipping $100+ · ✓ 30-day money-back guarantee · ✓ Fighter owned</p>
+
+      <div class="kk-pdp__trust" aria-label="Product trust and fit details">
+        <details class="kk-pdp__detail" open>
+          <summary>Size & fit help</summary>
+          <div class="rte">{{ section.settings.size_help }}</div>
+        </details>
+        <details class="kk-pdp__detail">
+          <summary>Shipping & returns</summary>
+          <div class="rte">{{ section.settings.shipping_returns }}</div>
+        </details>
+        <details class="kk-pdp__detail">
+          <summary>Secure checkout</summary>
+          <div class="rte">{{ section.settings.checkout_reassurance }}</div>
+        </details>
+      </div>
 
       {%- if section.settings.show_scarcity and product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= section.settings.scarcity_threshold -%}
         <p class="kk-pdp__scarcity">Only {{ product.selected_or_first_available_variant.inventory_quantity }} left in stock. Order soon!</p>
@@ -65,6 +80,15 @@
       {%- endfor -%}
     </div>
   </div>
+  <div class="kk-pdp__sticky" data-pdp-sticky aria-label="Quick add to cart">
+    <div class="kk-pdp__sticky-info">
+      <strong>{{ product.title }}</strong>
+      <span data-pdp-sticky-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+    </div>
+    <button type="button" class="kk-btn kk-btn--primary" data-pdp-sticky-submit {% unless product.available %}disabled{% endunless %}>
+      {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+    </button>
+  </div>
 </section>
 
 {% render 'structured-data-product', product: product %}
@@ -77,7 +101,10 @@
   "enabled_on": { "templates": ["product"] },
   "settings": [
     { "type": "checkbox", "id": "show_scarcity", "label": "Show low stock indicator", "default": true },
-    { "type": "range", "id": "scarcity_threshold", "label": "Low stock threshold", "min": 2, "max": 30, "step": 1, "default": 10 }
+    { "type": "range", "id": "scarcity_threshold", "label": "Low stock threshold", "min": 2, "max": 30, "step": 1, "default": 10 },
+    { "type": "richtext", "id": "size_help", "label": "Size and fit help", "default": "<p>Between sizes? Size up for a relaxed training fit or choose your normal size for a locked-in athletic fit.</p>" },
+    { "type": "richtext", "id": "shipping_returns", "label": "Shipping and returns copy", "default": "<p>Free shipping on orders over $100. Try it risk-free with a 30-day money-back guarantee.</p>" },
+    { "type": "richtext", "id": "checkout_reassurance", "label": "Checkout reassurance", "default": "<p>Secure checkout with major cards and accelerated payment options where available.</p>" }
   ],
   "blocks": [ { "type": "@app" } ]
 }

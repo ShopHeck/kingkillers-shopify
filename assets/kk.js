@@ -16,9 +16,18 @@
 
   /* ---------------------------- Cart drawer ---------------------------------- */
   var drawer = d.getElementById('CartDrawer');
+  var drawerOpener = null;
+  var updatingItems = {};
+
+  function esc(value) {
+    return String(value == null ? '' : value).replace(/[&<>\"']/g, function (ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;' })[ch];
+    });
+  }
 
   function openDrawer() {
     if (!drawer) return;
+    drawerOpener = d.activeElement;
     drawer.classList.add('is-open');
     drawer.setAttribute('aria-hidden', 'false');
     d.body.style.overflow = 'hidden';
@@ -30,6 +39,7 @@
     drawer.classList.remove('is-open');
     drawer.setAttribute('aria-hidden', 'true');
     d.body.style.overflow = '';
+    if (drawerOpener && drawerOpener.focus) drawerOpener.focus();
   }
 
   function renderCart(cart) {
@@ -53,11 +63,11 @@
         body.innerHTML = '<p class="kk-drawer__empty">Your cart is empty.</p>';
       } else {
         body.innerHTML = cart.items.map(function (it) {
-          var variantText = it.variant_title ? '<span class="kk-drawer__variant">' + it.variant_title + '</span>' : '';
-          return '<div class="kk-drawer__item" data-key="' + it.key + '">' +
-            (it.image ? '<img src="' + it.image.replace(/(\.[^.]+)$/, '_120x$1') + '" width="60" height="60" alt="" loading="lazy">' : '') +
+          var variantText = it.variant_title ? '<span class="kk-drawer__variant">' + esc(it.variant_title) + '</span>' : '';
+          return '<div class="kk-drawer__item" data-key="' + esc(it.key) + '">' +
+            (it.image ? '<img src="' + esc(it.image.replace(/(\.[^.]+)$/, '_120x$1')) + '" width="60" height="60" alt="" loading="lazy">' : '') +
             '<div class="kk-drawer__item-info">' +
-              '<span class="kk-drawer__name">' + it.product_title + '</span>' +
+              '<span class="kk-drawer__name">' + esc(it.product_title) + '</span>' +
               variantText +
               '<span class="kk-drawer__price">' + money(it.final_line_price) + '</span>' +
               '<div class="kk-drawer__qtyrow">' +
@@ -107,9 +117,14 @@
   });
 
   function updateCartItem(key, qty) {
+    if (updatingItems[key]) return;
+    updatingItems[key] = true;
     if (drawer) {
       var panel = drawer.querySelector('.kk-drawer__panel');
+      var item = null;
+      drawer.querySelectorAll('[data-key]').forEach(function (el) { if (el.getAttribute('data-key') === key) item = el; });
       if (panel) panel.style.opacity = '0.6';
+      if (item) item.querySelectorAll('button').forEach(function (btn) { btn.disabled = true; });
     }
     fetch('/cart/change.js', {
       method: 'POST',
@@ -127,6 +142,7 @@
           var panel = drawer.querySelector('.kk-drawer__panel');
           if (panel) panel.style.opacity = '';
         }
+        delete updatingItems[key];
       });
   }
 
@@ -168,7 +184,46 @@
       updateCartItem(key, 0);
     }
   });
-  d.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrawer(); });
+  d.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeDrawer();
+    if (e.key === 'Tab' && drawer && drawer.classList.contains('is-open')) {
+      var focusables = drawer.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey && d.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && d.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+
+  /* ------------------------------ PDP CRO ------------------------------------ */
+  d.querySelectorAll('[data-pdp]').forEach(function (pdp) {
+    var variant = pdp.querySelector('[data-pdp-variant]');
+    var price = pdp.querySelector('[data-pdp-price]');
+    var stickyPrice = pdp.querySelector('[data-pdp-sticky-price]');
+    var submit = pdp.querySelector('[data-pdp-submit]');
+    var stickySubmit = pdp.querySelector('[data-pdp-sticky-submit]');
+
+    function syncVariantState() {
+      if (!variant || !price) return;
+      var selected = variant.options ? variant.options[variant.selectedIndex] : variant;
+      var priceText = selected.getAttribute('data-price') || stickyPrice && stickyPrice.textContent || '';
+      var compareText = selected.getAttribute('data-compare') || '';
+      var available = selected.getAttribute('data-available') !== 'false';
+      price.innerHTML = '<span>' + esc(priceText) + '</span>' + (compareText ? '<s>' + esc(compareText) + '</s>' : '');
+      if (stickyPrice) stickyPrice.textContent = priceText;
+      [submit, stickySubmit].forEach(function (btn) {
+        if (!btn) return;
+        btn.disabled = !available;
+        btn.textContent = available ? 'Add to Cart' : 'Sold Out';
+      });
+    }
+
+    if (variant && variant.tagName === 'SELECT') variant.addEventListener('change', syncVariantState);
+    if (stickySubmit) stickySubmit.addEventListener('click', function () { if (submit) submit.click(); });
+    syncVariantState();
+  });
 
   /* --------------------------- Sticky header --------------------------------- */
   var header = d.querySelector('[data-header]');
