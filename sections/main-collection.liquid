@@ -1,0 +1,33 @@
+
+{%- comment -%} PLP grid using the shared product-card snippet + paginated results. {%- endcomment -%}
+<section class="kk-section kk-plp" aria-labelledby="plp-title">
+  <div class="kk-wrap">
+    <header class="kk-plp__head">
+      <h1 id="plp-title" class="kk-h2">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}<div class="kk-plp__desc rte">{{ collection.description }}</div>{%- endif -%}
+    </header>
+    {%- paginate collection.products by 24 -%}
+      <div class="kk-best__grid">
+        {%- for product in collection.products -%}
+          {% render 'product-card', product: product %}
+        {%- else -%}
+          <p>No products found in this collection.</p>
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="kk-plp__pager" aria-label="Pagination">{{ paginate | default_pagination }}</nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% render 'structured-data-breadcrumb', collection: collection %}
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "tag": "section",
+  "enabled_on": { "templates": ["collection"] },
+  "settings": []
+}
+{% endschema %}

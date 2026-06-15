@@ -1,0 +1,63 @@
+
+{%- comment -%}
+  COMPLETE reference section: dynamic product loop + full {% schema %} with settings,
+  blocks, max_blocks and presets (so it's editor-addable & removable). Includes an
+  editor preview fallback so the grid never looks empty when no collection is chosen.
+{%- endcomment -%}
+<section id="bestsellers" class="kk-section kk-best" aria-labelledby="best-{{ section.id }}">
+  <div class="kk-wrap">
+    <header class="kk-best__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="kk-h2" id="best-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.subtext != blank -%}<div class="kk-lead rte">{{ section.settings.subtext }}</div>{%- endif -%}
+    </header>
+
+    <div class="kk-best__grid">
+      {%- assign coll = section.settings.collection -%}
+      {%- if coll != blank and coll.products_count > 0 -%}
+        {%- for product in coll.products limit: section.settings.products_to_show -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Theme-editor fallback so merchants see a populated grid. {%- endcomment -%}
+        {%- for i in (1..section.settings.products_to_show) -%}
+          <article class="kk-pc kk-pc--ph">
+            <div class="kk-pc__media">{{ 'product-' | append: i | placeholder_svg_tag: 'kk-pc__phsvg' }}</div>
+            <div class="kk-pc__info">
+              <span class="kk-pc__stars" aria-hidden="true">★★★★★</span>
+              <h3 class="kk-pc__name">Example Product {{ i }}</h3>
+              <div class="kk-pc__pricerow"><span class="kk-pc__price">$39.99</span></div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.cta_label != blank -%}
+      <div class="kk-best__foot">
+        <a class="kk-btn kk-btn--ghost" href="{{ section.settings.cta_url }}">{{ section.settings.cta_label }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KK Featured Products",
+  "tag": "section",
+  "enabled_on": { "templates": ["index", "collection", "product", "page"] },
+  "settings": [
+    { "type": "text",       "id": "eyebrow", "label": "Eyebrow", "default": "Most Wanted" },
+    { "type": "text",       "id": "heading", "label": "Heading", "default": "The Lineup Athletes Reorder" },
+    { "type": "richtext",   "id": "subtext", "label": "Subtext",
+      "default": "<p>The pieces our community keeps coming back for. Bold prints, performance fabrics, and a fit that stays put through every round.</p>" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range",      "id": "products_to_show", "label": "Products to show", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "text",       "id": "cta_label", "label": "Button label", "default": "View Full Catalog" },
+    { "type": "url",        "id": "cta_url",   "label": "Button link" }
+  ],
+  "presets": [
+    { "name": "KK Featured Products", "settings": { "products_to_show": 4 } }
+  ]
+}
+{% endschema %}

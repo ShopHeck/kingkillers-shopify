@@ -1,0 +1,30 @@
+
+{%- comment -%}
+  Reusable responsive image. image_url -> image_tag auto-emits width/height (CLS-safe),
+  srcset, and best format (WebP/AVIF). Lazy by default; pass preload:true for the LCP only.
+  Usage:
+    {% render 'responsive-image', image: section.settings.image, sizes: '100vw', preload: true %}
+{%- endcomment -%}
+{%- liquid
+  assign img_widths = widths | default: '320, 480, 640, 800, 1080, 1440, 1920, 2400'
+  assign img_sizes = sizes | default: '100vw'
+  assign is_lcp = preload | default: false
+-%}
+{%- if image != blank -%}
+  {{ image
+     | image_url: width: 2400
+     | image_tag:
+         widths: img_widths,
+         sizes: img_sizes,
+         alt: alt | default: image.alt | default: '',
+         class: class,
+         loading: is_lcp | ternary: 'eager', 'lazy',
+         fetchpriority: is_lcp | ternary: 'high', 'auto',
+         preload: is_lcp,
+         decoding: 'async'
+  }}
+{%- else -%}
+  <div class="kk-img-ph" aria-hidden="true">
+    {{ 'product-1' | placeholder_svg_tag: 'kk-img-ph__svg' }}
+  </div>
+{%- endif -%}

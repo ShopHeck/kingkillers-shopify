@@ -1,0 +1,51 @@
+
+[
+  {
+    "name": "theme_info",
+    "theme_name": "King Killers",
+    "theme_author": "King Killers Apparel",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "https://kingkillers.co",
+    "theme_support_url": "mailto:sales@kingkillers.co"
+  },
+  {
+    "name": "Brand & NAP",
+    "info": "These values feed BOTH the visible copy and the JSON-LD structured data. Keep them factual and consistent everywhere (SEO + GEO).",
+    "settings": [
+      { "type": "image_picker", "id": "logo", "label": "Logo" },
+      { "type": "image_picker", "id": "share_image", "label": "Default social share image" },
+      { "type": "color", "id": "theme_color", "label": "Browser theme color", "default": "#070707" },
+      { "type": "text", "id": "brand_name", "label": "Brand name", "default": "King Killers Apparel" },
+      { "type": "text", "id": "brand_slogan", "label": "Slogan", "default": "Real Kings Kill Kings" },
+      { "type": "textarea", "id": "brand_description", "label": "Brand description",
+        "default": "Fighter-owned combat sports apparel based in Tampa / St. Petersburg, Florida. Made in the USA." },
+      { "type": "text", "id": "founder_name", "label": "Founder", "default": "Michael Heckert" },
+      { "type": "text", "id": "founding_year", "label": "Founding year", "default": "2021" },
+      { "type": "text", "id": "price_range", "label": "Price range (schema)", "default": "$19 - $69" },
+      { "type": "header", "content": "Address & contact" },
+      { "type": "text", "id": "nap_city", "label": "City", "default": "St. Petersburg" },
+      { "type": "text", "id": "nap_region", "label": "Region", "default": "FL" },
+      { "type": "text", "id": "nap_zip", "label": "Postal code", "default": "33702" },
+      { "type": "text", "id": "nap_email", "label": "Email", "default": "sales@kingkillers.co" },
+      { "type": "text", "id": "nap_phone", "label": "Phone", "default": "+1-620-704-7510" },
+      { "type": "header", "content": "Social" },
+      { "type": "text", "id": "twitter_handle", "label": "Twitter/X handle", "default": "@kingkillersco" },
+      { "type": "url", "id": "social_instagram", "label": "Instagram URL" },
+      { "type": "url", "id": "social_facebook", "label": "Facebook URL" },
+      { "type": "url", "id": "social_trustpilot", "label": "Trustpilot URL" }
+    ]
+  },
+  {
+    "name": "Commerce",
+    "settings": [
+      { "type": "range", "id": "free_ship_threshold", "label": "Free shipping threshold ($)", "min": 0, "max": 250, "step": 5, "default": 100 }
+    ]
+  },
+  {
+    "name": "Performance",
+    "settings": [
+      { "type": "checkbox", "id": "enable_google_font", "label": "Load Google Fonts (Archivo + Inter)", "default": false,
+        "info": "Off = fastest PageSpeed using a system-font stack. On = brand fonts via preconnect + display:swap." }
+    ]
+  }
+]

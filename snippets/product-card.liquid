@@ -1,0 +1,48 @@
+
+{%- comment -%}
+  Product card: review stars, price anchoring (Save %), AJAX quick-add.
+  Usage: {% render 'product-card', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+    assign save_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
+  endif
+-%}
+<article class="kk-pc" data-product-id="{{ product.id }}">
+  <a class="kk-pc__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+    {% render 'responsive-image',
+       image: product.featured_media.preview_image,
+       sizes: '(max-width:600px) 90vw, (max-width:990px) 50vw, 25vw',
+       widths: '300, 450, 600, 900',
+       class: 'kk-pc__img' %}
+    <span class="kk-pc__splatter" aria-hidden="true"></span>
+    {%- if product.metafields.custom.badge != blank -%}
+      <span class="kk-pc__badge">{{ product.metafields.custom.badge.value }}</span>
+    {%- elsif product.tags contains 'Best Seller' -%}
+      <span class="kk-pc__badge">Best Seller</span>
+    {%- endif -%}
+    {%- if on_sale -%}<span class="kk-pc__save">Save {{ save_pct }}%</span>{%- endif -%}
+  </a>
+  <div class="kk-pc__info">
+    {%- if product.metafields.reviews.rating.value != blank -%}
+      <span class="kk-pc__stars" aria-label="Rated {{ product.metafields.reviews.rating.value.rating }} out of 5">
+        <span aria-hidden="true">★★★★★</span>
+        <span class="kk-pc__rev">({{ product.metafields.reviews.rating_count.value }})</span>
+      </span>
+    {%- endif -%}
+    <h3 class="kk-pc__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <div class="kk-pc__pricerow">
+      <span class="kk-pc__price">{{ product.price | money }}</span>
+      {%- if on_sale -%}<s class="kk-pc__was">{{ product.compare_at_price | money }}</s>{%- endif -%}
+    </div>
+    <form method="post" action="{{ routes.cart_add_url }}" class="kk-pc__form" data-quick-add>
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" class="kk-btn kk-btn--primary kk-btn--full"
+              {% unless product.available %}disabled{% endunless %}>
+        {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+      </button>
+    </form>
+  </div>
+</article>

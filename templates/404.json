@@ -1,0 +1,20 @@
+
+{
+  "sections": {
+    "main": {
+      "type": "kk-final-cta",
+      "settings": {
+        "bg_word": "404",
+        "eyebrow": "Lost in the Cage",
+        "heading": "This Page Threw in the Towel.",
+        "sub": "<p>The page you were looking for doesn't exist. Get back to the gear.</p>",
+        "cta1_label": "Shop Best Sellers",
+        "cta1_url": "/collections/all",
+        "cta2_label": "Back Home",
+        "cta2_url": "/",
+        "fine": ""
+      }
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,70 @@
+
+{%- comment -%} Bento category grid. Blocks link to collections; large/small spans. {%- endcomment -%}
+<section id="categories" class="kk-section kk-cats" aria-labelledby="cats-{{ section.id }}">
+  <div class="kk-wrap">
+    <header class="kk-cats__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="kk-h2" id="cats-{{ section.id }}">{{ section.settings.heading }}</h2>
+      </div>
+      {%- if section.settings.subtext != blank -%}<p class="kk-lead kk-cats__lead">{{ section.settings.subtext }}</p>{%- endif -%}
+    </header>
+    <div class="kk-cats__grid">
+      {%- for block in section.blocks -%}
+        {%- assign c = block.settings.collection -%}
+        <a class="kk-cat kk-cat--{{ block.settings.span }}" href="{% if c != blank %}{{ c.url }}{% else %}{{ block.settings.link }}{% endif %}"
+           style="--hue: {{ block.settings.hue }};" {{ block.shopify_attributes }}>
+          <span class="kk-cat__art" aria-hidden="true"></span>
+          {%- if block.settings.tag != blank -%}<span class="kk-cat__tag">{{ block.settings.tag }}</span>{%- endif -%}
+          <span class="kk-cat__body">
+            <span class="kk-cat__title">{% if c != blank %}{{ c.title }}{% else %}{{ block.settings.title }}{% endif %}</span>
+            {%- if block.settings.meta != blank -%}<span class="kk-cat__count">{{ block.settings.meta }}</span>{%- endif -%}
+          </span>
+          <span class="kk-cat__arrow" aria-hidden="true">→</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KK Category Bento",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Shop by Arsenal" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Find Your Weapon" },
+    { "type": "richtext", "id": "subtext", "label": "Subtext" }
+  ],
+  "blocks": [
+    {
+      "type": "cat",
+      "name": "Category",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection (preferred)" },
+        { "type": "text", "id": "title", "label": "Fallback title", "default": "2-in-1 Hybrid Shorts" },
+        { "type": "url", "id": "link", "label": "Fallback link" },
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Best Seller" },
+        { "type": "text", "id": "meta", "label": "Meta line", "default": "From $34.99" },
+        { "type": "color", "id": "hue", "label": "Accent color", "default": "#e11313" },
+        { "type": "select", "id": "span", "label": "Size", "default": "sm",
+          "options": [ { "value": "lg", "label": "Large (2 cols)" }, { "value": "sm", "label": "Small (1 col)" } ] }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "KK Category Bento",
+      "blocks": [
+        { "type": "cat", "settings": { "title": "2-in-1 Hybrid Shorts", "tag": "Best Seller", "meta": "From $34.99", "hue": "#e11313", "span": "lg" } },
+        { "type": "cat", "settings": { "title": "MMA Rashguards", "tag": "Fightwear", "meta": "Compression fit", "hue": "#7b1fa2", "span": "sm" } },
+        { "type": "cat", "settings": { "title": "Graphic Tees & Tanks", "tag": "Everyday", "meta": "Pre-shrunk", "hue": "#1976d2", "span": "sm" } },
+        { "type": "cat", "settings": { "title": "Hoodies & Sleeveless", "tag": "Training", "meta": "From $49.99", "hue": "#c2410c", "span": "sm" } },
+        { "type": "cat", "settings": { "title": "Mesh Gym Shorts", "tag": "Performance", "meta": "From $34.99", "hue": "#0f766e", "span": "sm" } },
+        { "type": "cat", "settings": { "title": "Necklaces & Hats", "tag": "Accessories", "meta": "From $19.99", "hue": "#b45309", "span": "lg" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

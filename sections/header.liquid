@@ -1,0 +1,48 @@
+
+<header class="kk-header" data-header>
+  <div class="kk-wrap kk-header__inner">
+    <a class="kk-header__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 280 | image_tag:
+           widths: '140, 200, 280', sizes: '140px', loading: 'eager', alt: shop.name }}
+      {%- else -%}
+        <span class="kk-logo"><span class="kk-logo__mark" aria-hidden="true">K</span><span class="kk-logo__text">KING<span>KILLERS</span></span></span>
+      {%- endif -%}
+    </a>
+
+    <nav class="kk-header__nav" aria-label="Primary">
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}" class="kk-header__link">{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+
+    <div class="kk-header__actions">
+      {%- if section.settings.cta_label != blank -%}
+        <a href="{{ section.settings.cta_url }}" class="kk-btn kk-btn--primary kk-header__cta">{{ section.settings.cta_label }}</a>
+      {%- endif -%}
+      <a href="{{ routes.cart_url }}" class="kk-header__cart" data-cart-toggle aria-label="Open cart">
+        <span aria-hidden="true">🛒</span>
+        <span class="kk-header__count" data-cart-count>{{ cart.item_count }}</span>
+      </a>
+      <button class="kk-header__burger" data-nav-toggle aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+
+  <div class="kk-header__mobile" data-mobile-nav hidden>
+    {%- for link in section.settings.menu.links -%}
+      <a href="{{ link.url }}" class="kk-header__mlink">{{ link.title }}</a>
+    {%- endfor -%}
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "text", "id": "cta_label", "label": "Header button", "default": "Shop Now" },
+    { "type": "url", "id": "cta_url", "label": "Header button link" }
+  ]
+}
+{% endschema %}

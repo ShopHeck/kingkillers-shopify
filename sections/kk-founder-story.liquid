@@ -1,0 +1,49 @@
+
+<section id="story" class="kk-section kk-story" aria-labelledby="story-{{ section.id }}">
+  <div class="kk-wrap kk-story__inner">
+    <div class="kk-story__media">
+      {%- if section.settings.image != blank -%}
+        {% render 'responsive-image', image: section.settings.image,
+           sizes: '(max-width:880px) 100vw, 40vw', widths: '480, 720, 960, 1200',
+           class: 'kk-story__img' %}
+      {%- else -%}
+        <div class="kk-story__frame">
+          <span class="kk-story__initials">{{ section.settings.badge_initials }}</span>
+          <span class="kk-story__belt">{{ section.settings.badge_meta }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="kk-story__copy">
+      {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="kk-h2" id="story-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <div class="kk-story__text rte">{{ section.settings.body }}</div>
+      {%- if section.settings.quote != blank -%}
+        <blockquote class="kk-story__quote">{{ section.settings.quote }}</blockquote>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank -%}
+        <a class="kk-btn kk-btn--primary" href="{{ section.settings.cta_url }}">{{ section.settings.cta_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KK Founder Story",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Founder image" },
+    { "type": "text", "id": "badge_initials", "label": "Fallback initials", "default": "HECK" },
+    { "type": "text", "id": "badge_meta", "label": "Fallback badge", "default": "Tampa, FL · Est. 2021" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Who Are the King Killers?" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Built in the Cage, Not a Boardroom." },
+    { "type": "richtext", "id": "body", "label": "Body",
+      "default": "<p>King Killers is a US-based small business owned and operated by real fighters competing in BJJ, boxing and MMA. It started with Michael “Heck” Heckert — a professional fighter who fell in love with combat sports at local cage fights with his dad.</p><p>A “King Killer” hunts the people at the top. That mindset is stitched into every piece we make: premium fightwear at the best possible price, tested by people who actually compete.</p>" },
+    { "type": "richtext", "id": "quote", "label": "Pull quote",
+      "default": "<p>“Our goal is to work our way through the rankings until we one day match up against the King.”</p>" },
+    { "type": "text", "id": "cta_label", "label": "Button", "default": "Gear Up Like a Fighter" },
+    { "type": "url", "id": "cta_url", "label": "Button link" }
+  ],
+  "presets": [ { "name": "KK Founder Story" } ]
+}
+{% endschema %}

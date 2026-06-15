@@ -1,0 +1,38 @@
+
+{%- comment -%} Lives in header-group so merchants can edit/reorder it. Marquee, pausable. {%- endcomment -%}
+<div class="kk-announce" role="region" aria-label="Store announcements">
+  <div class="kk-announce__track">
+    {%- for block in section.blocks -%}
+      <span class="kk-announce__item" {{ block.shopify_attributes }}><span class="kk-announce__sep" aria-hidden="true">⚔</span>{{ block.settings.text }}</span>
+    {%- endfor -%}
+    {%- comment -%} Duplicate (aria-hidden) for a seamless loop. {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      <span class="kk-announce__item" aria-hidden="true"><span class="kk-announce__sep">⚔</span>{{ block.settings.text }}</span>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Message", "default": "FREE SHIPPING ON ORDERS $100+" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [
+        { "type": "message", "settings": { "text": "FREE SHIPPING ON ORDERS $100+" } },
+        { "type": "message", "settings": { "text": "30-DAY MONEY-BACK GUARANTEE" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

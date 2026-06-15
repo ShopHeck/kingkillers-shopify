@@ -1,0 +1,81 @@
+
+{%- comment -%}
+  PDP main section. Gallery (first image preloaded as LCP) + buy box, plus page-specific
+  Product & Breadcrumb JSON-LD bound to live product data. Exposes @app blocks so apps
+  (reviews, upsells) can inject cleanly without breaking OS 2.0.
+{%- endcomment -%}
+<section class="kk-pdp kk-section" aria-labelledby="pdp-title">
+  <div class="kk-wrap kk-pdp__grid">
+    <div class="kk-pdp__gallery">
+      {% render 'responsive-image', image: product.featured_media.preview_image,
+         sizes: '(max-width:750px) 100vw, 50vw', preload: true,
+         widths: '480, 720, 960, 1200, 1600', class: 'kk-pdp__img' %}
+      {%- if product.images.size > 1 -%}
+        <div class="kk-pdp__thumbs">
+          {%- for image in product.images offset: 1 limit: 4 -%}
+            {% render 'responsive-image', image: image, sizes: '120px', widths: '120, 240', class: 'kk-pdp__thumb' %}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="kk-pdp__buybox">
+      {%- if product.metafields.reviews.rating.value != blank -%}
+        <span class="kk-pc__stars" aria-label="Rated {{ product.metafields.reviews.rating.value.rating }} out of 5">
+          <span aria-hidden="true">★★★★★</span>
+          <span class="kk-pc__rev">({{ product.metafields.reviews.rating_count.value }} reviews)</span>
+        </span>
+      {%- endif -%}
+      <h1 id="pdp-title" class="kk-pdp__title">{{ product.title }}</h1>
+      <div class="kk-pdp__price">
+        {{ product.price | money }}
+        {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
+      </div>
+
+      {% form 'product', product, class: 'kk-pdp__form', novalidate: 'novalidate' %}
+        {%- unless product.has_only_default_variant -%}
+          <select name="id" class="kk-pdp__variants" aria-label="Variant">
+            {%- for variant in product.variants -%}
+              <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }} – {{ variant.price | money }}{% unless variant.available %} (Sold out){% endunless %}
+              </option>
+            {%- endfor -%}
+          </select>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {%- endunless -%}
+        <button type="submit" class="kk-btn kk-btn--primary kk-btn--full" {% unless product.available %}disabled{% endunless %}>
+          {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+        </button>
+      {% endform %}
+
+      <p class="kk-pdp__reassure">✓ Free shipping $100+ · ✓ 30-day money-back guarantee · ✓ Fighter owned</p>
+
+      {%- if product.metafields.custom.low_stock and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= 10 -%}
+        <p class="kk-pdp__scarcity">Only {{ product.selected_or_first_available_variant.inventory_quantity }} left in stock.</p>
+      {%- endif -%}
+
+      <div class="kk-pdp__desc rte">{{ product.description }}</div>
+
+      {%- comment -%} App blocks (reviews, upsells, etc.) render here. {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}{% render block %}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% render 'structured-data-product', product: product %}
+{% render 'structured-data-breadcrumb', product: product, collection: collection %}
+
+{% schema %}
+{
+  "name": "Product information",
+  "tag": "section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [],
+  "blocks": [ { "type": "@app" } ]
+}
+{% endschema %}

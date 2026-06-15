@@ -1,0 +1,73 @@
+
+{%- comment -%}
+  Organization + WebSite + Store JSON-LD. SITE-WIDE, so it lives in theme.liquid.
+  All NAP/brand facts come from theme settings -> identical in copy AND schema (GEO).
+  @id cross-references link the entities for knowledge-graph / AI extraction.
+{%- endcomment -%}
+{%- liquid
+  assign org_id = shop.url | append: '/#organization'
+  assign site_id = shop.url | append: '/#website'
+  assign store_id = shop.url | append: '/#store'
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": {{ org_id | json }},
+      "name": {{ settings.brand_name | default: shop.name | json }},
+      "url": {{ shop.url | json }},
+      "description": {{ settings.brand_description | json }},
+      "slogan": {{ settings.brand_slogan | json }},
+      "foundingDate": {{ settings.founding_year | json }},
+      "founder": { "@type": "Person", "name": {{ settings.founder_name | json }} },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": {{ settings.nap_city | json }},
+        "addressRegion": {{ settings.nap_region | json }},
+        "postalCode": {{ settings.nap_zip | json }},
+        "addressCountry": "US"
+      },
+      "email": {{ settings.nap_email | json }},
+      "telephone": {{ settings.nap_phone | json }},
+      "knowsAbout": [
+        "combat sports apparel", "MMA clothing", "BJJ rashguards",
+        "boxing apparel", "2-in-1 hybrid shorts", "fighter-owned apparel"
+      ],
+      "sameAs": [
+        {{ settings.social_instagram | json }},
+        {{ settings.social_facebook | json }},
+        {{ settings.social_trustpilot | json }}
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": {{ site_id | json }},
+      "url": {{ shop.url | json }},
+      "name": {{ shop.name | json }},
+      "publisher": { "@id": {{ org_id | json }} },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ shop.url | append: '/search?q={search_term_string}' | json }},
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Store",
+      "@id": {{ store_id | json }},
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      "description": {{ settings.brand_description | json }},
+      "image": {%- if settings.share_image != blank -%}{{ settings.share_image | image_url: width: 1200 | prepend: 'https:' | json }}{%- else -%}{{ shop.url | json }}{%- endif -%},
+      "priceRange": {{ settings.price_range | default: '$19 - $69' | json }},
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": {{ settings.nap_city | json }},
+        "addressRegion": {{ settings.nap_region | json }},
+        "addressCountry": "US"
+      }
+    }
+  ]
+}
+</script>

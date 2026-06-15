@@ -1,0 +1,10 @@
+
+{
+  "sections": {
+    "title": {
+      "type": "kk-entity-answer",
+      "settings": { "eyebrow": "About", "heading": "Who Are the King Killers?" }
+    }
+  },
+  "order": ["title"]
+}
