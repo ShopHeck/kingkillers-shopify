@@ -181,7 +181,10 @@ a{color:inherit}
 .kk-pdp__grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
 .kk-pdp__img{width:100%;border-radius:var(--radius);aspect-ratio:1/1;object-fit:cover}
 .kk-pdp__thumbs{display:flex;gap:10px;margin-top:12px}
-.kk-pdp__thumb{width:72px;height:72px;border-radius:8px;object-fit:cover;border:1px solid var(--line)}
+.kk-pdp__thumb{width:100%;height:100%;object-fit:cover}
+.kk-pdp__thumb-btn{width:72px;height:72px;border-radius:8px;border:1px solid var(--line);background:none;padding:0;cursor:pointer;overflow:hidden;transition:border-color .18s ease}
+.kk-pdp__thumb-btn:hover{border-color:var(--line-strong)}
+.kk-pdp__thumb-btn.is-active{border-color:var(--blood);border-width:2px;outline:none}
 .kk-pdp__title{font-family:var(--display);font-weight:900;font-size:clamp(1.8rem,4vw,2.8rem);line-height:1;text-transform:uppercase;margin:10px 0 14px}
 .kk-pdp__price{font-family:var(--display);font-weight:800;font-size:1.5rem;display:flex;gap:12px;align-items:baseline;margin-bottom:22px}
 .kk-pdp__price s{color:var(--ink-faint);font-size:1.05rem;font-weight:500}

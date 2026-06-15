@@ -1,0 +1,29 @@
+# Custom robots.txt.liquid for King Killers
+# For more information about this file and how Shopify uses it, check:
+# https://help.shopify.com/manual/promoting-marketing/seo/editing-robots-txt
+
+{%- for group in robots.default_groups -%}
+  {{- group.user_agent -}}
+
+  {%- for rule in group.rules -%}
+    {{- rule -}}
+  {%- endfor -%}
+
+  {%- if group.user_agent.value == '*' -%}
+    # Allow AI crawlers to discover and cite brand entities
+    User-agent: GPTBot
+    Allow: /
+    User-agent: ChatGPT-User
+    Allow: /
+    User-agent: ClaudeBot
+    Allow: /
+    User-agent: PerplexityBot
+    Allow: /
+    User-agent: OAI-SearchBot
+    Allow: /
+  {%- endif -%}
+
+  {%- if group.sitemap != blank -%}
+    {{- group.sitemap -}}
+  {%- endif -%}
+{%- endfor -%}
