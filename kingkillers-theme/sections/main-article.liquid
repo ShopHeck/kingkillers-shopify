@@ -1,0 +1,31 @@
+{%- comment -%}
+  Main article template rendering full post content.
+{%- endcomment -%}
+<article class="kk-section kk-art" aria-labelledby="art-title">
+  <div class="kk-wrap kk-wrap--narrow">
+    <header class="kk-art__head">
+      <a href="{{ blog.url }}" class="kk-art__back">&larr; Back to {{ blog.title }}</a>
+      <span class="kk-art__date">{{ article.published_at | time_tag: format: 'date' }} · by {{ article.author }}</span>
+      <h1 id="art-title" class="kk-h2 kk-art__title">{{ article.title }}</h1>
+    </header>
+
+    {%- if article.image != blank -%}
+      <div class="kk-art__media">
+        {% render 'responsive-image', image: article.image, sizes: '(max-width:750px) 100vw, 80vw', widths: '480, 720, 960, 1440', class: 'kk-art__img' %}
+      </div>
+    {%- endif -%}
+
+    <div class="kk-art__content rte">
+      {{ article.content }}
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article content",
+  "tag": "section",
+  "enabled_on": { "templates": ["article"] },
+  "settings": []
+}
+{% endschema %}
