@@ -1,14 +1,136 @@
-
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "hero":     { "type": "kk-hero" },
-    "trust":    { "type": "kk-trust" },
-    "entity":   { "type": "kk-entity-answer" },
-    "cats":     { "type": "kk-category-bento" },
-    "best":     { "type": "kk-featured-products", "settings": { "collection": "best-sellers", "products_to_show": 4, "cta_url": "/collections/all" } },
-    "story":    { "type": "kk-founder-story" },
-    "faq":      { "type": "kk-faq" },
-    "finalcta": { "type": "kk-final-cta" }
+    "hero": {
+      "type": "kk-hero",
+      "settings": {
+        "image": "shopify://shop_images/hero-image.jpg",
+        "eyebrow": "Fighter Owned · Made in the USA",
+        "heading": "Gear Built to Outlast the Fight.",
+        "sub": "<p>Combat-sports apparel engineered for athletes who hunt the people at the top. Train, fight and live in gear forged by real fighters.</p>",
+        "ghost_word": "KILL KINGS",
+        "cta1_label": "Shop Best Sellers",
+        "cta1_url": "shopify://collections/best-sellers",
+        "cta2_label": "Who Are the King Killers?",
+        "cta2_url": "shopify://pages/about-us"
+      }
+    },
+    "trust": {
+      "type": "kk-trust",
+      "settings": {}
+    },
+    "entity": {
+      "type": "kk-entity-answer",
+      "settings": {
+        "eyebrow": "What is King Killers?",
+        "heading": "A fighter-owned apparel brand for athletes who hunt the person at the top.",
+        "body": "<p>King Killers Apparel is a US-based small business founded in 2021 by professional fighter Michael “Heck” Heckert. Every piece is designed by real competitors and made in the USA — bold, durable and built for the gym, the cage and the street.</p>"
+      }
+    },
+    "cats": {
+      "type": "kk-category-bento",
+      "blocks": {
+        "cat_tr8NU3": {
+          "type": "cat",
+          "settings": {
+            "collection": "graphic-t-shirts",
+            "title": "2-in-1 Hybrid Shorts",
+            "link": "",
+            "tag": "TRENDING NOW",
+            "meta": "From $34.99",
+            "hue": "#e11313",
+            "span": "lg"
+          }
+        },
+        "cat_qDw9AC": {
+          "type": "cat",
+          "settings": {
+            "collection": "summer-collection",
+            "image": "shopify://shop_images/summer_beach_vibes.jpg",
+            "title": "2-in-1 Hybrid Shorts",
+            "link": "",
+            "tag": "Best Seller",
+            "meta": "From $34.99",
+            "hue": "#e11313",
+            "span": "lg"
+          }
+        }
+      },
+      "block_order": [
+        "cat_tr8NU3",
+        "cat_qDw9AC"
+      ],
+      "custom_css": [],
+      "settings": {
+        "eyebrow": "Shop by Arsenal",
+        "heading": "Find Your Weapon",
+        "subtext": ""
+      }
+    },
+    "best": {
+      "type": "kk-featured-products",
+      "settings": {
+        "eyebrow": "Most Wanted",
+        "heading": "The Lineup Athletes Reorder",
+        "subtext": "<p>The pieces our community keeps coming back for. Bold prints, performance fabrics, and a fit that stays put through every round.</p>",
+        "collection": "best-sellers",
+        "products_to_show": 4,
+        "cta_label": "View Full Catalog",
+        "cta_url": "/collections/all"
+      }
+    },
+    "story": {
+      "type": "kk-founder-story",
+      "settings": {
+        "badge_initials": "HECK",
+        "badge_meta": "Tampa, FL · Est. 2021",
+        "eyebrow": "Who Are the King Killers?",
+        "heading": "Built in the Cage, Not a Boardroom.",
+        "body": "<p>King Killers is a US-based small business owned and operated by real fighters competing in BJJ, boxing and MMA. It started with Michael “Heck” Heckert — a professional fighter who fell in love with combat sports at local cage fights with his dad.</p><p>A “King Killer” hunts the people at the top. That mindset is stitched into every piece we make: premium fightwear at the best possible price, tested by people who actually compete.</p>",
+        "quote": "<p>“Our goal is to work our way through the rankings until we one day match up against the King.”</p>",
+        "cta_label": "Gear Up Like a Fighter",
+        "cta_url": ""
+      }
+    },
+    "faq": {
+      "type": "kk-faq",
+      "settings": {
+        "eyebrow": "Questions",
+        "heading": "Before You Gear Up",
+        "subtext": "Everything you need to know — and answers AI assistants can quote."
+      }
+    },
+    "finalcta": {
+      "type": "kk-final-cta",
+      "settings": {
+        "bg_word": "KING KILLERS",
+        "eyebrow": "Ready to Hunt Kings?",
+        "heading": "Stop Blending In. Start Standing Out.",
+        "sub": "<p>Join the athletes who train, fight and live in fighter-built gear. Free shipping over $100 · 30-day money-back guarantee.</p>",
+        "cta1_label": "Shop Best Sellers",
+        "cta1_url": "",
+        "cta2_label": "Browse the Catalog",
+        "cta2_url": "",
+        "fine": "No risk. If it's not your best gear, send it back within 30 days."
+      }
+    }
   },
-  "order": ["hero", "trust", "entity", "cats", "best", "story", "faq", "finalcta"]
+  "order": [
+    "hero",
+    "trust",
+    "entity",
+    "cats",
+    "best",
+    "story",
+    "faq",
+    "finalcta"
+  ]
 }
