@@ -32,6 +32,22 @@
     </div>
 
     <div class="kk-pdp__buybox">
+      {%- if product.metafields.custom.badge != blank or product.tags contains 'Best Seller' or product.tags contains 'Made in USA' or product.tags contains 'Limited Drop' -%}
+        <div class="kk-pdp__badges">
+          {%- if product.metafields.custom.badge != blank -%}
+            <span class="kk-pdp__badge">{{ product.metafields.custom.badge.value }}</span>
+          {%- endif -%}
+          {%- if product.tags contains 'Best Seller' -%}
+            <span class="kk-pdp__badge">Best Seller</span>
+          {%- endif -%}
+          {%- if product.tags contains 'Made in USA' -%}
+            <span class="kk-pdp__badge kk-pdp__badge--blood">Made in USA</span>
+          {%- endif -%}
+          {%- if product.tags contains 'Limited Drop' -%}
+            <span class="kk-pdp__badge kk-pdp__badge--gold">Limited Drop</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
       {%- if product.metafields.reviews.rating.value != blank -%}
         <span class="kk-pc__stars" aria-label="Rated {{ product.metafields.reviews.rating.value.rating }} out of 5">
           <span aria-hidden="true">★★★★★</span>

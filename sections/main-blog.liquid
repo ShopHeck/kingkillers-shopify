@@ -1,0 +1,55 @@
+{%- comment -%}
+  Main blog listing section. Displays a grid of blog posts/articles.
+{%- endcomment -%}
+<section class="kk-section kk-blog" aria-labelledby="blog-title">
+  <div class="kk-wrap">
+    <header class="kk-blog__head">
+      <span class="kk-eyebrow">Intel & Training</span>
+      <h1 id="blog-title" class="kk-h2">{{ blog.title }}</h1>
+    </header>
+
+    {%- paginate blog.articles by 12 -%}
+      {%- if blog.articles.size > 0 -%}
+        <div class="kk-blog__grid">
+          {%- for article in blog.articles -%}
+            <article class="kk-blog__card">
+              {%- if article.image != blank -%}
+                <a href="{{ article.url }}" class="kk-blog__media" aria-label="{{ article.title | escape }}">
+                  {% render 'responsive-image', image: article.image, sizes: '(max-width:750px) 100vw, 33vw', widths: '360, 540, 720', class: 'kk-blog__img' %}
+                  <span class="kk-blog__splatter" aria-hidden="true"></span>
+                </a>
+              {%- endif -%}
+              <div class="kk-blog__info">
+                <span class="kk-blog__date">{{ article.published_at | time_tag: format: 'date' }}</span>
+                <h2 class="kk-blog__name"><a href="{{ article.url }}">{{ article.title }}</a></h2>
+                <p class="kk-blog__excerpt">
+                  {%- if article.excerpt.size > 0 -%}
+                    {{ article.excerpt | strip_html | truncatewords: 24 }}
+                  {%- else -%}
+                    {{ article.content | strip_html | truncatewords: 24 }}
+                  {%- endif -%}
+                </p>
+                <a href="{{ article.url }}" class="kk-btn kk-btn--ghost kk-blog__btn">Read Article</a>
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="kk-blog__pager" aria-label="Pagination">{{ paginate | default_pagination }}</nav>
+        {%- endif -%}
+      {%- else -%}
+        <p class="kk-blog__empty">No articles published yet. Stay tuned!</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog listings",
+  "tag": "section",
+  "enabled_on": { "templates": ["blog"] },
+  "settings": []
+}
+{% endschema %}

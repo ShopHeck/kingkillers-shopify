@@ -85,6 +85,53 @@
     }
     var total = drawer.querySelector('[data-drawer-total]');
     if (total) total.textContent = money(cart.total_price);
+
+    var upsellEl = drawer.querySelector('[data-drawer-upsell]');
+    if (upsellEl) {
+      if (!cart.items.length) {
+        upsellEl.innerHTML = '';
+        upsellEl.removeAttribute('data-product-id');
+      } else {
+        var firstProductId = cart.items[0].product_id;
+        if (upsellEl.getAttribute('data-product-id') !== String(firstProductId)) {
+          upsellEl.setAttribute('data-product-id', firstProductId);
+          fetch('/recommendations/products.json?product_id=' + firstProductId + '&limit=3')
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+              var products = data.products || [];
+              var cartProductIds = cart.items.map(function (it) { return it.product_id; });
+              products = products.filter(function (p) {
+                return cartProductIds.indexOf(p.id) === -1 && p.variants && p.variants.length > 0;
+              }).slice(0, 2);
+
+              if (!products.length) {
+                upsellEl.innerHTML = '';
+                return;
+              }
+
+              upsellEl.innerHTML = '<div class="kk-drawer__upsell-title">Complete the Kit</div>' +
+                '<div class="kk-drawer__upsell-items">' +
+                  products.map(function (p) {
+                    var variant = p.variants[0];
+                    var img = p.featured_image || '';
+                    return '<div class="kk-drawer__upsell-item">' +
+                      (img ? '<img src="' + esc(img) + '" width="40" height="40" alt="" loading="lazy">' : '') +
+                      '<div class="kk-drawer__upsell-info">' +
+                        '<span class="kk-drawer__upsell-name">' + esc(p.title) + '</span>' +
+                        '<span class="kk-drawer__upsell-price">' + money(variant.price) + '</span>' +
+                      '</div>' +
+                      '<button class="kk-btn kk-btn--ghost kk-drawer__upsell-add" data-upsell-variant="' + variant.id + '" aria-label="Add ' + esc(p.title) + ' to cart">Add</button>' +
+                    '</div>';
+                  }).join('') +
+                '</div>';
+            })
+            .catch(function (err) {
+              console.error(err);
+              upsellEl.innerHTML = '';
+            });
+        }
+      }
+    }
   }
 
   function fetchCart() {
@@ -182,6 +229,32 @@
       if (!itemEl) return;
       var key = itemEl.getAttribute('data-key');
       updateCartItem(key, 0);
+    }
+
+    var upsellAdd = e.target.closest('[data-upsell-variant]');
+    if (upsellAdd) {
+      e.preventDefault();
+      var variantId = upsellAdd.getAttribute('data-upsell-variant');
+      upsellAdd.disabled = true;
+      upsellAdd.textContent = '…';
+
+      var formData = new FormData();
+      formData.append('id', variantId);
+      formData.append('quantity', 1);
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: formData
+      })
+        .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
+        .then(function () { return fetchCart(); })
+        .then(function () { openDrawer(); })
+        .catch(function (err) { console.error(err); })
+        .finally(function () {
+          upsellAdd.disabled = false;
+          upsellAdd.textContent = 'Add';
+        });
     }
   });
   d.addEventListener('keydown', function (e) {
