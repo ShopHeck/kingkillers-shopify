@@ -50,7 +50,7 @@
     "header": {
       "type": "header",
       "settings": {
-        "logo": "shopify://shop_images/horizontal_kingkillers_logo.png",
+        "logo": "shopify://shop_images/logo-red-skull.png",
         "menu": "main-menu",
         "cta_label": "Shop Now",
         "cta_url": "shopify://collections"
