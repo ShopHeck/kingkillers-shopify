@@ -204,6 +204,7 @@
     var stickyPrice = pdp.querySelector('[data-pdp-sticky-price]');
     var submit = pdp.querySelector('[data-pdp-submit]');
     var stickySubmit = pdp.querySelector('[data-pdp-sticky-submit]');
+    var thumbs = pdp.querySelectorAll('.kk-pdp__thumb-btn');
 
     function syncVariantState() {
       if (!variant || !price) return;
@@ -218,11 +219,53 @@
         btn.disabled = !available;
         btn.textContent = available ? 'Add to Cart' : 'Sold Out';
       });
+
+      // Switch image if variant has data-image
+      var varImg = selected.getAttribute('data-image');
+      var varSrcset = selected.getAttribute('data-srcset');
+      if (varImg) {
+        var mainImg = pdp.querySelector('.kk-pdp__gallery img.kk-pdp__img');
+        if (mainImg) {
+          mainImg.setAttribute('src', varImg);
+          if (varSrcset) mainImg.setAttribute('srcset', varSrcset);
+          else mainImg.removeAttribute('srcset');
+        }
+        // Highlight matching thumbnail
+        thumbs.forEach(function (b) {
+          var isMatch = b.getAttribute('data-large-src') === varImg;
+          b.classList.toggle('is-active', isMatch);
+        });
+      }
     }
 
     if (variant && variant.tagName === 'SELECT') variant.addEventListener('change', syncVariantState);
     if (stickySubmit) stickySubmit.addEventListener('click', function () { if (submit) submit.click(); });
+
+    thumbs.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        thumbs.forEach(function (b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        var mainImg = pdp.querySelector('.kk-pdp__gallery img.kk-pdp__img');
+        var largeSrc = btn.getAttribute('data-large-src');
+        var largeSrcset = btn.getAttribute('data-large-srcset');
+        if (mainImg && largeSrc) {
+          mainImg.setAttribute('src', largeSrc);
+          if (largeSrcset) mainImg.setAttribute('srcset', largeSrcset);
+          else mainImg.removeAttribute('srcset');
+        }
+      });
+    });
+
     syncVariantState();
+  });
+
+  /* -------------------------- Collection Filters ----------------------------- */
+  d.querySelectorAll('.kk-plp__tools').forEach(function (form) {
+    form.querySelectorAll('input[type="checkbox"], input[type="number"], select').forEach(function (el) {
+      el.addEventListener('change', function () {
+        form.submit();
+      });
+    });
   });
 
   /* --------------------------- Sticky header --------------------------------- */
