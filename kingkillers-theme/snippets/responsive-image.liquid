@@ -9,6 +9,13 @@
   assign img_widths = widths | default: '320, 480, 640, 800, 1080, 1440, 1920, 2400'
   assign img_sizes = sizes | default: '100vw'
   assign is_lcp = preload | default: false
+
+  assign loading_attr = 'lazy'
+  assign fetchpriority_attr = 'auto'
+  if is_lcp
+    assign loading_attr = 'eager'
+    assign fetchpriority_attr = 'high'
+  endif
 -%}
 {%- if image != blank -%}
   {{ image
@@ -18,8 +25,8 @@
          sizes: img_sizes,
          alt: alt | default: image.alt | default: '',
          class: class,
-         loading: is_lcp | ternary: 'eager', 'lazy',
-         fetchpriority: is_lcp | ternary: 'high', 'auto',
+         loading: loading_attr,
+         fetchpriority: fetchpriority_attr,
          preload: is_lcp,
          decoding: 'async'
   }}

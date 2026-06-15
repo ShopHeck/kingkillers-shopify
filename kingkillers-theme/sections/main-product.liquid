@@ -51,8 +51,8 @@
 
       <p class="kk-pdp__reassure">✓ Free shipping $100+ · ✓ 30-day money-back guarantee · ✓ Fighter owned</p>
 
-      {%- if product.metafields.custom.low_stock and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= 10 -%}
-        <p class="kk-pdp__scarcity">Only {{ product.selected_or_first_available_variant.inventory_quantity }} left in stock.</p>
+      {%- if section.settings.show_scarcity and product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= section.settings.scarcity_threshold -%}
+        <p class="kk-pdp__scarcity">Only {{ product.selected_or_first_available_variant.inventory_quantity }} left in stock. Order soon!</p>
       {%- endif -%}
 
       <div class="kk-pdp__desc rte">{{ product.description }}</div>
@@ -75,7 +75,10 @@
   "name": "Product information",
   "tag": "section",
   "enabled_on": { "templates": ["product"] },
-  "settings": [],
+  "settings": [
+    { "type": "checkbox", "id": "show_scarcity", "label": "Show low stock indicator", "default": true },
+    { "type": "range", "id": "scarcity_threshold", "label": "Low stock threshold", "min": 2, "max": 30, "step": 1, "default": 10 }
+  ],
   "blocks": [ { "type": "@app" } ]
 }
 {% endschema %}

@@ -53,10 +53,22 @@
         body.innerHTML = '<p class="kk-drawer__empty">Your cart is empty.</p>';
       } else {
         body.innerHTML = cart.items.map(function (it) {
-          return '<div class="kk-drawer__item">' +
+          var variantText = it.variant_title ? '<span class="kk-drawer__variant">' + it.variant_title + '</span>' : '';
+          return '<div class="kk-drawer__item" data-key="' + it.key + '">' +
             (it.image ? '<img src="' + it.image.replace(/(\.[^.]+)$/, '_120x$1') + '" width="60" height="60" alt="" loading="lazy">' : '') +
-            '<div><span class="kk-drawer__name">' + it.product_title + '</span>' +
-            '<span class="kk-drawer__meta">Qty ' + it.quantity + ' · ' + money(it.final_line_price) + '</span></div>' +
+            '<div class="kk-drawer__item-info">' +
+              '<span class="kk-drawer__name">' + it.product_title + '</span>' +
+              variantText +
+              '<span class="kk-drawer__price">' + money(it.final_line_price) + '</span>' +
+              '<div class="kk-drawer__qtyrow">' +
+                '<div class="kk-drawer__qtybox">' +
+                  '<button class="kk-drawer__qtybtn" data-qty-change="-1" aria-label="Decrease quantity">&minus;</button>' +
+                  '<span class="kk-drawer__qtyval">' + it.quantity + '</span>' +
+                  '<button class="kk-drawer__qtybtn" data-qty-change="1" aria-label="Increase quantity">&plus;</button>' +
+                '</div>' +
+                '<button class="kk-drawer__remove" data-remove-item aria-label="Remove item">Remove</button>' +
+              '</div>' +
+            '</div>' +
           '</div>';
         }).join('');
       }
@@ -94,10 +106,35 @@
       });
   });
 
+  function updateCartItem(key, qty) {
+    if (drawer) {
+      var panel = drawer.querySelector('.kk-drawer__panel');
+      if (panel) panel.style.opacity = '0.6';
+    }
+    fetch('/cart/change.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ id: key, quantity: qty })
+    })
+      .then(function (r) { if (!r.ok) throw new Error('update failed'); return r.json(); })
+      .then(renderCart)
+      .catch(function (err) { console.error(err); })
+      .finally(function () {
+        if (drawer) {
+          var panel = drawer.querySelector('.kk-drawer__panel');
+          if (panel) panel.style.opacity = '';
+        }
+      });
+  }
+
   /* ----------------------------- Click handlers ------------------------------ */
   d.addEventListener('click', function (e) {
     if (e.target.closest('[data-cart-toggle]')) { e.preventDefault(); openDrawer(); fetchCart(); }
     if (e.target.closest('[data-drawer-close]')) { closeDrawer(); }
+    
     var navBtn = e.target.closest('[data-nav-toggle]');
     if (navBtn) {
       var nav = d.querySelector('[data-mobile-nav]');
@@ -106,6 +143,29 @@
         if (isOpen) { nav.setAttribute('hidden', ''); } else { nav.removeAttribute('hidden'); }
         navBtn.setAttribute('aria-expanded', String(!isOpen));
       }
+    }
+
+    var qtyBtn = e.target.closest('[data-qty-change]');
+    if (qtyBtn) {
+      e.preventDefault();
+      var itemEl = qtyBtn.closest('[data-key]');
+      if (!itemEl) return;
+      var key = itemEl.getAttribute('data-key');
+      var change = parseInt(qtyBtn.getAttribute('data-qty-change'), 10);
+      var qtyValEl = itemEl.querySelector('.kk-drawer__qtyval');
+      if (!qtyValEl) return;
+      var currentQty = parseInt(qtyValEl.textContent, 10);
+      var newQty = currentQty + change;
+      updateCartItem(key, newQty);
+    }
+
+    var removeBtn = e.target.closest('[data-remove-item]');
+    if (removeBtn) {
+      e.preventDefault();
+      var itemEl = removeBtn.closest('[data-key]');
+      if (!itemEl) return;
+      var key = itemEl.getAttribute('data-key');
+      updateCartItem(key, 0);
     }
   });
   d.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrawer(); });
