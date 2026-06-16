@@ -29,6 +29,18 @@
     },
     "entity": {
       "type": "kk-entity-answer",
+      "blocks": {
+        "fact_weydLc": {
+          "type": "fact",
+          "settings": {
+            "label": "Based in",
+            "value": "St. Petersburg, FL, USA"
+          }
+        }
+      },
+      "block_order": [
+        "fact_weydLc"
+      ],
       "settings": {
         "eyebrow": "What is King Killers?",
         "heading": "A fighter-owned apparel brand for athletes who hunt the person at the top.",
@@ -145,9 +157,9 @@
         "heading": "Stop Blending In. Start Standing Out.",
         "sub": "<p>Join the athletes who train, fight and live in fighter-built gear. Free shipping over $100 · 30-day money-back guarantee.</p>",
         "cta1_label": "Shop Best Sellers",
-        "cta1_url": "",
+        "cta1_url": "shopify://collections/best-sellers",
         "cta2_label": "Browse the Catalog",
-        "cta2_url": "",
+        "cta2_url": "shopify://collections/new",
         "fine": "No risk. If it's not your best gear, send it back within 30 days."
       }
     }
