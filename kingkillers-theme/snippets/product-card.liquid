@@ -22,6 +22,10 @@
       <span class="kk-pc__badge">{{ product.metafields.custom.badge.value }}</span>
     {%- elsif product.tags contains 'Best Seller' -%}
       <span class="kk-pc__badge">Best Seller</span>
+    {%- elsif product.tags contains 'Made in USA' -%}
+      <span class="kk-pc__badge kk-pc__badge--blood">Made in USA</span>
+    {%- elsif product.tags contains 'Limited Drop' -%}
+      <span class="kk-pc__badge kk-pc__badge--gold">Limited Drop</span>
     {%- endif -%}
     {%- if on_sale -%}<span class="kk-pc__save">Save {{ save_pct }}%</span>{%- endif -%}
   </a>

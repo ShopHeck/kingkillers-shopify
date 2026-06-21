@@ -1,0 +1,152 @@
+{%- comment -%}
+  Product Comparison Grid section.
+{%- endcomment -%}
+<section class="kk-section kk-compare" aria-labelledby="compare-title">
+  <div class="kk-wrap">
+    <header class="kk-compare__head">
+      {%- if section.settings.eyebrow != blank -%}<span class="kk-eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2 id="compare-title" class="kk-h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="kk-lead">{{ section.settings.lead }}</p>{%- endif -%}
+    </header>
+
+    <div class="kk-compare__table-wrapper">
+      <table class="kk-compare__table">
+        <thead>
+          <tr>
+            <th>Gear Details</th>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product' -%}
+                <th>
+                  <div class="kk-compare__product-header">
+                    {%- if block.settings.image != blank -%}
+                      <img src="{{ block.settings.image | image_url: width: 240 }}" 
+                           alt="{{ block.settings.title | escape }}" 
+                           class="kk-compare__product-img" 
+                           width="240" 
+                           height="{{ 240 | divided_by: block.settings.image.aspect_ratio | round }}"
+                           loading="lazy">
+                    {%- endif -%}
+                    <span class="kk-compare__product-title">{{ block.settings.title }}</span>
+                    {%- if block.settings.price != blank -%}<span class="kk-compare__product-price">{{ block.settings.price }}</span>{%- endif -%}
+                  </div>
+                </th>
+              {%- endif -%}
+            {%- endfor -%}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Primary Intent</strong></td>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product' -%}
+                <td>{{ block.settings.intent }}</td>
+              {%- endif -%}
+            {%- endfor -%}
+          </tr>
+          <tr>
+            <td><strong>Material & Weight</strong></td>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product' -%}
+                <td>{{ block.settings.material }}</td>
+              {%- endif -%}
+            {%- endfor -%}
+          </tr>
+          <tr>
+            <td><strong>Fit Style</strong></td>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product' -%}
+                <td>{{ block.settings.fit }}</td>
+              {%- endif -%}
+            {%- endfor -%}
+          </tr>
+          <tr>
+            <td><strong>Internal Liner</strong></td>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product' -%}
+                <td>{{ block.settings.liner }}</td>
+              {%- endif -%}
+            {%- endfor -%}
+          </tr>
+          <tr>
+            <td><strong>Key Benefit</strong></td>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product' -%}
+                <td><strong>{{ block.settings.benefit }}</strong></td>
+              {%- endif -%}
+            {%- endfor -%}
+          </tr>
+          <tr>
+            <td></td>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'product' -%}
+                <td>
+                  {%- if block.settings.link != blank -%}
+                    <a href="{{ block.settings.link }}" class="kk-btn kk-btn--primary kk-compare__btn">Shop Now &rarr;</a>
+                  {%- endif -%}
+                </td>
+              {%- endif -%}
+            {%- endfor -%}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kk-compare__head { text-align: center; margin-bottom: 48px; }
+  .kk-compare__head .kk-eyebrow { justify-content: center; }
+  .kk-compare__head .kk-lead { margin: 0 auto; }
+  .kk-compare__table-wrapper { overflow-x: auto; width: 100%; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-card); box-shadow: var(--shadow); }
+  .kk-compare__table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+  .kk-compare__table th, .kk-compare__table td { padding: 18px 24px; border-bottom: 1px solid var(--line); font-size: .92rem; vertical-align: middle; }
+  .kk-compare__table th { background: rgba(255, 255, 255, 0.02); font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: .85rem; color: var(--ink-dim); }
+  .kk-compare__table th:first-child, .kk-compare__table td:first-child { background: rgba(0, 0, 0, 0.15); font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; color: var(--blood); border-right: 1px solid var(--line); width: 200px; }
+  .kk-compare__table tr:last-child td { border-bottom: none; }
+  .kk-compare__product-header { display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; }
+  .kk-compare__product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); }
+  .kk-compare__product-title { color: var(--ink); font-size: 1.05rem; }
+  .kk-compare__product-price { color: var(--ink-dim); font-size: .88rem; font-weight: 600; }
+  .kk-compare__btn { padding: 10px 18px !important; min-height: 0 !important; font-size: .78rem !important; border-radius: 6px !important; width: 100%; }
+</style>
+
+{% schema %}
+{
+  "name": "Gear comparison",
+  "tag": "section",
+  "enabled_on": { "templates": ["index", "product", "page"] },
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "Choose Your Armor" },
+    { "type": "text", "id": "title", "label": "Section Title", "default": "Compare King Killers Gear" },
+    { "type": "textarea", "id": "lead", "label": "Lead Paragraph", "default": "Each piece is wear-tested and optimized for specific combat training domains. Find the right fit for your grind." }
+  ],
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product Column",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Product Image" },
+        { "type": "text", "id": "title", "label": "Product Name", "default": "Hybrid Training Shorts" },
+        { "type": "text", "id": "price", "label": "Price", "default": "$59.00" },
+        { "type": "text", "id": "intent", "label": "Intent / Sport", "default": "MMA / BJJ / Grappling" },
+        { "type": "text", "id": "material", "label": "Material", "default": "Durable 4-way stretch" },
+        { "type": "text", "id": "fit", "label": "Fit Style", "default": "Athletic mid-thigh, side-slits" },
+        { "type": "text", "id": "liner", "label": "Internal Liner", "default": "2-in-1 compression liner" },
+        { "type": "text", "id": "benefit", "label": "Key Benefit", "default": "High-mobility, no velcro chafing" },
+        { "type": "url", "id": "link", "label": "Product Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gear comparison",
+      "blocks": [
+        { "type": "product", "settings": { "title": "2-in-1 Hybrid Shorts", "intent": "MMA / BJJ / Wrestling", "material": "Ultra-stretch performance knit", "liner": "Comfort compression liner", "benefit": "Dual-utility training & roll ready" } },
+        { "type": "product", "settings": { "title": "Mesh Gym Shorts", "intent": "Lifting / Striking / CrossFit", "material": "Breathable double-mesh", "liner": "No liner (layer ready)", "benefit": "Heavy breathing, vintage drop" } },
+        { "type": "product", "settings": { "title": "Performance Rashguard", "intent": "No-Gi BJJ / Grappling", "material": "Reinforced flatlock spandex", "liner": "Chafing-free compression", "benefit": "Crawlable entity protection, SPF50" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
