@@ -1,7 +1,65 @@
-
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "main": { "type": "main-collection" }
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "enable_filtering": true,
+        "enable_sorting": true
+      }
+    },
+    "kk_trust_j4jANk": {
+      "type": "kk-trust",
+      "blocks": {
+        "item_3McgPQ": {
+          "type": "item",
+          "settings": {
+            "title": "Fighter Owned",
+            "text": "Run by real BJJ, boxing & MMA competitors"
+          }
+        },
+        "item_7JeXA9": {
+          "type": "item",
+          "settings": {
+            "title": "Made in the USA",
+            "text": "Designed & sold exclusively by King Killers"
+          }
+        },
+        "item_gPfjeX": {
+          "type": "item",
+          "settings": {
+            "title": "4.8★ Rated",
+            "text": "200+ reviews across Trustpilot & site"
+          }
+        },
+        "item_HdmGGm": {
+          "type": "item",
+          "settings": {
+            "title": "Guaranteed",
+            "text": "30-day money-back, no questions asked"
+          }
+        }
+      },
+      "block_order": [
+        "item_3McgPQ",
+        "item_7JeXA9",
+        "item_gPfjeX",
+        "item_HdmGGm"
+      ],
+      "name": "KK Trust strip",
+      "settings": {}
+    }
   },
-  "order": ["main"]
+  "order": [
+    "main",
+    "kk_trust_j4jANk"
+  ]
 }

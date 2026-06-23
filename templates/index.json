@@ -23,9 +23,58 @@
         "cta2_url": "shopify://pages/about-us"
       }
     },
-    "trust": {
+    "kk_trust_Tf7aHf": {
       "type": "kk-trust",
+      "blocks": {
+        "item_zMga7d": {
+          "type": "item",
+          "settings": {
+            "title": "Fighter Owned",
+            "text": "Run by real BJJ, boxing & MMA competitors"
+          }
+        },
+        "item_XLggX6": {
+          "type": "item",
+          "settings": {
+            "title": "Made in the USA",
+            "text": "Designed & sold exclusively by King Killers"
+          }
+        },
+        "item_zwmUqF": {
+          "type": "item",
+          "settings": {
+            "title": "4.8★ Rated",
+            "text": "200+ reviews across Trustpilot & site"
+          }
+        },
+        "item_7B9c6m": {
+          "type": "item",
+          "settings": {
+            "title": "Guaranteed",
+            "text": "30-day money-back, no questions asked"
+          }
+        }
+      },
+      "block_order": [
+        "item_zMga7d",
+        "item_XLggX6",
+        "item_zwmUqF",
+        "item_7B9c6m"
+      ],
+      "name": "KK Trust strip",
       "settings": {}
+    },
+    "best": {
+      "type": "kk-featured-products",
+      "settings": {
+        "eyebrow": "Most Wanted",
+        "heading": "The Lineup Athletes Reorder",
+        "subtext": "<p>The pieces our community keeps coming back for. Bold prints, performance fabrics, and a fit that stays put through every round.</p>",
+        "collection": "best-sellers",
+        "products_to_show": 4,
+        "cta_label": "View Full Catalog",
+        "cta_url": "/collections/all"
+      }
     },
     "entity": {
       "type": "kk-entity-answer",
@@ -50,6 +99,18 @@
     "cats": {
       "type": "kk-category-bento",
       "blocks": {
+        "cat_kwF66x": {
+          "type": "cat",
+          "settings": {
+            "collection": "mens-swim-trunks",
+            "title": "Men's Swimwear",
+            "link": "shopify://collections/mens-swim-trunks",
+            "tag": "Best Seller",
+            "meta": "From $34.99",
+            "hue": "#e11313",
+            "span": "lg"
+          }
+        },
         "cat_tr8NU3": {
           "type": "cat",
           "settings": {
@@ -62,6 +123,18 @@
             "span": "lg"
           }
         },
+        "cat_CdNWqL": {
+          "type": "cat",
+          "settings": {
+            "collection": "2-in-1-shorts",
+            "title": "2-in-1 Hybrid Shorts",
+            "link": "shopify://collections/mens-athletic-shorts",
+            "tag": "LOW STOCK",
+            "meta": "From $34.99",
+            "hue": "#e11313",
+            "span": "lg"
+          }
+        },
         "cat_qDw9AC": {
           "type": "cat",
           "settings": {
@@ -69,7 +142,7 @@
             "image": "shopify://shop_images/summer_beach_vibes.jpg",
             "title": "2-in-1 Hybrid Shorts",
             "link": "",
-            "tag": "Best Seller",
+            "tag": "HOT🔥",
             "meta": "From $34.99",
             "hue": "#e11313",
             "span": "lg"
@@ -77,7 +150,9 @@
         }
       },
       "block_order": [
+        "cat_kwF66x",
         "cat_tr8NU3",
+        "cat_CdNWqL",
         "cat_qDw9AC"
       ],
       "custom_css": [],
@@ -85,18 +160,6 @@
         "eyebrow": "Shop by Arsenal",
         "heading": "Find Your Weapon",
         "subtext": ""
-      }
-    },
-    "best": {
-      "type": "kk-featured-products",
-      "settings": {
-        "eyebrow": "Most Wanted",
-        "heading": "The Lineup Athletes Reorder",
-        "subtext": "<p>The pieces our community keeps coming back for. Bold prints, performance fabrics, and a fit that stays put through every round.</p>",
-        "collection": "best-sellers",
-        "products_to_show": 4,
-        "cta_label": "View Full Catalog",
-        "cta_url": "/collections/all"
       }
     },
     "story": {
@@ -129,19 +192,11 @@
             "question": "Affiliate Program Details",
             "answer": "<p>You can join the King Killers Community through our affiliate hub - <a href=\"/pages/influencers\" target=\"_blank\" title=\"Community\">Join the King Killers Community</a></p>"
           }
-        },
-        "qa_wA83VN": {
-          "type": "qa",
-          "settings": {
-            "question": "What is King Killers Apparel?",
-            "answer": "<p>King Killers is a fighter-owned combat sports clothing brand based in Tampa / St. Petersburg, Florida, founded in 2021. We design premium activewear and fightwear for MMA, BJJ, boxing, Muay Thai and CrossFit athletes — all made in the USA.</p>"
-          }
         }
       },
       "block_order": [
         "qa_EBzP47",
-        "qa_tfpPJ9",
-        "qa_wA83VN"
+        "qa_tfpPJ9"
       ],
       "settings": {
         "eyebrow": "Questions",
@@ -166,10 +221,10 @@
   },
   "order": [
     "hero",
-    "trust",
+    "kk_trust_Tf7aHf",
+    "best",
     "entity",
     "cats",
-    "best",
     "story",
     "faq",
     "finalcta"
