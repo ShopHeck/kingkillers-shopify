@@ -234,6 +234,66 @@
         "cta2_url": "shopify://collections/new",
         "fine": "No risk. If it's not your best gear, send it back within 30 days."
       }
+    },
+    "1782249687611ec019": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_2ac85db_frxjg6": {
+          "type": "ai_gen_block_2ac85db",
+          "settings": {
+            "blog": "news",
+            "articles_count": 3,
+            "heading": "Latest from the Ring",
+            "subheading": "Fighter stories, training tips, and brand updates",
+            "show_date": true,
+            "show_author": true,
+            "show_excerpt": true,
+            "excerpt_length": 120,
+            "show_read_more": true,
+            "read_more_text": "Read More",
+            "show_view_all": true,
+            "view_all_text": "View All Articles",
+            "button_alignment": "center",
+            "desktop_width_percent": 100,
+            "columns_desktop": 3,
+            "columns_tablet": 2,
+            "columns_mobile": "1",
+            "grid_gap": 30,
+            "section_padding": 60,
+            "image_aspect_ratio": 65,
+            "heading_size": 42,
+            "heading_transform": "uppercase",
+            "heading_alignment": "center",
+            "heading_spacing": 40,
+            "subheading_size": 16,
+            "card_title_size": 20,
+            "excerpt_size": 14,
+            "card_padding": 24,
+            "card_border_radius": 8,
+            "button_spacing": 40,
+            "button_border_radius": 4,
+            "background_color": "#000000",
+            "heading_color": "#ffffff",
+            "subheading_color": "#999999",
+            "card_background": "#0a0a0a",
+            "card_border_color": "#1a1a1a",
+            "card_title_color": "#ffffff",
+            "excerpt_color": "#cccccc",
+            "meta_color": "#888888",
+            "link_color": "#ffffff",
+            "link_hover_color": "#cccccc",
+            "button_background": "#070707",
+            "button_border_color": "#ffffff",
+            "button_text_color": "#ffffff",
+            "button_hover_background": "#ffffff"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_2ac85db_frxjg6"
+      ],
+      "settings": {}
     }
   },
   "order": [
@@ -244,6 +304,7 @@
     "cats",
     "story",
     "kk_faq_V9r7W4",
-    "finalcta"
+    "finalcta",
+    "1782249687611ec019"
   ]
 }
