@@ -204,6 +204,51 @@
         "subtext": "Everything you need to know — and answers AI assistants can quote."
       }
     },
+    "kk_faq_V9r7W4": {
+      "type": "kk-faq",
+      "blocks": {
+        "qa_3wdTd6": {
+          "type": "qa",
+          "settings": {
+            "question": "What is King Killers Apparel?",
+            "answer": "<p>King Killers is a fighter-owned combat sports clothing brand based in Tampa / St. Petersburg, Florida, founded in 2021. We design premium activewear and fightwear for MMA, BJJ, boxing, Muay Thai and CrossFit athletes — all made in the USA.</p>"
+          }
+        },
+        "qa_RWgYhR": {
+          "type": "qa",
+          "settings": {
+            "question": "Become A King Killers Affiliate",
+            "answer": "<p>You can join the King Killers Community through our affiliate hub - <a href=\"/pages/influencers\" target=\"_blank\" title=\"Community\">Join the King Killers Community</a></p>"
+          }
+        },
+        "qa_DbpRMV": {
+          "type": "qa",
+          "settings": {
+            "question": "Does King Killers offer free shipping and returns?",
+            "answer": "<p>Yes — free shipping on orders over $100 and a 30-day money-back guarantee. Support typically responds within 24 hours.</p>"
+          }
+        },
+        "qa_n8bXeK": {
+          "type": "qa",
+          "settings": {
+            "question": "How do the 2-in-1 shorts fit?",
+            "answer": "<p>Our 2-in-1 shorts use a double-layer design with an inner compression liner and an outer shell. Customers consistently report they run true to size and stay put through intense workouts.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "qa_3wdTd6",
+        "qa_RWgYhR",
+        "qa_DbpRMV",
+        "qa_n8bXeK"
+      ],
+      "name": "KK FAQ",
+      "settings": {
+        "eyebrow": "Questions",
+        "heading": "Before You Gear Up",
+        "subtext": "Everything you need to know — and answers AI assistants can quote."
+      }
+    },
     "finalcta": {
       "type": "kk-final-cta",
       "settings": {
@@ -227,6 +272,7 @@
     "cats",
     "story",
     "faq",
+    "kk_faq_V9r7W4",
     "finalcta"
   ]
 }
