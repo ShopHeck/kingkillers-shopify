@@ -155,6 +155,7 @@
       "block_order": [
         "fact_weydLc"
       ],
+      "disabled": true,
       "settings": {
         "eyebrow": "What is King Killers?",
         "heading": "A fighter-owned apparel brand for athletes who hunt the person at the top.",
