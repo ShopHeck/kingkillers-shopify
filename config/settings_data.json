@@ -32,12 +32,34 @@
       "footer": {
         "type": "footer",
         "settings": {}
+      },
+      "kk-newsletter-popup": {
+        "type": "kk-newsletter-popup",
+        "settings": {
+          "enable": false,
+          "eyebrow": "Fighter Owned · Made in the USA",
+          "heading": "Join the Ranks",
+          "text": "Get first access to new drops, fighter stories, and members-only deals — straight to your inbox.",
+          "placeholder": "Enter your email",
+          "button": "Sign Me Up",
+          "discount_code": "",
+          "discount_text": "10% off your first order. One use per customer.",
+          "success_heading": "Welcome to the ranks.",
+          "success_text": "Keep an eye on your inbox for first access to new drops.",
+          "delay": 6,
+          "frequency_days": 14
+        }
       }
     },
     "content_for_index": [],
     "blocks": {
       "14060646107696862457": {
         "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      },
+      "855628211100114053": {
+        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
         "disabled": false,
         "settings": {}
       }
