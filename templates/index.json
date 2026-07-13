@@ -115,8 +115,8 @@
           "type": "cat",
           "settings": {
             "collection": "graphic-t-shirts",
-            "title": "2-in-1 Hybrid Shorts",
-            "link": "",
+            "title": "Graphic Tee's",
+            "link": "shopify://collections/graphic-t-shirts",
             "tag": "TRENDING NOW",
             "meta": "From $34.99",
             "hue": "#e11313",
@@ -140,8 +140,8 @@
           "settings": {
             "collection": "summer-collection",
             "image": "shopify://shop_images/summer_beach_vibes.jpg",
-            "title": "2-in-1 Hybrid Shorts",
-            "link": "",
+            "title": "Summer Collection",
+            "link": "shopify://collections/summer-collection",
             "tag": "HOT🔥",
             "meta": "From $34.99",
             "hue": "#e11313",

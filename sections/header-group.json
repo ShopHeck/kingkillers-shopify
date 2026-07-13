@@ -17,7 +17,7 @@
         "m1": {
           "type": "message",
           "settings": {
-            "text": "FREE SHIPPING ON ORDERS $75+"
+            "text": "FREE SHIPPING ON ORDERS $100+"
           }
         },
         "m2": {
@@ -53,7 +53,9 @@
         "logo": "shopify://shop_images/logo-red-skull.png",
         "menu": "main-menu",
         "cta_label": "Shop Now",
-        "cta_url": "shopify://collections"
+        "cta_url": "shopify://collections",
+        "enable_search": true,
+        "enable_account": true
       }
     }
   },
