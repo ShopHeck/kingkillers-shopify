@@ -1,5 +1,28 @@
 
 <footer class="kk-footer" aria-label="Site footer">
+  {%- if section.settings.show_newsletter -%}
+    <div class="kk-wrap kk-footer__signup">
+      <div class="kk-footer__signup-copy">
+        {%- if section.settings.newsletter_heading != blank -%}<h2 class="kk-footer__signup-h">{{ section.settings.newsletter_heading }}</h2>{%- endif -%}
+        {%- if section.settings.newsletter_text != blank -%}<p class="kk-footer__signup-sub">{{ section.settings.newsletter_text }}</p>{%- endif -%}
+      </div>
+      {%- form 'customer', id: 'footer-newsletter', class: 'kk-newsletter' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter, footer">
+        {%- if form.posted_successfully? -%}
+          <p class="kk-newsletter__ok" role="status">⚔ You're in. Watch your inbox for drops &amp; deals.</p>
+        {%- else -%}
+          <div class="kk-newsletter__row">
+            <input type="email" name="contact[email]" class="kk-newsletter__input" placeholder="{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}" aria-label="Email address" autocomplete="email" required>
+            <button type="submit" class="kk-btn kk-btn--primary kk-newsletter__btn">{{ section.settings.newsletter_button | default: 'Sign Up' }}</button>
+          </div>
+          {%- if form.errors -%}
+            <p class="kk-newsletter__err" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  {%- endif -%}
+
   <div class="kk-wrap kk-footer__top">
     <div class="kk-footer__brand">
       <span class="kk-logo"><span class="kk-logo__mark" aria-hidden="true">K</span><span class="kk-logo__text">KING<span>KILLERS</span></span></span>
@@ -34,6 +57,14 @@
 {% schema %}
 {
   "name": "Footer",
+  "settings": [
+    { "type": "header", "content": "Email signup" },
+    { "type": "checkbox", "id": "show_newsletter", "label": "Show email signup", "default": true },
+    { "type": "text", "id": "newsletter_heading", "label": "Heading", "default": "Join the Ranks" },
+    { "type": "text", "id": "newsletter_text", "label": "Text", "default": "First access to new drops, fighter stories & members-only deals — straight to your inbox." },
+    { "type": "text", "id": "newsletter_placeholder", "label": "Input placeholder", "default": "Enter your email" },
+    { "type": "text", "id": "newsletter_button", "label": "Button label", "default": "Sign Up" }
+  ],
   "blocks": [
     {
       "type": "menu",
