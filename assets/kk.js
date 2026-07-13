@@ -278,13 +278,23 @@
     var submit = pdp.querySelector('[data-pdp-submit]');
     var stickySubmit = pdp.querySelector('[data-pdp-sticky-submit]');
     var thumbs = pdp.querySelectorAll('.kk-pdp__thumb-btn');
+    var pills = pdp.querySelectorAll('[data-pdp-pill]');
+    var sizeLabel = pdp.querySelector('[data-pdp-size-label]');
+
+    function selectedOption() {
+      if (!variant) return null;
+      if (variant.options) return variant.options[variant.selectedIndex];
+      return variant;
+    }
 
     function syncVariantState() {
       if (!variant || !price) return;
-      var selected = variant.options ? variant.options[variant.selectedIndex] : variant;
-      var priceText = selected.getAttribute('data-price') || stickyPrice && stickyPrice.textContent || '';
+      var selected = selectedOption();
+      if (!selected) return;
+      var priceText = selected.getAttribute('data-price') || (stickyPrice && stickyPrice.textContent) || '';
       var compareText = selected.getAttribute('data-compare') || '';
       var available = selected.getAttribute('data-available') !== 'false';
+      var selectedId = selected.value || selected.getAttribute('value') || '';
       price.innerHTML = '<span>' + esc(priceText) + '</span>' + (compareText ? '<s>' + esc(compareText) + '</s>' : '');
       if (stickyPrice) stickyPrice.textContent = priceText;
       [submit, stickySubmit].forEach(function (btn) {
@@ -292,6 +302,20 @@
         btn.disabled = !available;
         btn.textContent = available ? 'Add to Cart' : 'Sold Out';
       });
+
+      pills.forEach(function (pill) {
+        var isSel = pill.getAttribute('data-variant-id') === selectedId;
+        pill.classList.toggle('is-selected', isSel);
+        pill.setAttribute('aria-selected', String(isSel));
+      });
+      if (sizeLabel) {
+        var title = '';
+        pills.forEach(function (pill) {
+          if (pill.getAttribute('data-variant-id') === selectedId) title = pill.getAttribute('data-title') || pill.textContent.trim();
+        });
+        if (!title && selected.textContent) title = selected.textContent.split('–')[0].trim();
+        if (title) sizeLabel.textContent = title;
+      }
 
       // Switch image if variant has data-image
       var varImg = selected.getAttribute('data-image');
@@ -303,13 +327,30 @@
           if (varSrcset) mainImg.setAttribute('srcset', varSrcset);
           else mainImg.removeAttribute('srcset');
         }
-        // Highlight matching thumbnail
         thumbs.forEach(function (b) {
           var isMatch = b.getAttribute('data-large-src') === varImg;
           b.classList.toggle('is-active', isMatch);
         });
       }
     }
+
+    function selectVariantId(id) {
+      if (!variant || !variant.options) return;
+      for (var i = 0; i < variant.options.length; i++) {
+        if (String(variant.options[i].value) === String(id)) {
+          variant.selectedIndex = i;
+          break;
+        }
+      }
+      syncVariantState();
+    }
+
+    pills.forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        if (pill.disabled) return;
+        selectVariantId(pill.getAttribute('data-variant-id'));
+      });
+    });
 
     if (variant && variant.tagName === 'SELECT') variant.addEventListener('change', syncVariantState);
     if (stickySubmit) stickySubmit.addEventListener('click', function () { if (submit) submit.click(); });

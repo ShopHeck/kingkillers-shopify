@@ -441,3 +441,30 @@ a{color:inherit}
   .kk-search__list{grid-template-columns:1fr}
   .kk-search__submit{padding:13px 16px}
 }
+
+
+/* ---- PDP CRO: size pills + trust row (2026-07-13) ---- */
+.kk-pdp__rating{display:inline-flex;align-items:center;gap:8px;margin:0 0 8px;color:var(--ink-dim);text-decoration:none;font-size:.9rem}
+.kk-pdp__rating:hover{color:var(--ink)}
+.kk-pdp__rating--soft{margin:0 0 8px;color:var(--ink-faint);font-size:.85rem}
+.kk-pdp__size{margin:0 0 14px}
+.kk-pdp__size-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}
+.kk-pdp__size-label{font-family:var(--display);font-weight:800;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.kk-pdp__size-current{display:inline-block;margin-left:8px;color:var(--blood);letter-spacing:.04em}
+.kk-pdp__size-guide{font-size:.82rem;color:var(--ink-dim);text-decoration:underline;text-underline-offset:3px}
+.kk-pdp__size-guide:hover{color:var(--ink)}
+.kk-pdp__pills{display:flex;flex-wrap:wrap;gap:8px}
+.kk-pdp__pill{min-width:48px;min-height:44px;padding:10px 14px;border-radius:10px;border:1px solid var(--line-strong);background:var(--bg-card);color:var(--ink);font-family:var(--display);font-weight:800;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:border-color .15s ease,background .15s ease,color .15s ease,transform .15s ease}
+.kk-pdp__pill:hover:not(:disabled){border-color:var(--blood);transform:translateY(-1px)}
+.kk-pdp__pill.is-selected{background:var(--blood);border-color:var(--blood);color:#fff}
+.kk-pdp__pill.is-soldout,.kk-pdp__pill:disabled{opacity:.38;cursor:not-allowed;text-decoration:line-through}
+.kk-pdp__variants--sr{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.kk-pdp__trustrow{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kk-pdp__trustrow li{border:1px solid var(--line);border-radius:12px;background:var(--bg-card);padding:12px 14px}
+.kk-pdp__trustrow strong{display:block;font-family:var(--display);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.kk-pdp__trustrow span{display:block;color:var(--ink-dim);font-size:.82rem;line-height:1.35}
+.kk-pdp__apps{margin-top:28px}
+@media (max-width:640px){
+  .kk-pdp__trustrow{grid-template-columns:1fr}
+  .kk-pdp__pill{min-width:44px;padding:10px 12px}
+}
