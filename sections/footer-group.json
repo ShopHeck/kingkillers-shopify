@@ -34,9 +34,16 @@
         "menu_QaLbBQ"
       ],
       "settings": {}
+    },
+    "newsletter_popup": {
+      "type": "kk-newsletter-popup",
+      "settings": {
+        "enable": false
+      }
     }
   },
   "order": [
-    "footer"
+    "footer",
+    "newsletter_popup"
   ]
 }

@@ -524,4 +524,72 @@
     var openItem = d.querySelector('.kk-nav__item--has.is-open');
     if (openItem) { var t = openItem.querySelector('[data-mega-toggle]'); closeMega(openItem); if (t) t.focus(); }
   });
+
+  /* --------------------------- Newsletter popup ------------------------------ */
+  var np = d.querySelector('[data-np]');
+  if (np) {
+    var NP_KEY = 'kk_np_seen';
+    var NP_SUBMIT = 'kk_np_submitting';
+    var npOpener = null;
+    var npDelay = (parseInt(np.getAttribute('data-delay'), 10) || 0) * 1000;
+    var npFreq = parseInt(np.getAttribute('data-frequency'), 10) || 14;
+    var npSubscribed = !!np.querySelector('[data-np-success]');
+
+    function npStore(key, val) { try { localStorage.setItem(key, val); } catch (e) {} }
+    function npSuppress(days) { npStore(NP_KEY, String(Date.now() + days * 864e5)); }
+    function npSuppressed() {
+      try { var v = localStorage.getItem(NP_KEY); return v && Date.now() < parseInt(v, 10); }
+      catch (e) { return false; }
+    }
+    function npOpen() {
+      npOpener = d.activeElement;
+      np.removeAttribute('hidden');
+      np.getBoundingClientRect(); // reflow so the transition plays
+      np.classList.add('is-open');
+      d.body.style.overflow = 'hidden';
+      // Prefer the email field (so users can type immediately); in the success
+      // state that field is gone, so fall back to the primary button.
+      var focusable = np.querySelector('.kk-np__input, .kk-btn') || np.querySelector('button');
+      if (focusable) focusable.focus();
+    }
+    function npClose() {
+      if (!np.classList.contains('is-open')) return;
+      np.classList.remove('is-open');
+      d.body.style.overflow = '';
+      npSuppress(npFreq);
+      setTimeout(function () { np.setAttribute('hidden', ''); }, 280);
+      if (npOpener && npOpener.focus) npOpener.focus();
+    }
+
+    np.addEventListener('click', function (e) {
+      if (e.target.closest('[data-np-close]')) { e.preventDefault(); npClose(); }
+    });
+    d.addEventListener('keydown', function (e) {
+      if (!np.classList.contains('is-open')) return;
+      if (e.key === 'Escape') { npClose(); return; }
+      if (e.key === 'Tab') {
+        var f = np.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])');
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && d.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && d.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+
+    // Flag the popup as the submit source so we can reveal success after the native reload.
+    var npForm = np.querySelector('form');
+    if (npForm) npForm.addEventListener('submit', function () {
+      try { sessionStorage.setItem(NP_SUBMIT, '1'); } catch (e) {}
+    });
+
+    if (npSubscribed) {
+      // A newsletter form on the page posted successfully this request — don't nag them again.
+      npSuppress(365);
+      var fromPopup = false;
+      try { fromPopup = sessionStorage.getItem(NP_SUBMIT) === '1'; sessionStorage.removeItem(NP_SUBMIT); } catch (e) {}
+      if (fromPopup) npOpen(); // reveal the success state / code only if THEY used the popup
+    } else if (!npSuppressed()) {
+      if (npDelay > 0) { setTimeout(npOpen, npDelay); } else { npOpen(); }
+    }
+  }
 })();
