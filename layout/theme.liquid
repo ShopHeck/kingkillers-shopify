@@ -68,6 +68,9 @@
       </aside>
     </div>
 
+    {%- comment -%} Welcome email popup (position:fixed; renders nothing unless enabled in the editor). {%- endcomment -%}
+    {% section 'kk-newsletter-popup' %}
+
     <script>window.kkFreeShipThreshold = {{ settings.free_ship_threshold | default: 100 | times: 100 }};</script>
     <script src="{{ 'kk.js' | asset_url }}" defer></script>
   </body>
