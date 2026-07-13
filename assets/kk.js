@@ -367,4 +367,120 @@
       el.classList.add('kk-reveal'); io.observe(el);
     });
   }
+
+  /* ------------------------------ Mega menu ---------------------------------- */
+  /* CSS reveals panels on hover for pointer devices; JS drives the explicit
+     (pinned) open state for touch + keyboard and keeps aria-expanded honest. */
+  var megaItems = Array.prototype.slice.call(d.querySelectorAll('.kk-nav__item--has'));
+
+  function closeMega(item) {
+    if (!item) return;
+    item.classList.remove('is-open');
+    var t = item.querySelector('[data-mega-toggle]');
+    if (t) t.setAttribute('aria-expanded', 'false');
+  }
+  function closeAllMega(except) {
+    megaItems.forEach(function (it) { if (it !== except) closeMega(it); });
+  }
+
+  megaItems.forEach(function (item) {
+    var toggle = item.querySelector('[data-mega-toggle]');
+    if (!toggle) return;
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      var willOpen = !item.classList.contains('is-open');
+      closeAllMega(item);
+      item.classList.toggle('is-open', willOpen);
+      toggle.setAttribute('aria-expanded', String(willOpen));
+      if (willOpen) closeSearch();
+    });
+    // Keyboard: close when focus leaves the item entirely.
+    item.addEventListener('focusout', function (e) {
+      if (!item.contains(e.relatedTarget)) closeMega(item);
+    });
+  });
+
+  /* --------------------------- Mobile nav accordion -------------------------- */
+  d.querySelectorAll('[data-msub-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.getAttribute('aria-controls');
+      var sub = id && d.getElementById(id);
+      if (!sub) return;
+      var willOpen = sub.hasAttribute('hidden');
+      if (willOpen) { sub.removeAttribute('hidden'); } else { sub.setAttribute('hidden', ''); }
+      btn.setAttribute('aria-expanded', String(willOpen));
+    });
+  });
+
+  /* ---------------------------- Predictive search ---------------------------- */
+  var searchToggle = d.querySelector('[data-search-toggle]');
+  var searchPanel = d.querySelector('[data-search-panel]');
+  var searchInput = searchPanel && searchPanel.querySelector('[data-search-input]');
+  var searchResults = searchPanel && searchPanel.querySelector('[data-search-results]');
+  var searchTimer = null;
+  var searchController = null;
+  var lastQuery = '';
+
+  function openSearch() {
+    if (!searchPanel) return;
+    closeAllMega(null);
+    searchPanel.removeAttribute('hidden');
+    if (searchToggle) searchToggle.setAttribute('aria-expanded', 'true');
+    if (searchInput) searchInput.focus();
+  }
+  function closeSearch() {
+    if (!searchPanel || searchPanel.hasAttribute('hidden')) return;
+    searchPanel.setAttribute('hidden', '');
+    if (searchToggle) searchToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  if (searchToggle && searchPanel) {
+    searchToggle.addEventListener('click', function () {
+      if (searchPanel.hasAttribute('hidden')) { openSearch(); } else { closeSearch(); }
+    });
+    searchPanel.addEventListener('click', function (e) {
+      if (e.target.closest('[data-search-close]')) closeSearch();
+    });
+  }
+
+  function runPredictive(q) {
+    if (!searchResults) return;
+    if (searchController) searchController.abort();
+    searchController = ('AbortController' in window) ? new AbortController() : null;
+    var url = '/search/suggest?q=' + encodeURIComponent(q) +
+      '&section_id=predictive-search&resources[type]=product,collection&resources[limit]=8';
+    fetch(url, searchController ? { signal: searchController.signal } : undefined)
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var inner = doc.querySelector('#shopify-section-predictive-search') || doc.querySelector('.shopify-section') || doc.body;
+        searchResults.innerHTML = inner ? inner.innerHTML : '';
+      })
+      .catch(function (err) { if (err && err.name !== 'AbortError') searchResults.innerHTML = ''; });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      var q = searchInput.value.trim();
+      clearTimeout(searchTimer);
+      if (q.length < 2) { searchResults.innerHTML = ''; lastQuery = ''; return; }
+      if (q === lastQuery) return;
+      searchTimer = setTimeout(function () { lastQuery = q; runPredictive(q); }, 220);
+    });
+  }
+
+  /* --------- Shared close-on-outside-click / Escape for menu + search -------- */
+  d.addEventListener('click', function (e) {
+    if (!e.target.closest('.kk-nav__item--has')) closeAllMega(null);
+    if (searchPanel && !searchPanel.hasAttribute('hidden') &&
+        !e.target.closest('[data-search-panel]') && !e.target.closest('[data-search-toggle]')) {
+      closeSearch();
+    }
+  });
+  d.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (searchPanel && !searchPanel.hasAttribute('hidden')) { closeSearch(); if (searchToggle) searchToggle.focus(); }
+    var openItem = d.querySelector('.kk-nav__item--has.is-open');
+    if (openItem) { var t = openItem.querySelector('[data-mega-toggle]'); closeMega(openItem); if (t) t.focus(); }
+  });
 })();
