@@ -1,0 +1,65 @@
+{%- comment -%}
+  Predictive search results, rendered on demand by the Section Rendering API.
+  kk.js fetches /search/suggest?q=TERM&section_id=predictive-search and injects the
+  markup. Rendering server-side means prices, images and availability are always
+  correct (no guessing JSON shapes). Not addable in the editor — no preset by design.
+{%- endcomment -%}
+{%- if predictive_search.performed -%}
+  {%- assign products = predictive_search.resources.products -%}
+  {%- assign collections = predictive_search.resources.collections -%}
+  {%- if products.size > 0 or collections.size > 0 -%}
+    {%- if collections.size > 0 -%}
+      <div class="kk-search__group">
+        <p class="kk-search__grouphead">Collections</p>
+        <ul class="kk-search__coll">
+          {%- for collection in collections limit: 4 -%}
+            <li><a href="{{ collection.url }}" class="kk-search__colllink">{{ collection.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    {%- if products.size > 0 -%}
+      <div class="kk-search__group">
+        <p class="kk-search__grouphead">Products</p>
+        <ul class="kk-search__list">
+          {%- for product in products limit: 8 -%}
+            <li>
+              <a href="{{ product.url }}" class="kk-search__result">
+                <span class="kk-search__thumb">
+                  {%- if product.featured_media != blank -%}
+                    {{ product.featured_media.preview_image | image_url: width: 120 | image_tag:
+                       widths: '60, 120', sizes: '60px', loading: 'lazy',
+                       alt: product.title | escape, class: 'kk-search__thumbimg' }}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'kk-search__thumbimg' }}
+                  {%- endif -%}
+                </span>
+                <span class="kk-search__rinfo">
+                  <span class="kk-search__rtitle">{{ product.title }}</span>
+                  <span class="kk-search__rprice">
+                    {%- if product.compare_at_price_max > product.price -%}
+                      <span class="kk-search__rsale">{{ product.price | money }}</span> <s>{{ product.compare_at_price_max | money }}</s>
+                    {%- else -%}
+                      {%- if product.price_varies -%}From {% endif -%}{{ product.price | money }}
+                    {%- endif -%}
+                  </span>
+                </span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&type=product" class="kk-search__all">
+      See all results for &ldquo;{{ predictive_search.terms }}&rdquo; <span aria-hidden="true">→</span>
+    </a>
+  {%- else -%}
+    <p class="kk-search__empty">No matches for &ldquo;{{ predictive_search.terms }}&rdquo;. Try a different term.</p>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{ "name": "Predictive search" }
+{% endschema %}
