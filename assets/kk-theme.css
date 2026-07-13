@@ -302,6 +302,7 @@ a{color:inherit}
 .kk-blog__excerpt{color:var(--ink-dim);font-size:.9rem;line-height:1.5;margin:0 0 8px;flex:1}
 .kk-blog__btn{align-self:flex-start;padding:8px 16px!important;min-height:0!important;font-size:.78rem!important;border-radius:6px!important}
 .kk-blog__pager{margin-top:48px;text-align:center}
+.kk-blog__foot{margin-top:44px;text-align:center}
 .kk-blog__empty{text-align:center;padding:48px 0;color:var(--ink-faint)}
 
 /* Article Page */
