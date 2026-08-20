@@ -20,36 +20,23 @@
     "17872543690051e77b": {
       "type": "apps",
       "blocks": {
-        "pallet_login_gate_BazKNT": {
-          "type": "shopify://apps/pallet/blocks/login-gate/019caad8-47fa-7160-beb4-bf3f4af5e88c",
-          "settings": {
-            "message_guest": "Are you a wholesale buyer? Log in for exclusive pricing.",
-            "message_logged_in": "Want wholesale pricing? Apply for a wholesale account.",
-            "button_text": "Log in for wholesale pricing",
-            "login_url": "/account/login",
-            "button_color": "#C42728",
-            "background_color": "#3B3E42",
-            "border_color": "#000000",
-            "text_color": "#FAFAFA"
-          }
-        },
         "pallet_wholesale_pricing_9tBrim": {
           "type": "shopify://apps/pallet/blocks/wholesale-pricing/019caad8-47fa-7160-beb4-bf3f4af5e88c",
           "settings": {
             "badge_text": "Wholesale Price",
             "tiers_title": "Volume discounts",
             "show_savings": true,
-            "background_color": "#3B3E42",
+            "background_color": "#3b3e42",
             "border_color": "#000000",
-            "text_color": "#FAFAFA",
-            "badge_color": "#3B3E42",
+            "text_color": "#fafafa",
+            "badge_color": "#3b3e42",
             "badge_text_color": "#ffffff",
-            "savings_color": "#C42728",
-            "min_badge_background": "#005CB2",
+            "savings_color": "#c42728",
+            "min_badge_background": "#005cb2",
             "min_badge_border_color": "#000000",
-            "min_badge_text_color": "#FAFAFA",
-            "best_tier_background": "#C42728",
-            "best_tier_text_color": "#FAFAFA"
+            "min_badge_text_color": "#fafafa",
+            "best_tier_background": "#c42728",
+            "best_tier_text_color": "#fafafa"
           }
         },
         "pallet_registration_form_nVYVyK": {
@@ -59,29 +46,42 @@
             "description": "Fill out the form below to apply for a wholesale account with exclusive pricing.",
             "button_text": "Submit Application",
             "success_message": "Thank you! Your wholesale application has been submitted. We'll review it and get back to you shortly.",
-            "background_color": "#3F3F3F",
+            "background_color": "#3f3f3f",
             "border_color": "#000000",
-            "text_color": "#FFFFFF",
-            "description_color": "#FAFAFA",
+            "text_color": "#ffffff",
+            "description_color": "#fafafa",
             "input_border_color": "#000000",
-            "button_color": "#C42728",
+            "button_color": "#c42728",
             "button_text_color": "#ffffff",
             "member_background": "#000000",
-            "member_border_color": "#C42728",
-            "member_text_color": "#FAFAFA",
+            "member_border_color": "#c42728",
+            "member_text_color": "#fafafa",
             "success_background": "#000000",
-            "success_border_color": "#005CB2",
-            "success_text_color": "#FAFAFA",
+            "success_border_color": "#005cb2",
+            "success_text_color": "#fafafa",
             "error_background": "#fdf0ef",
             "error_border_color": "#e74c3c",
             "error_text_color": "#922b21"
           }
+        },
+        "pallet_login_gate_BazKNT": {
+          "type": "shopify://apps/pallet/blocks/login-gate/019caad8-47fa-7160-beb4-bf3f4af5e88c",
+          "settings": {
+            "message_guest": "Are you a wholesale buyer? Log in for exclusive pricing.",
+            "message_logged_in": "Want wholesale pricing? Apply for a wholesale account.",
+            "button_text": "Log in for wholesale pricing",
+            "login_url": "/account/login",
+            "button_color": "#c42728",
+            "background_color": "#3b3e42",
+            "border_color": "#000000",
+            "text_color": "#fafafa"
+          }
         }
       },
       "block_order": [
-        "pallet_login_gate_BazKNT",
         "pallet_wholesale_pricing_9tBrim",
-        "pallet_registration_form_nVYVyK"
+        "pallet_registration_form_nVYVyK",
+        "pallet_login_gate_BazKNT"
       ],
       "settings": {}
     }
