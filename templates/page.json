@@ -1,10 +1,93 @@
-
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "title": {
       "type": "kk-entity-answer",
-      "settings": { "eyebrow": "About", "heading": "Who Are the King Killers?" }
+      "settings": {
+        "eyebrow": "About",
+        "heading": "Who Are the King Killers?",
+        "body": "<p>King Killers Apparel is a US-based small business founded in 2021 by professional fighter Michael “Heck” Heckert. Every piece is designed by real competitors and made in the USA — bold, durable and built for the gym, the cage and the street.</p>"
+      }
+    },
+    "17872543690051e77b": {
+      "type": "apps",
+      "blocks": {
+        "pallet_login_gate_BazKNT": {
+          "type": "shopify://apps/pallet/blocks/login-gate/019caad8-47fa-7160-beb4-bf3f4af5e88c",
+          "settings": {
+            "message_guest": "Are you a wholesale buyer? Log in for exclusive pricing.",
+            "message_logged_in": "Want wholesale pricing? Apply for a wholesale account.",
+            "button_text": "Log in for wholesale pricing",
+            "login_url": "/account/login",
+            "button_color": "#C42728",
+            "background_color": "#3B3E42",
+            "border_color": "#000000",
+            "text_color": "#FAFAFA"
+          }
+        },
+        "pallet_wholesale_pricing_9tBrim": {
+          "type": "shopify://apps/pallet/blocks/wholesale-pricing/019caad8-47fa-7160-beb4-bf3f4af5e88c",
+          "settings": {
+            "badge_text": "Wholesale Price",
+            "tiers_title": "Volume discounts",
+            "show_savings": true,
+            "background_color": "#3B3E42",
+            "border_color": "#000000",
+            "text_color": "#FAFAFA",
+            "badge_color": "#3B3E42",
+            "badge_text_color": "#ffffff",
+            "savings_color": "#C42728",
+            "min_badge_background": "#005CB2",
+            "min_badge_border_color": "#000000",
+            "min_badge_text_color": "#FAFAFA",
+            "best_tier_background": "#C42728",
+            "best_tier_text_color": "#FAFAFA"
+          }
+        },
+        "pallet_registration_form_nVYVyK": {
+          "type": "shopify://apps/pallet/blocks/registration-form/019caad8-47fa-7160-beb4-bf3f4af5e88c",
+          "settings": {
+            "title": "Apply for Wholesale Access",
+            "description": "Fill out the form below to apply for a wholesale account with exclusive pricing.",
+            "button_text": "Submit Application",
+            "success_message": "Thank you! Your wholesale application has been submitted. We'll review it and get back to you shortly.",
+            "background_color": "#3F3F3F",
+            "border_color": "#000000",
+            "text_color": "#FFFFFF",
+            "description_color": "#FAFAFA",
+            "input_border_color": "#000000",
+            "button_color": "#C42728",
+            "button_text_color": "#ffffff",
+            "member_background": "#000000",
+            "member_border_color": "#C42728",
+            "member_text_color": "#FAFAFA",
+            "success_background": "#000000",
+            "success_border_color": "#005CB2",
+            "success_text_color": "#FAFAFA",
+            "error_background": "#fdf0ef",
+            "error_border_color": "#e74c3c",
+            "error_text_color": "#922b21"
+          }
+        }
+      },
+      "block_order": [
+        "pallet_login_gate_BazKNT",
+        "pallet_wholesale_pricing_9tBrim",
+        "pallet_registration_form_nVYVyK"
+      ],
+      "settings": {}
     }
   },
-  "order": ["title"]
+  "order": [
+    "title",
+    "17872543690051e77b"
+  ]
 }
