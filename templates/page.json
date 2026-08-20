@@ -47,7 +47,7 @@
             "button_text": "Submit Application",
             "success_message": "Thank you! Your wholesale application has been submitted. We'll review it and get back to you shortly.",
             "background_color": "#000000",
-            "border_color": "#000000",
+            "border_color": "#ACACAC",
             "text_color": "#FF0102",
             "description_color": "#fafafa",
             "input_border_color": "#000000",
