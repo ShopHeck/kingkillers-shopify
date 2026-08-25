@@ -9,12 +9,16 @@
   assign img_widths = widths | default: '320, 480, 640, 800, 1080, 1440, 1920, 2400'
   assign img_sizes = sizes | default: '100vw'
   assign is_lcp = preload | default: false
+  assign eager_early = eager_first | default: false
 
   assign loading_attr = 'lazy'
   assign fetchpriority_attr = 'auto'
   if is_lcp
     assign loading_attr = 'eager'
     assign fetchpriority_attr = 'high'
+  elsif eager_early
+    assign loading_attr = 'eager'
+    assign fetchpriority_attr = 'low'
   endif
 -%}
 {%- if image != blank -%}

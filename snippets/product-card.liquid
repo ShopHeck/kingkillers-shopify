@@ -16,7 +16,9 @@
        image: product.featured_media.preview_image,
        sizes: '(max-width:600px) 90vw, (max-width:990px) 50vw, 25vw',
        widths: '300, 450, 600, 900',
-       class: 'kk-pc__img' %}
+       class: 'kk-pc__img',
+       alt: product.title,
+       eager_first: true %}
     <span class="kk-pc__splatter" aria-hidden="true"></span>
     {%- if product.metafields.custom.badge != blank -%}
       <span class="kk-pc__badge">{{ product.metafields.custom.badge.value }}</span>

@@ -22,7 +22,7 @@
                     data-large-src="{{ image | image_url: width: 1200 }}"
                     data-large-srcset="{{ srcset_val | strip | escape }}"
                     aria-label="View product image {{ forloop.index }}">
-              {% render 'responsive-image', image: image, sizes: '120px', widths: '120, 240', class: 'kk-pdp__thumb' %}
+              {% render 'responsive-image', image: image, sizes: '120px', widths: '120, 240', class: 'kk-pdp__thumb', alt: product.title, eager_first: true %}
             </button>
           {%- endfor -%}
         </div>
