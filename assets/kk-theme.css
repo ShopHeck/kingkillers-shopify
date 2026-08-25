@@ -519,3 +519,19 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){
   .kk-np__panel,.kk-np__overlay{transition:none;transform:none}
 }
+
+
+/* ===== 2026-08-25 audit: a11y + UX overrides ===== */
+/* WCAG AA: brighten muted grays + brand red used as TEXT on dark surfaces.
+   --ink-faint #74747e (3.9:1) -> #90909c (~5.6:1); --blood #e11313 (4.35:1) -> #ff3d33 (~5.4:1).
+   Backgrounds/borders using these vars are unaffected visually. */
+:root{--ink-faint:#90909c;--blood:#ff3d33}
+
+/* Touch targets >= 44px on nav dropdown toggles + header cart */
+.kk-nav__toggle{min-width:44px;min-height:44px;padding:10px 14px}
+.kk-header__cart{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+
+/* Hero subheadline legibility over busy photo (mobile worst-case) */
+@media (max-width:750px){
+  .kk-hero__scrim{background:linear-gradient(180deg,rgba(7,7,7,.82),rgba(7,7,7,.55) 45%,rgba(7,7,7,.35))}
+}

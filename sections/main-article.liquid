@@ -45,3 +45,17 @@
   "mainEntityOfPage": { "@type": "WebPage", "@id": {{ shop.url | append: article.url | json }} }
 }
 </script>
+
+<script data-kk-art-dedupe>
+(function(){
+  var first=document.getElementById('art-title');
+  if(!first)return;
+  var scope=document.querySelector('.kk-art__content')||document;
+  var h1s=scope.querySelectorAll('h1');
+  for(var i=0;i<h1s.length;i++){
+    if(h1s[i]!==first){var d=document.createElement('p');d.className='kk-h3';d.style.fontWeight='700';
+      while(h1s[i].firstChild)d.appendChild(h1s[i].firstChild);
+      h1s[i].parentNode.replaceChild(d,h1s[i]);}
+  }
+})();
+</script>
