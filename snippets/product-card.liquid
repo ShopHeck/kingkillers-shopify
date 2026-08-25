@@ -51,12 +51,11 @@
     {%- else -%}
     <div class="kk-notify" data-notify>
       <button type="button" class="kk-btn kk-btn--ghost kk-btn--full" data-notify-toggle>Notify Me When Back</button>
-      <form method="post" action="/contact#kk-notify-{{ product.id }}" class="kk-notify__form" hidden>
-        <input type="hidden" name="form_type" value="customer">
+      {%- form 'customer', class: 'kk-notify__form', hidden: 'hidden' -%}
         <input type="hidden" name="contact[tags]" value="notify-me, {{ product.title | escape }}">
         <input type="email" name="contact[email]" placeholder="your@email.com" required aria-label="Email for restock alert on {{ product.title | escape }}">
         <button type="submit" class="kk-btn kk-btn--primary">Alert Me</button>
-      </form>
+      {%- endform -%}
     </div>
     {%- endif -%}
   </div>

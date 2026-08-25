@@ -163,12 +163,11 @@
       {%- unless product.available -%}
       <div class="kk-notify kk-notify--pdp" data-notify id="kk-notify">
         <p class="kk-notify__title">This one's gone — get first dibs when it's back.</p>
-        <form method="post" action="/contact#kk-notify" class="kk-notify__form">
-          <input type="hidden" name="form_type" value="customer">
+        {%- form 'customer', class: 'kk-notify__form' -%}
           <input type="hidden" name="contact[tags]" value="notify-me, {{ product.title | escape }}">
           <input type="email" name="contact[email]" placeholder="your@email.com" required aria-label="Email for restock alert on {{ product.title | escape }}">
           <button type="submit" class="kk-btn kk-btn--primary">Notify Me</button>
-        </form>
+        {%- endform -%}
       </div>
       {%- endunless -%}
 
