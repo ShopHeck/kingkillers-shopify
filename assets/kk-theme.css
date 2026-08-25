@@ -535,3 +535,16 @@ a{color:inherit}
 @media (max-width:750px){
   .kk-hero__scrim{background:linear-gradient(180deg,rgba(7,7,7,.82),rgba(7,7,7,.55) 45%,rgba(7,7,7,.35))}
 }
+
+
+/* ===== 2026-08-25 CRO: notify-me + seo copy ===== */
+.kk-notify{margin-top:8px}
+.kk-notify--pdp{margin-top:14px}
+.kk-notify__title{font-size:14px;color:var(--ink-dim);margin:0 0 8px}
+.kk-notify__form{display:flex;gap:8px}
+.kk-notify__form input[type=email]{flex:1;min-width:0;min-height:44px;padding:0 12px;background:#f4f4f5;border:1px solid #d4d4d8;border-radius:10px;color:#09090b;font-size:14px}
+.kk-notify__form input[type=email]::placeholder{color:#71717a}
+.kk-seocopy{border-top:1px solid var(--line);margin-top:8px}
+.kk-seocopy .kk-wrap{display:grid;gap:12px;color:var(--ink-dim);font-size:15px;line-height:1.7;padding-top:28px;padding-bottom:28px}
+.kk-seocopy h2,.kk-seocopy h3{color:var(--ink);margin:0}
+.kk-seocopy p{margin:0}

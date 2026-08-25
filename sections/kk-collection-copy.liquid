@@ -1,0 +1,19 @@
+{%- comment -%}
+  Below-grid editorial/SEO content. Sources collection.metafields.custom.seo_copy (html).
+  Renders nothing when the metafield is empty, so untouched collections are unaffected.
+{%- endcomment -%}
+{%- assign seo_copy = collection.metafields.custom.seo_copy.value -%}
+{%- if seo_copy != blank -%}
+  <section class="kk-section kk-seocopy" aria-label="About this collection">
+    <div class="kk-wrap">{{ seo_copy }}</div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KK Collection copy",
+  "tag": "div",
+  "enabled_on": { "templates": ["collection"] },
+  "settings": []
+}
+{% endschema %}

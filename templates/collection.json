@@ -36,7 +36,7 @@
         "item_gPfjeX": {
           "type": "item",
           "settings": {
-            "title": "4.8★ Rated",
+            "title": "4.8\u2605 Rated",
             "text": "200+ reviews across Trustpilot & site"
           }
         },
@@ -56,10 +56,15 @@
       ],
       "name": "KK Trust strip",
       "settings": {}
+    },
+    "kk_seocopy": {
+      "type": "kk-collection-copy",
+      "settings": {}
     }
   },
   "order": [
     "main",
+    "kk_seocopy",
     "kk_trust_j4jANk"
   ]
 }

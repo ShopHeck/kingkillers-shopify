@@ -43,12 +43,31 @@
       <span class="kk-pc__price">{{ product.price | money }}</span>
       {%- if on_sale -%}<s class="kk-pc__was">{{ product.compare_at_price | money }}</s>{%- endif -%}
     </div>
+    {%- if product.available -%}
     <form method="post" action="{{ routes.cart_add_url }}" class="kk-pc__form" data-quick-add>
       <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-      <button type="submit" class="kk-btn kk-btn--primary kk-btn--full"
-              {% unless product.available %}disabled{% endunless %}>
-        {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
-      </button>
+      <button type="submit" class="kk-btn kk-btn--primary kk-btn--full">Add to Cart</button>
     </form>
+    {%- else -%}
+    <div class="kk-notify" data-notify>
+      <button type="button" class="kk-btn kk-btn--ghost kk-btn--full" data-notify-toggle>Notify Me When Back</button>
+      <form method="post" action="/contact#kk-notify-{{ product.id }}" class="kk-notify__form" hidden>
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="contact[tags]" value="notify-me, {{ product.title | escape }}">
+        <input type="email" name="contact[email]" placeholder="your@email.com" required aria-label="Email for restock alert on {{ product.title | escape }}">
+        <button type="submit" class="kk-btn kk-btn--primary">Alert Me</button>
+      </form>
+    </div>
+    {%- endif -%}
   </div>
 </article>
+
+<script>
+if(!window.kkNotifyInit){window.kkNotifyInit=true;
+document.addEventListener('click',function(e){
+var b=e.target.closest('[data-notify-toggle]');
+if(b){var wrap=b.closest('[data-notify]');var f=wrap&&wrap.querySelector('.kk-notify__form');
+if(f){f.hidden=!f.hidden;if(!f.hidden){var inp=f.querySelector('input[type=email]');if(inp)inp.focus();}}}
+});
+}
+</script>
