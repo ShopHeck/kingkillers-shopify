@@ -9,9 +9,9 @@
     (&quot; / &#39;) from apps or imports. Decode once here so the single
     escape filter below yields exactly-once-escaped meta content.
   endcomment
-  assign og_title = page_title | replace: "&quot;", "" | replace: "&#39;", "'" | replace: "&amp;", "&"
+  assign og_title = page_title | replace: "&amp;#39;", "'" | replace: "&amp;quot;", "" | replace: "&#39;", "'" | replace: "&quot;", "" | replace: "&amp;", "&"
   assign og_desc_raw = page_description | default: shop.description | default: settings.brand_description
-  assign og_desc = og_desc_raw | replace: "&quot;", "" | replace: "&#39;", "'" | replace: "&amp;", "&"
+  assign og_desc = og_desc_raw | replace: "&amp;#39;", "'" | replace: "&amp;quot;", "" | replace: "&#39;", "'" | replace: "&quot;", "" | replace: "&amp;", "&"
   if request.page_type == 'index'
     assign og_title = settings.brand_name | default: shop.name | append: ' | Fighter-Owned Combat Sports Apparel'
   endif
