@@ -25,7 +25,8 @@
 
   assign srcset_parts = ''
   assign sep = ''
-  for w in img_widths | split: ','
+  assign width_list = img_widths | split: ','
+  for w in width_list
     assign ww = w | strip
     assign width_url = image | image_url: width: ww
     assign src_parts = srcset_parts | append: sep | append: 'https:' | append: width_url | append: ' ' | append: ww | append: 'w'
