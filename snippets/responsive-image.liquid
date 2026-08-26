@@ -1,15 +1,17 @@
-
 {%- comment -%}
-  Reusable responsive image. image_url -> image_tag auto-emits width/height (CLS-safe),
-  srcset, and best format (WebP/AVIF). Lazy by default; pass preload:true for the LCP only.
+  Reusable responsive image emitting RAW <img> markup (bypasses image_tag attribute
+  handling entirely so class/loading/fetchpriority/alt always survive).
+  preload:true -> eager + fetchpriority high. eager_first -> eager + fetchpriority low.
   Usage:
-    {% render 'responsive-image', image: section.settings.image, sizes: '100vw', preload: true %}
+    {% render 'responsive-image', image: section.settings.image, sizes: '100vw', preload: true, class: 'kk-hero__img', alt: '...' %}
 {%- endcomment -%}
 {%- liquid
   assign img_widths = widths | default: '320, 480, 640, 800, 1080, 1440, 1920, 2400'
   assign img_sizes = sizes | default: '100vw'
   assign is_lcp = preload | default: false
   assign eager_early = eager_first | default: false
+  assign img_alt = alt | default: image.alt | default: ''
+  assign img_class = class | default: ''
 
   assign loading_attr = 'lazy'
   assign fetchpriority_attr = 'auto'
@@ -20,20 +22,29 @@
     assign loading_attr = 'eager'
     assign fetchpriority_attr = 'low'
   endif
+
+  assign srcset_parts = ''
+  assign sep = ''
+  for w in img_widths | split: ','
+    assign ww = w | strip
+    assign width_url = image | image_url: width: ww
+    assign src_parts = srcset_parts | append: sep | append: 'https:' | append: width_url | append: ' ' | append: ww | append: 'w'
+    assign srcset_parts = src_parts
+    assign sep = ', '
+  endfor
 -%}
 {%- if image != blank -%}
-  {{ image
-     | image_url: width: 2400
-     | image_tag:
-         widths: img_widths,
-         sizes: img_sizes,
-         alt: alt | default: image.alt | default: '',
-         class: class,
-         loading: loading_attr,
-         fetchpriority: fetchpriority_attr,
-         preload: is_lcp,
-         decoding: 'async'
-  }}
+  <img
+    src="https:{{ image | image_url: width: 2400 }}"
+    srcset="{{ srcset_parts }}"
+    sizes="{{ img_sizes }}"
+    width="{{ image.width }}"
+    height="{{ image.height }}"
+    alt="{{ img_alt | escape }}"
+    loading="{{ loading_attr }}"
+    fetchpriority="{{ fetchpriority_attr }}"
+    decoding="async"
+    {% if img_class != blank %}class="{{ img_class }}"{% endif %}>
 {%- else -%}
   <div class="kk-img-ph" aria-hidden="true">
     {{ 'product-1' | placeholder_svg_tag: 'kk-img-ph__svg' }}
