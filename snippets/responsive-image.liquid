@@ -23,20 +23,28 @@
     assign fetchpriority_attr = 'low'
   endif
 
+  assign main_url = image | image_url: width: 2400
+  if main_url contains '//'
+    assign main_url = main_url | prepend: 'https:'
+  endif
+
   assign srcset_parts = ''
   assign sep = ''
   assign width_list = img_widths | split: ','
   for w in width_list
     assign ww = w | strip
-    assign width_url = image | image_url: width: ww
-    assign src_parts = srcset_parts | append: sep | append: 'https:' | append: width_url | append: ' ' | append: ww | append: 'w'
+    assign u_w = image | image_url: width: ww
+    if u_w contains '//'
+      assign u_w = u_w | prepend: 'https:'
+    endif
+    assign src_parts = srcset_parts | append: sep | append: u_w | append: ' ' | append: ww | append: 'w'
     assign srcset_parts = src_parts
     assign sep = ', '
   endfor
 -%}
 {%- if image != blank -%}
   <img
-    src="https:{{ image | image_url: width: 2400 }}"
+    src="{{ main_url }}"
     srcset="{{ srcset_parts }}"
     sizes="{{ img_sizes }}"
     width="{{ image.width }}"
