@@ -8,6 +8,10 @@
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="icon" type="image/png" href="{{ 'favicon-32.png' | asset_url }}">
 
+    {%- comment -%} Google Tag Manager (consolidated tag loader) {%- endcomment -%}
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TGBCH9FK');</script>
+    {%- comment -%} /End Google Tag Manager {%- endcomment -%}
+
     {%- comment -%} Flip no-js -> js immediately so we never block paint. {%- endcomment -%}
     <script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
 
@@ -36,6 +40,8 @@
   </head>
 
   <body class="kk template-{{ request.page_type | handle }}">
+
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGBCH9FK" height="0" width="0" style="display:none;visibility:hidden" aria-hidden="true"></iframe></noscript>
     <a class="kk-skip" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
 
     {%- comment -%} Header group = announcement bar + header, editable/reorderable in the editor. {%- endcomment -%}
