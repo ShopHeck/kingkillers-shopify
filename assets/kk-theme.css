@@ -133,7 +133,6 @@ a{color:inherit}
 .kk-pc:hover{transform:translateY(-5px);border-color:var(--line-strong);box-shadow:var(--shadow)}
 .kk-pc__media{position:relative;display:block;aspect-ratio:1/1;background:#0d0d10;overflow:hidden}
 .kk-pc__media img{width:100%;height:100%;object-fit:cover}
-.kk-pc__splatter{position:absolute;inset:0;pointer-events:none;opacity:.4;background-image:radial-gradient(circle at 28% 32%,rgba(255,255,255,.5) 0 7px,transparent 8px),radial-gradient(circle at 74% 64%,rgba(225,19,19,.6) 0 9px,transparent 10px),radial-gradient(circle at 50% 86%,rgba(255,255,255,.3) 0 5px,transparent 6px)}
 .kk-pc__badge{position:absolute;top:12px;left:12px;font-family:var(--display);font-weight:800;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;background:#070707;color:#fff;padding:5px 9px;border-radius:6px;border:1px solid var(--line-strong)}
 .kk-pc__save{position:absolute;top:12px;right:12px;font-family:var(--display);font-weight:800;font-size:.6rem;background:var(--blood);color:#fff;padding:5px 9px;border-radius:6px}
 .kk-pc__info{padding:16px 16px 18px;display:flex;flex-direction:column;gap:7px}

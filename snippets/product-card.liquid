@@ -19,7 +19,6 @@
        class: 'kk-pc__img',
        alt: product.title,
        eager_first: true %}
-    <span class="kk-pc__splatter" aria-hidden="true"></span>
     {%- if product.metafields.custom.badge != blank -%}
       <span class="kk-pc__badge">{{ product.metafields.custom.badge.value }}</span>
     {%- elsif product.tags contains 'Best Seller' -%}
