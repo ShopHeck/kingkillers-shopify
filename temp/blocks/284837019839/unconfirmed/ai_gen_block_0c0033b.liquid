@@ -1,6 +1,60 @@
+{% doc %}
+  @prompt
+    Add a quantity selector to product pages that allows customers to increase or decrease the quantity before adding to cart. It should include a minus button, a number input field showing the current quantity (minimum 1), and a plus button. Style it to match a premium athletic/combat sports brand aesthetic — clean, bold, and minimal. Place it above or adjacent to the Add to Cart button.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .ai-quantity-selector-{{ ai_gen_id }} { display: block; width: {{ block.settings.desktop_width_percent }}%; max-width: 100%; margin: {{ block.settings.margin_top }}px 0 {{ block.settings.margin_bottom }}px; }
+  .ai-quantity-selector-{{ ai_gen_id }}__label { display: block; margin-bottom: 10px; color: {{ block.settings.text_color }}; font-size: 12px; font-weight: 700; letter-spacing: .12em; line-height: 1.2; text-transform: uppercase; }
+  .ai-quantity-selector-{{ ai_gen_id }}__control { display: inline-flex; align-items: center; min-height: 52px; overflow: hidden; border: 1px solid {{ block.settings.border_color }}; border-radius: {{ block.settings.border_radius }}px; background: {{ block.settings.background_color }}; }
+  .ai-quantity-selector-{{ ai_gen_id }}__button { display: grid; width: 52px; height: 52px; padding: 0; place-items: center; border: 0; background: transparent; color: {{ block.settings.text_color }}; cursor: pointer; transition: background-color 160ms ease, color 160ms ease; }
+  .ai-quantity-selector-{{ ai_gen_id }}__button:hover, .ai-quantity-selector-{{ ai_gen_id }}__button:focus-visible { background: {{ block.settings.accent_color }}; color: #ffffff; }
+  .ai-quantity-selector-{{ ai_gen_id }}__button:focus-visible, .ai-quantity-selector-{{ ai_gen_id }}__input:focus-visible { outline: 2px solid {{ block.settings.accent_color }}; outline-offset: -2px; }
+  .ai-quantity-selector-{{ ai_gen_id }}__button svg { width: 16px; height: 16px; stroke-width: 2.5; }
+  .ai-quantity-selector-{{ ai_gen_id }}__input { width: 58px; height: 52px; padding: 0 4px; border: 0; border-right: 1px solid {{ block.settings.border_color }}; border-left: 1px solid {{ block.settings.border_color }}; background: transparent; color: {{ block.settings.text_color }}; font-size: 16px; font-weight: 700; text-align: center; -moz-appearance: textfield; }
+  .ai-quantity-selector-{{ ai_gen_id }}__input::-webkit-outer-spin-button, .ai-quantity-selector-{{ ai_gen_id }}__input::-webkit-inner-spin-button { margin: 0; -webkit-appearance: none; }
+{% endstyle %}
+<quantity-selector-{{ ai_gen_id }} class="ai-quantity-selector-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <label class="ai-quantity-selector-{{ ai_gen_id }}__label" for="ai-quantity-{{ ai_gen_id }}">{{ block.settings.label }}</label>
+  <div class="ai-quantity-selector-{{ ai_gen_id }}__control">
+    <button type="button" class="ai-quantity-selector-{{ ai_gen_id }}__button" data-action="decrease" aria-label="Decrease quantity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M5 12h14" /></svg></button>
+    <input id="ai-quantity-{{ ai_gen_id }}" class="ai-quantity-selector-{{ ai_gen_id }}__input" type="number" name="quantity" value="1" min="1" step="1" inputmode="numeric" aria-label="Quantity">
+    <button type="button" class="ai-quantity-selector-{{ ai_gen_id }}__button" data-action="increase" aria-label="Increase quantity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg></button>
+  </div>
+</quantity-selector-{{ ai_gen_id }}>
+<script>
+  (function() {
+    class QuantitySelector{{ ai_gen_id }} extends HTMLElement {
+      connectedCallback() {
+        this.input = this.querySelector('input');
+        this.querySelectorAll('[data-action]').forEach((button) => button.addEventListener('click', () => {
+          const current = parseInt(this.input.value, 10) || 1;
+          this.input.value = button.dataset.action === 'increase' ? current + 1 : Math.max(1, current - 1);
+          this.input.dispatchEvent(new Event('change', { bubbles: true }));
+        }));
+        this.input.addEventListener('change', () => { this.input.value = Math.max(1, parseInt(this.input.value, 10) || 1); });
+      }
+    }
+    if (!customElements.get('quantity-selector-{{ ai_gen_id }}')) customElements.define('quantity-selector-{{ ai_gen_id }}', QuantitySelector{{ ai_gen_id }});
+  })();
+</script>
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Quantity selector",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Quantity" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "header", "content": "Style" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#070707" },
+    { "type": "color", "id": "border_color", "label": "Border", "default": "#b8b8b8" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#b42318" },
+    { "type": "range", "id": "border_radius", "label": "Corner radius", "min": 0, "max": 20, "step": 1, "unit": "px", "default": 2 },
+    { "type": "range", "id": "margin_top", "label": "Top spacing", "min": 0, "max": 40, "step": 5, "unit": "px", "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Bottom spacing", "min": 0, "max": 40, "step": 5, "unit": "px", "default": 15 }
+  ],
+  "presets": [{ "name": "Quantity selector" }],
+  "tag": null,
+  "class": "quantity-selector-block"
+}
 {% endschema %}
