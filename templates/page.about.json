@@ -1,0 +1,144 @@
+{
+  "sections": {
+    "hero": {
+      "type": "kk-about-hero",
+      "blocks": {
+        "founded": {
+          "type": "fact",
+          "settings": {
+            "label": "Founded",
+            "value": "2021"
+          }
+        },
+        "home": {
+          "type": "fact",
+          "settings": {
+            "label": "Home corner",
+            "value": "St. Petersburg, FL"
+          }
+        },
+        "owner": {
+          "type": "fact",
+          "settings": {
+            "label": "Built by",
+            "value": "An active pro fighter"
+          }
+        }
+      },
+      "block_order": ["founded", "home", "owner"],
+      "settings": {
+        "image": "shopify://shop_images/hero-image.jpg",
+        "eyebrow": "Fighter Owned · Est. 2021",
+        "heading": "This Brand Has Taken a Punch.",
+        "body": "<p>King Killers was built by professional fighter Michael “Heck” Heckert for people who know that the top spot is earned one round at a time.</p>",
+        "primary_label": "Shop Fighter-Built Gear",
+        "primary_url": "shopify://collections/best-sellers",
+        "secondary_label": "Read the Story",
+        "secondary_url": "#about-story"
+      }
+    },
+    "trust": {
+      "type": "kk-trust",
+      "blocks": {
+        "fighter_owned": {
+          "type": "item",
+          "settings": {
+            "title": "Fighter Owned",
+            "text": "The founder still trains, competes and knows the arena firsthand"
+          }
+        },
+        "independent": {
+          "type": "item",
+          "settings": {
+            "title": "Independent",
+            "text": "A small US business—not a boardroom imitation of fight culture"
+          }
+        },
+        "community": {
+          "type": "item",
+          "settings": {
+            "title": "Built for the Climb",
+            "text": "For MMA, boxing, BJJ, Muay Thai and everyday training"
+          }
+        },
+        "guarantee": {
+          "type": "item",
+          "settings": {
+            "title": "30-Day Guarantee",
+            "text": "Try the gear without taking the risk"
+          }
+        }
+      },
+      "block_order": ["fighter_owned", "independent", "community", "guarantee"],
+      "settings": {}
+    },
+    "story": {
+      "type": "kk-about-story",
+      "blocks": {
+        "spark": {
+          "type": "round",
+          "settings": {
+            "heading": "The spark",
+            "text": "A local cage fight with his dad turns curiosity into an obsession with combat sports."
+          }
+        },
+        "work": {
+          "type": "round",
+          "settings": {
+            "heading": "The work",
+            "text": "Years of training, competition and fight camps turn the spectator into a professional fighter."
+          }
+        },
+        "brand": {
+          "type": "round",
+          "settings": {
+            "heading": "The brand",
+            "text": "King Killers launches in 2021 with a fighter’s point of view and an independent operator behind every order."
+          }
+        },
+        "next": {
+          "type": "round",
+          "settings": {
+            "heading": "The next ranking",
+            "text": "Keep improving the gear, supporting fighters and earning a place in more training rooms."
+          }
+        }
+      },
+      "block_order": ["spark", "work", "brand", "next"],
+      "settings": {
+        "eyebrow": "What the Name Means",
+        "heading": "A King Killer Hunts the Person at the Top.",
+        "intro": "<p>Not out of envy. Out of respect for the work it took to get there. In combat sports, the king is the champion. Your job is to train, climb the rankings and earn the right to meet them.</p><p>That same mindset follows us outside the ring: study the standard, do the hard work and never confuse confidence with entitlement.</p>",
+        "founder_image": "shopify://shop_images/victory-shot.jpg",
+        "founder_image_alt": "Michael Heckert after a professional fight",
+        "image_caption": "Michael “Heck” Heckert · Professional fighter and King Killers founder",
+        "founder_kicker": "Meet the Founder",
+        "founder_heading": "Built Between Fight Camps.",
+        "founder_body": "<p>Michael “Heck” Heckert fell in love with combat sports after watching local cage fights with his dad. The obsession became a career across MMA, boxing and professional bare-knuckle fighting.</p><p>King Killers started in 2021 as a way to turn that life inside the fight game into gear with an honest point of view. Every order supports an independent, fighter-owned business—and helps keep the next camp moving.</p>",
+        "quote": "<p>“Our goal is to work through the rankings until we earn the matchup with the king.”</p>",
+        "timeline_eyebrow": "The Climb",
+        "timeline_heading": "No Overnight Success. Just Rounds.",
+        "timeline_intro": "The brand grew the same way a fighter does: one honest round at a time.",
+        "promise_label": "Our Corner",
+        "promise_text": "We make bold gear for people who train with intent, compete with respect and keep showing up when nobody is watching.",
+        "promise_link_label": "Hear from verified customers",
+        "promise_link": "/pages/reviews"
+      }
+    },
+    "finalcta": {
+      "type": "kk-final-cta",
+      "settings": {
+        "bg_word": "EARN THE CROWN",
+        "eyebrow": "Your Next Round",
+        "heading": "Wear What You Train For.",
+        "sub": "<p>Fighter-built gear for the gym, the street and every hard round between.</p>",
+        "cta1_label": "Shop Best Sellers",
+        "cta1_url": "shopify://collections/best-sellers",
+        "cta2_label": "Read Customer Reviews",
+        "cta2_url": "/pages/reviews",
+        "fine": "Free shipping over $100 · 30-day money-back guarantee"
+      }
+    }
+  },
+  "order": ["hero", "trust", "story", "finalcta"]
+}

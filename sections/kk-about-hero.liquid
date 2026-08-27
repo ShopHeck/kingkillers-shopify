@@ -1,0 +1,78 @@
+<section class="kk-about-hero" aria-labelledby="about-hero-{{ section.id }}">
+  <div class="kk-about-hero__media" aria-hidden="true">
+    {% render 'responsive-image',
+       image: section.settings.image,
+       sizes: '100vw',
+       preload: true,
+       widths: '640, 960, 1280, 1600, 1920, 2400',
+       class: 'kk-about-hero__img',
+       alt: '' %}
+    <span class="kk-about-hero__scrim"></span>
+  </div>
+
+  <div class="kk-wrap kk-about-hero__inner">
+    <div class="kk-about-hero__copy">
+      {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h1 class="kk-about-hero__title" id="about-hero-{{ section.id }}">{{ section.settings.heading }}</h1>
+      {%- if section.settings.body != blank -%}<div class="kk-about-hero__body rte">{{ section.settings.body }}</div>{%- endif -%}
+      <div class="kk-about-hero__actions">
+        {%- if section.settings.primary_label != blank -%}
+          <a class="kk-btn kk-btn--primary" href="{{ section.settings.primary_url }}">{{ section.settings.primary_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.secondary_label != blank -%}
+          <a class="kk-btn kk-btn--ghost" href="{{ section.settings.secondary_url }}">{{ section.settings.secondary_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <dl class="kk-about-hero__facts" aria-label="King Killers at a glance">
+        {%- for block in section.blocks -%}
+          <div class="kk-about-hero__fact" {{ block.shopify_attributes }}>
+            <dt>{{ block.settings.label }}</dt>
+            <dd>{{ block.settings.value }}</dd>
+          </div>
+        {%- endfor -%}
+      </dl>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KK About hero",
+  "tag": "section",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Fight-night image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Fighter Owned · Est. 2021" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "This Brand Has Taken a Punch." },
+    { "type": "richtext", "id": "body", "label": "Introduction", "default": "<p>King Killers was built by professional fighter Michael “Heck” Heckert for people who know that the top spot is earned one round at a time.</p>" },
+    { "type": "text", "id": "primary_label", "label": "Primary button", "default": "Shop Fighter-Built Gear" },
+    { "type": "url", "id": "primary_url", "label": "Primary link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button", "default": "Read the Story" },
+    { "type": "url", "id": "secondary_url", "label": "Secondary link" }
+  ],
+  "blocks": [
+    {
+      "type": "fact",
+      "name": "Brand fact",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Founded" },
+        { "type": "text", "id": "value", "label": "Value", "default": "2021" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "KK About hero",
+      "blocks": [
+        { "type": "fact", "settings": { "label": "Founded", "value": "2021" } },
+        { "type": "fact", "settings": { "label": "Home corner", "value": "St. Petersburg, FL" } },
+        { "type": "fact", "settings": { "label": "Built by", "value": "Active fighters" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

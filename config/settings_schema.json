@@ -1,1 +1,49 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "King Killers",
+    "theme_version": "1.1.0",
+    "theme_author": "King Killers",
+    "theme_support_email": "sales@kingkillers.co",
+    "theme_documentation_url": "https://github.com/ShopHeck/kingkillers-shopify"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      { "type": "text", "id": "brand_name", "label": "Brand name", "default": "King Killers Apparel" },
+      { "type": "text", "id": "brand_slogan", "label": "Brand slogan", "default": "Real Kings Kill Kings" },
+      { "type": "textarea", "id": "brand_description", "label": "Brand description", "default": "Fighter-owned combat sports apparel based in Tampa / St. Petersburg, Florida. Made in the USA." },
+      { "type": "text", "id": "founder_name", "label": "Founder name", "default": "Michael Heckert" },
+      { "type": "text", "id": "founding_year", "label": "Founding year", "default": "2021" },
+      { "type": "text", "id": "price_range", "label": "Typical price range", "default": "$19 - $69" },
+      { "type": "image_picker", "id": "share_image", "label": "Social sharing image" }
+    ]
+  },
+  {
+    "name": "Contact and location",
+    "settings": [
+      { "type": "text", "id": "nap_city", "label": "City", "default": "St. Petersburg" },
+      { "type": "text", "id": "nap_region", "label": "State or region", "default": "FL" },
+      { "type": "text", "id": "nap_zip", "label": "ZIP code", "default": "33702" },
+      { "type": "text", "id": "nap_email", "label": "Contact email", "default": "sales@kingkillers.co" },
+      { "type": "text", "id": "nap_phone", "label": "Contact phone", "default": "+1-620-704-7510" }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      { "type": "text", "id": "twitter_handle", "label": "X / Twitter handle", "default": "@kingkillersco" },
+      { "type": "url", "id": "social_instagram", "label": "Instagram URL" },
+      { "type": "url", "id": "social_facebook", "label": "Facebook URL" },
+      { "type": "url", "id": "social_trustpilot", "label": "Trustpilot URL" }
+    ]
+  },
+  {
+    "name": "Storefront",
+    "settings": [
+      { "type": "color", "id": "theme_color", "label": "Browser theme color", "default": "#070707" },
+      { "type": "range", "id": "free_ship_threshold", "label": "Free shipping threshold", "min": 0, "max": 250, "step": 5, "unit": "$", "default": 100 },
+      { "type": "checkbox", "id": "enable_google_font", "label": "Load Archivo and Inter from Google Fonts", "default": true }
+    ]
+  }
+]
