@@ -277,6 +277,8 @@
     var stickyPrice = pdp.querySelector('[data-pdp-sticky-price]');
     var submit = pdp.querySelector('[data-pdp-submit]');
     var stickySubmit = pdp.querySelector('[data-pdp-sticky-submit]');
+    var quantity = pdp.querySelector('[data-pdp-quantity-input]');
+    var quantityButtons = pdp.querySelectorAll('[data-pdp-quantity-change]');
     var thumbs = pdp.querySelectorAll('.kk-pdp__thumb-btn');
     var pills = pdp.querySelectorAll('[data-pdp-pill]');
     var sizeLabel = pdp.querySelector('[data-pdp-size-label]');
@@ -287,6 +289,21 @@
       return variant;
     }
 
+    function normaliseQuantity() {
+      if (!quantity) return;
+      var min = parseInt(quantity.getAttribute('min'), 10) || 1;
+      var max = parseInt(quantity.getAttribute('max'), 10);
+      var value = parseInt(quantity.value, 10);
+      if (!Number.isFinite(value)) value = min;
+      value = Math.max(min, value);
+      if (Number.isFinite(max)) value = Math.min(max, value);
+      quantity.value = value;
+      quantityButtons.forEach(function (btn) {
+        var change = parseInt(btn.getAttribute('data-pdp-quantity-change'), 10);
+        btn.disabled = change < 0 ? value <= min : Number.isFinite(max) && value >= max;
+      });
+    }
+
     function syncVariantState() {
       if (!variant || !price) return;
       var selected = selectedOption();
@@ -295,8 +312,14 @@
       var compareText = selected.getAttribute('data-compare') || '';
       var available = selected.getAttribute('data-available') !== 'false';
       var selectedId = selected.value || selected.getAttribute('value') || '';
+      var quantityMax = parseInt(selected.getAttribute('data-quantity-max'), 10);
       price.innerHTML = '<span>' + esc(priceText) + '</span>' + (compareText ? '<s>' + esc(compareText) + '</s>' : '');
       if (stickyPrice) stickyPrice.textContent = priceText;
+      if (quantity) {
+        if (Number.isFinite(quantityMax) && quantityMax > 0) quantity.setAttribute('max', quantityMax);
+        else quantity.removeAttribute('max');
+        normaliseQuantity();
+      }
       [submit, stickySubmit].forEach(function (btn) {
         if (!btn) return;
         btn.disabled = !available;
@@ -353,6 +376,22 @@
     });
 
     if (variant && variant.tagName === 'SELECT') variant.addEventListener('change', syncVariantState);
+    if (quantity) {
+      quantity.addEventListener('change', normaliseQuantity);
+      quantity.addEventListener('blur', normaliseQuantity);
+      if (quantity.form) quantity.form.addEventListener('submit', normaliseQuantity);
+    }
+    quantityButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        normaliseQuantity();
+        var change = parseInt(btn.getAttribute('data-pdp-quantity-change'), 10);
+        var nextValue = parseInt(quantity.value, 10) + change;
+        var max = parseInt(quantity.getAttribute('max'), 10);
+        quantity.value = Number.isFinite(max) ? Math.min(nextValue, max) : nextValue;
+        normaliseQuantity();
+        quantity.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
     if (stickySubmit) stickySubmit.addEventListener('click', function () { if (submit) submit.click(); });
 
     thumbs.forEach(function (btn) {

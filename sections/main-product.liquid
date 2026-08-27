@@ -143,6 +143,7 @@
                       data-price="{{ variant.price | money }}"
                       data-compare="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money }}{% endif %}"
                       data-available="{{ variant.available }}"
+                      data-quantity-max="{% if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' %}{{ variant.inventory_quantity }}{% endif %}"
                       data-image="{{ var_image | image_url: width: 1200 }}"
                       data-srcset="{{ var_srcset | strip | escape }}"
                       {% if default_variant and variant.id == default_variant.id %}selected{% endif %}
@@ -152,12 +153,25 @@
             {%- endfor -%}
           </select>
         {%- else -%}
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-pdp-variant>
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}"
+                 data-available="{{ product.selected_or_first_available_variant.available }}"
+                 data-quantity-max="{% if product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_policy == 'deny' %}{{ product.selected_or_first_available_variant.inventory_quantity }}{% endif %}"
+                 data-pdp-variant>
         {%- endunless -%}
 
-        <button type="submit" class="kk-btn kk-btn--primary kk-btn--full" data-pdp-submit {% unless product.available %}disabled{% endunless %}>
-          {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
-        </button>
+        <div class="kk-pdp__purchase">
+          <div class="kk-pdp__quantity" data-pdp-quantity>
+            <label for="Quantity-{{ section.id }}">Quantity</label>
+            <div class="kk-pdp__quantity-control">
+              <button type="button" data-pdp-quantity-change="-1" aria-label="Decrease quantity" aria-controls="Quantity-{{ section.id }}" disabled>&minus;</button>
+              <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" step="1" inputmode="numeric" autocomplete="off" aria-label="Product quantity" data-pdp-quantity-input>
+              <button type="button" data-pdp-quantity-change="1" aria-label="Increase quantity" aria-controls="Quantity-{{ section.id }}">&plus;</button>
+            </div>
+          </div>
+          <button type="submit" class="kk-btn kk-btn--primary kk-btn--full" data-pdp-submit {% unless product.available %}disabled{% endunless %}>
+            {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+          </button>
+        </div>
       {% endform %}
 
       {%- unless product.available -%}
