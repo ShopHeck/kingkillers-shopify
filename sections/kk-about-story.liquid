@@ -1,0 +1,121 @@
+<section id="about-story" class="kk-about-story" aria-labelledby="about-story-{{ section.id }}">
+  <div class="kk-wrap">
+    <header class="kk-about-story__manifesto">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="kk-about-story__manifesto-title" id="about-story-{{ section.id }}">{{ section.settings.heading }}</h2>
+      </div>
+      <div class="kk-about-story__manifesto-copy rte">{{ section.settings.intro }}</div>
+    </header>
+
+    <div class="kk-about-story__founder">
+      <div class="kk-about-story__portrait">
+        {%- if section.settings.founder_image != blank -%}
+          {% render 'responsive-image',
+             image: section.settings.founder_image,
+             sizes: '(max-width: 820px) 100vw, 44vw',
+             widths: '480, 720, 960, 1200',
+             class: 'kk-about-story__portrait-img',
+             alt: section.settings.founder_image_alt %}
+        {%- else -%}
+          <div class="kk-about-story__portrait-fallback" aria-hidden="true">
+            <span>HECK</span>
+            <small>Professional fighter · Founder</small>
+          </div>
+        {%- endif -%}
+        <p class="kk-about-story__caption">{{ section.settings.image_caption }}</p>
+      </div>
+
+      <div class="kk-about-story__founder-copy">
+        <p class="kk-about-story__kicker">{{ section.settings.founder_kicker }}</p>
+        <h2>{{ section.settings.founder_heading }}</h2>
+        <div class="kk-about-story__body rte">{{ section.settings.founder_body }}</div>
+        {%- if section.settings.quote != blank -%}
+          <blockquote>{{ section.settings.quote }}</blockquote>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="kk-about-story__climb" aria-labelledby="about-climb-{{ section.id }}">
+        <div class="kk-about-story__climb-head">
+          <p class="kk-eyebrow">{{ section.settings.timeline_eyebrow }}</p>
+          <h2 class="kk-h2" id="about-climb-{{ section.id }}">{{ section.settings.timeline_heading }}</h2>
+          <p>{{ section.settings.timeline_intro }}</p>
+        </div>
+        <ol class="kk-about-story__rounds">
+          {%- for block in section.blocks -%}
+            <li class="kk-about-story__round" {{ block.shopify_attributes }}>
+              <span class="kk-about-story__round-no">Round {{ forloop.index | prepend: '0' }}</span>
+              <div>
+                <h3>{{ block.settings.heading }}</h3>
+                <p>{{ block.settings.text }}</p>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </div>
+    {%- endif -%}
+
+    <div class="kk-about-story__promise">
+      <p class="kk-about-story__promise-label">{{ section.settings.promise_label }}</p>
+      <p class="kk-about-story__promise-text">{{ section.settings.promise_text }}</p>
+      {%- if section.settings.promise_link_label != blank -%}
+        <a href="{{ section.settings.promise_link }}">{{ section.settings.promise_link_label }} <span aria-hidden="true">→</span></a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KK About story",
+  "tag": "section",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "header", "content": "Manifesto" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "What the Name Means" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A King Killer Hunts the Person at the Top." },
+    { "type": "richtext", "id": "intro", "label": "Explanation", "default": "<p>Not out of envy. Out of respect for the work it took to get there. In combat sports, the king is the champion. Your job is to train, climb the rankings and earn the right to meet them.</p><p>That same mindset follows us outside the ring: study the standard, do the hard work and never confuse confidence with entitlement.</p>" },
+    { "type": "header", "content": "Founder story" },
+    { "type": "image_picker", "id": "founder_image", "label": "Founder image" },
+    { "type": "text", "id": "founder_image_alt", "label": "Founder image alt text", "default": "Michael Heckert after a professional fight" },
+    { "type": "text", "id": "image_caption", "label": "Image caption", "default": "Michael “Heck” Heckert · Professional fighter and King Killers founder" },
+    { "type": "text", "id": "founder_kicker", "label": "Founder label", "default": "Meet the Founder" },
+    { "type": "text", "id": "founder_heading", "label": "Founder heading", "default": "Built Between Fight Camps." },
+    { "type": "richtext", "id": "founder_body", "label": "Founder story", "default": "<p>Michael “Heck” Heckert fell in love with combat sports after watching local cage fights with his dad. The obsession became a career across MMA, boxing and professional bare-knuckle fighting.</p><p>King Killers started in 2021 as a way to turn that life inside the fight game into gear with an honest point of view. Every order supports an independent, fighter-owned business—and helps keep the next camp moving.</p>" },
+    { "type": "richtext", "id": "quote", "label": "Founder quote", "default": "<p>“Our goal is to work through the rankings until we earn the matchup with the king.”</p>" },
+    { "type": "header", "content": "The climb" },
+    { "type": "text", "id": "timeline_eyebrow", "label": "Timeline eyebrow", "default": "The Climb" },
+    { "type": "text", "id": "timeline_heading", "label": "Timeline heading", "default": "No Overnight Success. Just Rounds." },
+    { "type": "textarea", "id": "timeline_intro", "label": "Timeline introduction", "default": "The brand grew the same way a fighter does: one honest round at a time." },
+    { "type": "header", "content": "Closing promise" },
+    { "type": "text", "id": "promise_label", "label": "Promise label", "default": "Our Corner" },
+    { "type": "textarea", "id": "promise_text", "label": "Promise", "default": "We make bold gear for people who train with intent, compete with respect and keep showing up when nobody is watching." },
+    { "type": "text", "id": "promise_link_label", "label": "Promise link label", "default": "Hear from verified customers" },
+    { "type": "url", "id": "promise_link", "label": "Promise link" }
+  ],
+  "blocks": [
+    {
+      "type": "round",
+      "name": "Round",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "The spark" },
+        { "type": "textarea", "id": "text", "label": "Story", "default": "A local cage fight with his dad turns curiosity into an obsession with combat sports." }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "KK About story",
+      "blocks": [
+        { "type": "round", "settings": { "heading": "The spark", "text": "A local cage fight with his dad turns curiosity into an obsession with combat sports." } },
+        { "type": "round", "settings": { "heading": "The work", "text": "Years of training, competition and fight camps turn the spectator into a professional fighter." } },
+        { "type": "round", "settings": { "heading": "The brand", "text": "King Killers launches in 2021 with a fighter’s point of view and an independent operator behind every order." } },
+        { "type": "round", "settings": { "heading": "The next ranking", "text": "Keep improving the gear, supporting fighters and earning a place in more training rooms." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

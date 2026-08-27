@@ -133,7 +133,6 @@ a{color:inherit}
 .kk-pc:hover{transform:translateY(-5px);border-color:var(--line-strong);box-shadow:var(--shadow)}
 .kk-pc__media{position:relative;display:block;aspect-ratio:1/1;background:#0d0d10;overflow:hidden}
 .kk-pc__media img{width:100%;height:100%;object-fit:cover}
-.kk-pc__splatter{position:absolute;inset:0;pointer-events:none;opacity:.4;background-image:radial-gradient(circle at 28% 32%,rgba(255,255,255,.5) 0 7px,transparent 8px),radial-gradient(circle at 74% 64%,rgba(225,19,19,.6) 0 9px,transparent 10px),radial-gradient(circle at 50% 86%,rgba(255,255,255,.3) 0 5px,transparent 6px)}
 .kk-pc__badge{position:absolute;top:12px;left:12px;font-family:var(--display);font-weight:800;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;background:#070707;color:#fff;padding:5px 9px;border-radius:6px;border:1px solid var(--line-strong)}
 .kk-pc__save{position:absolute;top:12px;right:12px;font-family:var(--display);font-weight:800;font-size:.6rem;background:var(--blood);color:#fff;padding:5px 9px;border-radius:6px}
 .kk-pc__info{padding:16px 16px 18px;display:flex;flex-direction:column;gap:7px}
@@ -572,3 +571,82 @@ a{color:inherit}
 .kk-post-links li{padding:4px 0}
 .kk-post-links li a{color:var(--blood);text-decoration:none}
 .kk-post-links li a:hover{text-decoration:underline}
+
+/* ============================================================
+   About page — fighter-owned editorial story
+   ============================================================ */
+.kk-about-hero{position:relative;min-height:min(820px,88vh);display:flex;align-items:flex-end;overflow:hidden;isolation:isolate;background:#070707}
+.kk-about-hero__media{position:absolute;inset:0;z-index:-2}
+.kk-about-hero__img,.kk-about-hero__media .kk-img-ph{width:100%;height:100%;object-fit:cover}
+.kk-about-hero__scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,7,7,.96) 0%,rgba(7,7,7,.82) 38%,rgba(7,7,7,.25) 72%),linear-gradient(0deg,rgba(7,7,7,.92),transparent 55%)}
+.kk-about-hero__inner{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:48px;padding-top:clamp(100px,14vw,180px);padding-bottom:clamp(56px,8vw,96px)}
+.kk-about-hero__copy{max-width:790px}
+.kk-about-hero__title{max-width:11ch;margin:0 0 24px;font-family:var(--display);font-weight:900;font-size:clamp(3.2rem,8vw,7.4rem);line-height:.86;letter-spacing:-.045em;text-transform:uppercase;text-wrap:balance}
+.kk-about-hero__body{max-width:58ch;color:#d5d5da;font-size:clamp(1.04rem,1.7vw,1.28rem);line-height:1.65}
+.kk-about-hero__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.kk-about-hero__facts{display:flex;flex-direction:column;width:min(260px,24vw);margin:0;border-left:1px solid rgba(255,255,255,.28)}
+.kk-about-hero__fact{padding:14px 0 14px 22px;border-bottom:1px solid rgba(255,255,255,.16)}
+.kk-about-hero__fact:last-child{border-bottom:0}
+.kk-about-hero__fact dt{margin:0 0 5px;color:var(--blood);font-family:var(--display);font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.kk-about-hero__fact dd{margin:0;color:#fff;font-family:var(--display);font-size:.9rem;font-weight:800;text-transform:uppercase}
+
+.kk-about-story{overflow:hidden;background:var(--bg)}
+.kk-about-story__manifesto{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(36px,8vw,110px);padding:clamp(78px,11vw,140px) 0;align-items:start}
+.kk-about-story__manifesto-title{max-width:14ch;margin:0;font-family:var(--display);font-size:clamp(2.7rem,6vw,5.8rem);font-weight:900;letter-spacing:-.04em;line-height:.9;text-transform:uppercase;text-wrap:balance}
+.kk-about-story__manifesto-title::after{content:"";display:block;width:90px;height:7px;margin-top:30px;background:var(--blood)}
+.kk-about-story__manifesto-copy{color:var(--ink-dim);font-size:clamp(1.04rem,1.45vw,1.22rem);line-height:1.8}
+.kk-about-story__manifesto-copy p:first-child{color:var(--ink);font-size:1.12em}
+
+.kk-about-story__founder{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(36px,7vw,96px);align-items:center;padding:clamp(52px,7vw,86px);margin-inline:calc(50% - 50vw);padding-inline:max(24px,calc((100vw - var(--max))/2 + 24px));background:var(--bg-elev);border-block:1px solid var(--line)}
+.kk-about-story__portrait{position:relative;max-width:570px}
+.kk-about-story__portrait::before{content:"";position:absolute;inset:-14px 14px 14px -14px;border:1px solid var(--blood);border-radius:18px;opacity:.65}
+.kk-about-story__portrait-img,.kk-about-story__portrait-fallback{position:relative;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:14px;background:var(--bg-card)}
+.kk-about-story__portrait-fallback{display:flex;flex-direction:column;justify-content:flex-end;padding:30px;background:linear-gradient(145deg,#2a0808,#0b0b0d)}
+.kk-about-story__portrait-fallback span{font-family:var(--display);font-weight:900;font-size:clamp(3rem,8vw,7rem)}
+.kk-about-story__portrait-fallback small{color:var(--ink-dim);font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.12em}
+.kk-about-story__caption{position:relative;margin:14px 0 0;color:var(--ink-faint);font-size:.76rem;line-height:1.5}
+.kk-about-story__kicker{margin:0 0 12px;color:var(--blood);font-family:var(--display);font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+.kk-about-story__founder-copy h2{max-width:12ch;margin:0 0 24px;font-family:var(--display);font-size:clamp(2.4rem,5vw,4.8rem);font-weight:900;letter-spacing:-.035em;line-height:.9;text-transform:uppercase}
+.kk-about-story__body{max-width:58ch;color:var(--ink-dim);font-size:1.04rem;line-height:1.75}
+.kk-about-story__founder-copy blockquote{margin:32px 0 0;padding:24px 0 0;border-top:1px solid var(--line-strong);color:var(--ink);font-family:var(--display);font-size:clamp(1.25rem,2vw,1.65rem);font-weight:800;line-height:1.35}
+.kk-about-story__founder-copy blockquote p{margin:0}
+
+.kk-about-story__climb{display:grid;grid-template-columns:.76fr 1.24fr;gap:clamp(40px,8vw,110px);padding:clamp(82px,11vw,140px) 0}
+.kk-about-story__climb-head{position:sticky;top:110px;align-self:start}
+.kk-about-story__climb-head .kk-h2{max-width:10ch}
+.kk-about-story__climb-head>p:last-child{max-width:36ch;color:var(--ink-dim);font-size:1rem;line-height:1.65}
+.kk-about-story__rounds{position:relative;display:flex;flex-direction:column;gap:0;margin:0;padding:0;list-style:none;counter-reset:round}
+.kk-about-story__rounds::before{content:"";position:absolute;top:20px;bottom:20px;left:7px;width:1px;background:linear-gradient(var(--blood),rgba(255,255,255,.12))}
+.kk-about-story__round{display:grid;grid-template-columns:106px 1fr;gap:24px;padding:0 0 42px 30px;position:relative}
+.kk-about-story__round::before{content:"";position:absolute;top:7px;left:0;width:15px;height:15px;border:4px solid var(--bg);border-radius:50%;background:var(--blood);box-shadow:0 0 0 1px var(--blood)}
+.kk-about-story__round-no{padding-top:4px;color:var(--blood);font-family:var(--display);font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.kk-about-story__round h3{margin:0 0 8px;font-family:var(--display);font-size:clamp(1.35rem,2.2vw,1.85rem);font-weight:900;text-transform:uppercase}
+.kk-about-story__round p{margin:0;color:var(--ink-dim);font-size:.98rem;line-height:1.65}
+
+.kk-about-story__promise{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:28px;margin-bottom:clamp(82px,11vw,140px);padding:30px 34px;border:1px solid var(--line-strong);border-left:6px solid var(--blood);border-radius:14px;background:var(--bg-card)}
+.kk-about-story__promise-label{margin:0;color:var(--blood);font-family:var(--display);font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.kk-about-story__promise-text{margin:0;color:var(--ink);font-family:var(--display);font-size:clamp(1rem,1.7vw,1.24rem);font-weight:700;line-height:1.45}
+.kk-about-story__promise a{color:var(--ink);font-weight:800;text-decoration:none;white-space:nowrap}
+.kk-about-story__promise a:hover{color:var(--blood)}
+
+@media (max-width:900px){
+  .kk-about-hero__inner{grid-template-columns:1fr}
+  .kk-about-hero__facts{width:100%;display:grid;grid-template-columns:repeat(3,1fr);border-left:0;border-top:1px solid rgba(255,255,255,.28)}
+  .kk-about-hero__fact{padding:14px 16px 0 0;border-bottom:0}
+  .kk-about-story__manifesto,.kk-about-story__founder,.kk-about-story__climb{grid-template-columns:1fr}
+  .kk-about-story__founder{padding-inline:24px}
+  .kk-about-story__climb-head{position:static}
+  .kk-about-story__promise{grid-template-columns:1fr;gap:12px}
+}
+@media (max-width:600px){
+  .kk-about-hero{min-height:720px}
+  .kk-about-hero__scrim{background:linear-gradient(0deg,rgba(7,7,7,.98) 8%,rgba(7,7,7,.78) 58%,rgba(7,7,7,.24))}
+  .kk-about-hero__inner{padding-top:170px;padding-bottom:46px;gap:30px}
+  .kk-about-hero__title{font-size:clamp(2.75rem,15vw,4.6rem)}
+  .kk-about-hero__facts{grid-template-columns:1fr 1fr}
+  .kk-about-story__manifesto{padding-block:76px}
+  .kk-about-story__founder{padding-block:72px}
+  .kk-about-story__round{grid-template-columns:1fr;gap:8px;padding-left:28px}
+  .kk-about-story__portrait::before{inset:-9px 9px 9px -9px}
+  .kk-about-story__promise{padding:24px}
+}

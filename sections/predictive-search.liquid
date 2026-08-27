@@ -30,7 +30,7 @@
                   {%- if product.featured_media != blank -%}
                     {{ product.featured_media.preview_image | image_url: width: 120 | image_tag:
                        widths: '60, 120', sizes: '60px', loading: 'lazy',
-                       alt: product.title | escape, class: 'kk-search__thumbimg' }}
+                       alt: product.title, class: 'kk-search__thumbimg' }}
                   {%- else -%}
                     {{ 'product-1' | placeholder_svg_tag: 'kk-search__thumbimg' }}
                   {%- endif -%}
