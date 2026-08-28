@@ -1,12 +1,35 @@
 {
   "sections": {
     "main": {
-      "type": "kk-faq",
+      "type": "main-faq",
       "settings": {
-        "eyebrow": "FAQ",
-        "heading": "Frequently Asked Questions",
-        "subtext": "Find answers to commonly asked questions about sizing, orders, shipping, and sponsorships."
-      }
+        "eyebrow": "Customer corner",
+        "heading": "King Killers FAQ. No runaround.",
+        "intro": "<p>Clear answers about King Killers orders, shipping, returns, sizing, product care, and the fighter-owned brand behind the gear.</p>",
+        "contact_url": "/pages/contact",
+        "shop_url": "/collections/all"
+      },
+      "blocks": {
+        "order_confirmation": { "type": "question", "settings": { "category": "orders", "question": "How do I know my order went through?", "answer": "<p>Shopify sends an order confirmation to the email or phone number used at checkout. If you do not see it, check your spam folder, then <a href=\"/pages/contact\">contact us</a> with the name and email used for the order.</p>" } },
+        "order_change": { "type": "question", "settings": { "category": "orders", "question": "Can I change or cancel an order after checkout?", "answer": "<p>Contact us as soon as possible with your order number and the requested change. We will help when we can, but changes are not guaranteed after an order enters production or ships.</p>" } },
+        "shipping_timing": { "type": "question", "settings": { "category": "shipping", "question": "When will my order ship and arrive?", "answer": "<p>Most apparel orders process in 1–3 business days. Estimated transit is 2–5 business days in the USA, 5–10 to Canada, and 10–30 worldwide. Swim trunks can have delays of up to 20 business days. See the <a href=\"/policies/shipping-policy\">shipping policy</a> for current details.</p>" } },
+        "shipping_tracking": { "type": "question", "settings": { "category": "shipping", "question": "Will I receive tracking?", "answer": "<p>Yes. Tracking information is sent as soon as your order ships. If tracking shows delivery but you cannot find the package, check the delivery location and carrier updates before contacting us with your order number.</p>" } },
+        "shipping_free": { "type": "question", "settings": { "category": "shipping", "question": "Do you offer free shipping?", "answer": "<p>Orders of $100 or more qualify for free shipping when the offer is available for the destination shown at checkout. The checkout total is the final source for shipping eligibility and cost.</p>" } },
+        "shipping_international": { "type": "question", "settings": { "category": "shipping", "question": "Do you ship internationally?", "answer": "<p>Yes. International delivery estimates vary by destination, and the recipient is responsible for customs duties or import fees charged by the destination country.</p>" } },
+        "return_window": { "type": "question", "settings": { "category": "returns", "question": "What is the return window?", "answer": "<p>Eligible items may be returned within 30 days after delivery. Items must be unworn, unused, tagged, and in their original packaging, with proof of purchase. Contact <a href=\"mailto:sales@kingkillers.co\">sales@kingkillers.co</a> before sending anything back.</p>" } },
+        "return_exceptions": { "type": "question", "settings": { "category": "returns", "question": "Which items cannot be returned?", "answer": "<p>Custom or personalized products, swimwear, rash guards, hats, worn items, discounted items, and gift cards are not eligible under the current policy. Read the full <a href=\"/policies/refund-policy\">returns and refunds policy</a> before starting a return.</p>" } },
+        "return_shipping": { "type": "question", "settings": { "category": "returns", "question": "Who pays return shipping?", "answer": "<p>Customers normally pay return shipping. King Killers may cover it when the store caused the issue, such as sending the wrong item, size, color, style, or address; those cases are reviewed individually.</p>" } },
+        "sizing_choose": { "type": "question", "settings": { "category": "sizing", "question": "How should I choose my size?", "answer": "<p>Use the sizing information on the specific product page because fit can vary by garment. If you are between sizes or need extra room for training movement, <a href=\"/pages/contact\">contact us</a> before ordering.</p>" } },
+        "sizing_fit": { "type": "question", "settings": { "category": "sizing", "question": "Does every King Killers product fit the same?", "answer": "<p>No. T-shirts, hoodies, lined shorts, swimwear, and performance pieces can use different cuts. Check the product description and available size guide rather than assuming one size fits the same across every style.</p>" } },
+        "products_made": { "type": "question", "settings": { "category": "products", "question": "Where is King Killers gear designed and made?", "answer": "<p>King Killers is a US-based brand, and its apparel is designed and made in the USA. Product pages provide the most specific information for each item.</p>" } },
+        "products_sports": { "type": "question", "settings": { "category": "products", "question": "What sports is King Killers gear made for?", "answer": "<p>The collection is built around combat sports and hard training, including MMA, boxing, Muay Thai, Brazilian jiu-jitsu, wrestling, CrossFit, and strength work, with styles that also work outside the gym.</p>" } },
+        "care_wash": { "type": "question", "settings": { "category": "care", "question": "How should I wash King Killers apparel?", "answer": "<p>Always follow the care label on the garment. To protect printed graphics and performance fabrics, wash with similar colors, avoid harsh bleach, and use low heat unless the label gives different instructions.</p>" } },
+        "brand_who": { "type": "question", "settings": { "category": "brand", "question": "Who is behind King Killers Apparel?", "answer": "<p>King Killers Apparel was founded in 2021 by professional fighter Michael “Heck” Heckert. The fighter-owned brand is based in the Tampa Bay area and builds apparel around combat-sports culture.</p>" } },
+        "brand_sponsor": { "type": "question", "settings": { "category": "brand", "question": "How can I join the King Killers community?", "answer": "<p>Fitness creators, fighters, and other potential partners can review current affiliate, gifting, content, and partnership opportunities on the <a href=\"/pages/influencers\">King Killers community page</a>.</p>" } }
+      },
+      "block_order": [
+        "order_confirmation", "order_change", "shipping_timing", "shipping_tracking", "shipping_free", "shipping_international", "return_window", "return_exceptions", "return_shipping", "sizing_choose", "sizing_fit", "products_made", "products_sports", "care_wash", "brand_who", "brand_sponsor"
+      ]
     }
   },
   "order": [

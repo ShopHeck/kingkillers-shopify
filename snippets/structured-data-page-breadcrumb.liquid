@@ -1,0 +1,24 @@
+{%- comment -%}
+  BreadcrumbList for alternate Shopify page templates. Keep this page-specific so
+  the URLs and visible hierarchy always match the resource being rendered.
+{%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": {{ shop.url | json }}
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ page.title | json }},
+      "item": {{ shop.url | append: page.url | json }}
+    }
+  ]
+}
+</script>
