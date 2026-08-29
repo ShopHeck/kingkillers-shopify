@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-reviews",
+      "settings": {
+        "eyebrow": "Fighter tested · Customer scored",
+        "heading": "Customer reviews. The gear gets judged here.",
+        "intro": "<p>Unfiltered product and store feedback from people who bought King Killers gear. Read the wins, the critiques, and the details that help you choose with confidence.</p>",
+        "shop_url": "/collections/all"
+      }
+    }
+  },
+  "order": ["main"]
+}

@@ -549,6 +549,42 @@
     });
   }
 
+  /* ------------------------------- FAQ search ------------------------------- */
+  d.querySelectorAll('[data-faq-hub]').forEach(function (hub) {
+    var input = hub.querySelector('[data-faq-search]');
+    var items = Array.prototype.slice.call(hub.querySelectorAll('[data-faq-item]'));
+    var groups = Array.prototype.slice.call(hub.querySelectorAll('[data-faq-group]'));
+    var empty = hub.querySelector('[data-faq-empty]');
+    var status = hub.querySelector('[data-faq-status]');
+    if (!input || !items.length) return;
+
+    input.addEventListener('input', function () {
+      var query = input.value.trim().toLocaleLowerCase();
+      var visible = 0;
+
+      items.forEach(function (item) {
+        var searchable = item.textContent + ' ' + (item.getAttribute('data-faq-keywords') || '');
+        var match = !query || searchable.toLocaleLowerCase().indexOf(query) !== -1;
+        item.hidden = !match;
+        if (match) {
+          visible += 1;
+          if (query.length >= 2) item.open = true;
+        }
+      });
+
+      groups.forEach(function (group) {
+        group.hidden = !group.querySelector('[data-faq-item]:not([hidden])');
+      });
+
+      if (empty) empty.hidden = visible !== 0;
+      if (status) {
+        status.textContent = query
+          ? visible + (visible === 1 ? ' answer found.' : ' answers found.')
+          : '';
+      }
+    });
+  });
+
   /* --------- Shared close-on-outside-click / Escape for menu + search -------- */
   d.addEventListener('click', function (e) {
     if (!e.target.closest('.kk-nav__item--has')) closeAllMega(null);
