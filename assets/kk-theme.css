@@ -331,8 +331,11 @@ a{color:inherit}
 .kk-art__media{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin-bottom:36px;aspect-ratio:16/9}
 .kk-art__media img{width:100%;height:100%;object-fit:cover}
 .kk-art__content{color:var(--ink-dim);line-height:1.8;font-size:1.04rem}
+.kk-art__content :where(p,ul,ol,li,blockquote,div,span,font,table,th,td,pre,code,em,i,u,small,figcaption){color:inherit!important}
 .kk-art__content p{margin-bottom:20px}
-.kk-art__content h2,.kk-art__content h3{color:var(--ink);font-family:var(--display);text-transform:uppercase;margin-top:36px;margin-bottom:14px}
+.kk-art__content :where(h1,h2,h3,h4,h5,h6,strong,b){color:var(--ink)!important}
+.kk-art__content h2,.kk-art__content h3{font-family:var(--display);text-transform:uppercase;margin-top:36px;margin-bottom:14px}
+.kk-art__content a{color:var(--blood-bright)!important;text-underline-offset:3px}
 
 @media (max-width:900px){
   .kk-blog__grid{grid-template-columns:repeat(2,1fr)}
