@@ -1,0 +1,119 @@
+{%- comment -%}
+  Full cart page. The drawer in theme.liquid handles the AJAX path, but /cart is still
+  reachable directly — the header cart link points at it, accelerated checkouts and
+  wallets return to it, and it is the only cart with JS disabled. The theme shipped
+  without a cart template, so all of those landed on nothing.
+{%- endcomment -%}
+{%- liquid
+  comment
+    The free-shipping threshold is a range setting with min 0, and Liquid's `default`
+    filter only substitutes for nil/false/empty — a literal 0 passes straight through.
+    Dividing by it raises Liquid::ZeroDivisionError, which would take out this whole
+    page, checkout form included. So the progress maths stays inside the > 0 guard;
+    a 0 threshold means shipping is always free and the progress bar has nothing to
+    say, which is why the markup below omits it entirely.
+  endcomment
+  assign ship_threshold = settings.free_ship_threshold | default: 100
+  assign ship_threshold_cents = ship_threshold | times: 100
+  assign show_ship_progress = false
+  if ship_threshold_cents > 0
+    assign show_ship_progress = true
+    assign remaining = ship_threshold_cents | minus: cart.total_price
+    assign ship_progress = cart.total_price | times: 100 | divided_by: ship_threshold_cents
+    if ship_progress > 100
+      assign ship_progress = 100
+    endif
+  endif
+-%}
+<section class="kk-section kk-cartpage" aria-labelledby="cart-title">
+  <div class="kk-wrap">
+    <header class="kk-plp__head">
+      <p class="kk-eyebrow">Your cart</p>
+      <h1 id="cart-title" class="kk-h2">{% if cart.item_count > 0 %}Ready to Roll Out{% else %}Your Cart Is Empty{% endif %}</h1>
+    </header>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="kk-plp__empty">
+        <p>Nothing in here yet. Go find something worth fighting in.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="kk-btn kk-btn--primary">Shop all gear</a>
+      </div>
+    {%- else -%}
+      {%- if show_ship_progress -%}
+        <div class="kk-cartpage__ship">
+          <div class="kk-drawer__bar"><span style="width:{{ ship_progress }}%"></span></div>
+          <p class="kk-cartpage__shipmsg">
+            {%- if remaining > 0 -%}
+              You're {{ remaining | money }} away from free shipping.
+            {%- else -%}
+              Free shipping unlocked.
+            {%- endif -%}
+          </p>
+        </div>
+      {%- endif -%}
+
+      <form action="{{ routes.cart_url }}" method="post" novalidate class="kk-cartpage__form">
+        <ul class="kk-cartpage__items">
+          {%- for item in cart.items -%}
+            <li class="kk-cartpage__item">
+              <a class="kk-cartpage__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+                {% render 'responsive-image', image: item.image, sizes: '104px', widths: '104, 208, 312', class: 'kk-cartpage__img', alt: item.product.title %}
+              </a>
+              <div class="kk-cartpage__info">
+                <a class="kk-cartpage__name" href="{{ item.url }}">{{ item.product.title }}</a>
+                {%- unless item.product.has_only_default_variant -%}
+                  <p class="kk-cartpage__variant">{{ item.variant.title }}</p>
+                {%- endunless -%}
+                {%- if item.selling_plan_allocation != blank -%}
+                  <p class="kk-cartpage__variant">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                {%- endif -%}
+                <p class="kk-cartpage__unit">
+                  {{ item.final_price | money }}
+                  {%- if item.original_price > item.final_price -%}
+                    <s>{{ item.original_price | money }}</s>
+                  {%- endif -%}
+                </p>
+              </div>
+              <div class="kk-cartpage__qty">
+                <label class="kk-visually-hidden" for="CartQty-{{ forloop.index }}">Quantity for {{ item.product.title | escape }}</label>
+                <input id="CartQty-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}"
+                       min="0" step="1" inputmode="numeric"
+                       {% if item.variant.inventory_management == 'shopify' and item.variant.inventory_policy == 'deny' %}max="{{ item.variant.inventory_quantity }}"{% endif %}>
+                <a class="kk-cartpage__remove" href="{{ item.url_to_remove }}">Remove</a>
+              </div>
+              <p class="kk-cartpage__line">{{ item.final_line_price | money }}</p>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if cart.cart_level_discount_applications.size > 0 -%}
+          <ul class="kk-cartpage__discounts">
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <li>{{ discount.title }} &minus;{{ discount.total_allocated_amount | money }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        <div class="kk-cartpage__foot">
+          <div class="kk-cartpage__totals">
+            <div class="kk-cartpage__subtotal"><span>Subtotal</span><span>{{ cart.total_price | money }}</span></div>
+            <p class="kk-cartpage__tax">Taxes and shipping calculated at checkout.</p>
+          </div>
+          <div class="kk-cartpage__actions">
+            <button type="submit" name="update" class="kk-btn kk-btn--ghost">Update cart</button>
+            <button type="submit" name="checkout" class="kk-btn kk-btn--primary">Checkout</button>
+          </div>
+        </div>
+        <p class="kk-cartpage__reassure">✓ {% if show_ship_progress %}Free shipping ${{ ship_threshold }}+{% else %}Free shipping on every order{% endif %} · ✓ {{ settings.return_window_days | default: 30 }}-day money-back guarantee</p>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "section",
+  "enabled_on": { "templates": ["cart"] },
+  "settings": []
+}
+{% endschema %}

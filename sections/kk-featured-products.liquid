@@ -1,6 +1,6 @@
 
 {%- comment -%}
-  COMPLETE reference section: dynamic product loop + full {% schema %} with settings,
+  COMPLETE reference section: dynamic product loop + a full schema tag with settings,
   blocks, max_blocks and presets (so it's editor-addable & removable). Includes an
   editor preview fallback so the grid never looks empty when no collection is chosen.
 {%- endcomment -%}
@@ -15,8 +15,12 @@
     <div class="kk-best__grid">
       {%- assign coll = section.settings.collection -%}
       {%- if coll != blank and coll.products_count > 0 -%}
+        {%- comment -%}
+          No eager_count: this row sits below the hero, trust strip and bento grid on
+          every template that uses it, so every card is safely lazy.
+        {%- endcomment -%}
         {%- for product in coll.products limit: section.settings.products_to_show -%}
-          {% render 'product-card', product: product %}
+          {% render 'product-card', product: product, index: forloop.index %}
         {%- endfor -%}
       {%- else -%}
         {%- comment -%} Theme-editor fallback so merchants see a populated grid. {%- endcomment -%}

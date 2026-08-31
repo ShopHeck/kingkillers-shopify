@@ -7,6 +7,18 @@
   assign org_id = shop.url | append: '/#organization'
   assign site_id = shop.url | append: '/#website'
   assign store_id = shop.url | append: '/#store'
+
+  comment
+    One resolved brand image, reused by Organization.logo and Store.image. Google
+    needs a real ImageObject here — the previous fallback emitted the shop URL.
+  endcomment
+  assign brand_logo = settings.share_image
+  if brand_logo == blank
+    assign brand_logo = shop.brand.square_logo
+  endif
+  if brand_logo == blank
+    assign brand_logo = shop.brand.logo
+  endif
 -%}
 <script type="application/ld+json">
 {
@@ -34,11 +46,37 @@
         "combat sports apparel", "MMA clothing", "BJJ rashguards",
         "boxing apparel", "2-in-1 hybrid shorts", "fighter-owned apparel"
       ],
+      {%- comment -%}
+        Build sameAs from only the profiles the merchant has actually filled in.
+        Emitting an empty string for an unset setting produced ["","",""], which is
+        invalid and gives search engines nothing to reconcile the entity against.
+      {%- endcomment -%}
+      {%- assign social_urls = '' -%}
+      {%- assign social_sep = '' -%}
+      {%- assign social_candidates = settings.social_instagram | append: '|' | append: settings.social_facebook | append: '|' | append: settings.social_trustpilot | append: '|' | append: settings.social_youtube | append: '|' | append: settings.social_tiktok | split: '|' -%}
+      {%- for url in social_candidates -%}
+        {%- if url != blank -%}
+          {%- assign social_urls = social_urls | append: social_sep | append: url -%}
+          {%- assign social_sep = '|' -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if social_urls != blank -%}
       "sameAs": [
-        {{ settings.social_instagram | json }},
-        {{ settings.social_facebook | json }},
-        {{ settings.social_trustpilot | json }}
-      ]
+        {%- assign social_list = social_urls | split: '|' -%}
+        {%- for url in social_list -%}
+          {{ url | json }}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ],
+      {%- endif -%}
+      {%- if brand_logo != blank -%}
+      "logo": {
+        "@type": "ImageObject",
+        "url": {{ brand_logo | image_url: width: 600 | prepend: 'https:' | json }},
+        "width": 600,
+        "height": {{ brand_logo.height | times: 600 | divided_by: brand_logo.width }}
+      },
+      {%- endif -%}
+      "areaServed": "US"
     },
     {
       "@type": "WebSite",
@@ -48,7 +86,10 @@
       "publisher": { "@id": {{ org_id | json }} },
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "{{ shop.url }}/search?q={search_term_string}",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "{{ shop.url }}{{ routes.search_url }}?q={search_term_string}"
+        },
         "query-input": "required name=search_term_string"
       }
     },
@@ -58,7 +99,9 @@
       "name": {{ shop.name | json }},
       "url": {{ shop.url | json }},
       "description": {{ settings.brand_description | json }},
-      "image": {%- if settings.share_image != blank -%}{{ settings.share_image | image_url: width: 1200 | prepend: 'https:' | json }}{%- else -%}{{ shop.url | json }}{%- endif -%},
+      {%- if brand_logo != blank -%}
+      "image": {{ brand_logo | image_url: width: 1200 | prepend: 'https:' | json }},
+      {%- endif -%}
       "priceRange": {{ settings.price_range | default: '$19 - $69' | json }},
       "address": {
         "@type": "PostalAddress",

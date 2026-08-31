@@ -1,0 +1,92 @@
+{%- comment -%}
+  Search results page. The header search form and the WebSite SearchAction JSON-LD both
+  point at /search, and predictive search is documented as degrading to this page when
+  JS is unavailable — but the theme shipped without a search template, so every one of
+  those paths dead-ended. Reuses the PLP grid and product card, so no new CSS.
+{%- endcomment -%}
+<section class="kk-section kk-plp kk-searchpage" aria-labelledby="search-title">
+  <div class="kk-wrap">
+    <header class="kk-plp__head">
+      <p class="kk-eyebrow">Search</p>
+      <h1 id="search-title" class="kk-h2">
+        {%- if search.performed -%}
+          {%- if search.results_count > 0 -%}
+            {{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %} for “{{ search.terms }}”
+          {%- else -%}
+            No results for “{{ search.terms }}”
+          {%- endif -%}
+        {%- else -%}
+          Search the arsenal
+        {%- endif -%}
+      </h1>
+    </header>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="kk-searchpage__form">
+      <input type="hidden" name="type" value="product,page,article">
+      <input type="search" name="q" value="{{ search.terms | escape }}" class="kk-searchpage__input"
+             placeholder="Search gear, e.g. 2-in-1 shorts…" aria-label="Search the store" autocomplete="off">
+      <button type="submit" class="kk-btn kk-btn--primary">Search</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- paginate search.results by 24 -%}
+        {%- if search.results_count > 0 -%}
+          {%- assign product_index = 0 -%}
+          <div class="kk-best__grid">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                {%- assign product_index = product_index | plus: 1 -%}
+                {% render 'product-card', product: item, index: product_index, eager_count: 4 %}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Pages and articles that matched, listed separately from the grid. {%- endcomment -%}
+          {%- assign has_content_hits = false -%}
+          {%- for item in search.results -%}
+            {%- unless item.object_type == 'product' -%}{%- assign has_content_hits = true -%}{%- break -%}{%- endunless -%}
+          {%- endfor -%}
+          {%- if has_content_hits -%}
+            <div class="kk-searchpage__content">
+              <h2 class="kk-searchpage__subhead">Guides &amp; pages</h2>
+              <ul class="kk-searchpage__list">
+                {%- for item in search.results -%}
+                  {%- unless item.object_type == 'product' -%}
+                    <li>
+                      <a href="{{ item.url }}">{{ item.title }}</a>
+                      {%- if item.excerpt != blank -%}<p>{{ item.excerpt | strip_html | truncatewords: 28 }}</p>{%- endif -%}
+                    </li>
+                  {%- endunless -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          {%- if paginate.pages > 1 -%}
+            <nav class="kk-plp__pager" aria-label="Pagination">{{ paginate | default_pagination }}</nav>
+          {%- endif -%}
+        {%- else -%}
+          <div class="kk-plp__empty">
+            <h2>Nothing matched that</h2>
+            <p>Try a broader term — “shorts”, “rashguard”, “hoodie” — or browse the full range.</p>
+            <a href="{{ routes.all_products_collection_url }}" class="kk-btn kk-btn--primary">Shop all gear</a>
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <div class="kk-plp__empty">
+        <p>Search for a product, a guide, or a page.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="kk-btn kk-btn--ghost">Browse everything</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "section",
+  "enabled_on": { "templates": ["search"] },
+  "settings": []
+}
+{% endschema %}

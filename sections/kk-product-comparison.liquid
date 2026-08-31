@@ -19,12 +19,12 @@
                 <th>
                   <div class="kk-compare__product-header">
                     {%- if block.settings.image != blank -%}
-                      <img src="{{ block.settings.image | image_url: width: 240 }}" 
-                           alt="{{ block.settings.title | escape }}" 
-                           class="kk-compare__product-img" 
-                           width="240" 
-                           height="{{ 240 | divided_by: block.settings.image.aspect_ratio | round }}"
-                           loading="lazy">
+                      {% render 'responsive-image',
+                         image: block.settings.image,
+                         sizes: '80px',
+                         widths: '80, 160, 240',
+                         class: 'kk-compare__product-img',
+                         alt: block.settings.title %}
                     {%- endif -%}
                     <span class="kk-compare__product-title">{{ block.settings.title }}</span>
                     {%- if block.settings.price != blank -%}<span class="kk-compare__product-price">{{ block.settings.price }}</span>{%- endif -%}
