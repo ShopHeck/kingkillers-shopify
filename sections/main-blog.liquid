@@ -15,7 +15,7 @@
             <article class="kk-blog__card">
               {%- if article.image != blank -%}
                 <a href="{{ article.url }}" class="kk-blog__media" aria-label="{{ article.title | escape }}">
-                  {% render 'responsive-image', image: article.image, sizes: '(max-width:750px) 100vw, 33vw', widths: '360, 540, 720', class: 'kk-blog__img' %}
+                  {% render 'responsive-image', image: article.image, sizes: '(max-width:750px) 100vw, 33vw', widths: '360, 540, 720', class: 'kk-blog__img', preload: forloop.first %}
                   <span class="kk-blog__splatter" aria-hidden="true"></span>
                 </a>
               {%- endif -%}

@@ -1,7 +1,16 @@
 {%- comment -%}
   Reusable responsive image emitting RAW <img> markup (bypasses image_tag attribute
   handling entirely so class/loading/fetchpriority/alt always survive).
-  preload:true -> eager + fetchpriority high. eager_first -> eager + fetchpriority low.
+
+  Sizing: candidate widths are CLAMPED to the source image's real width. Shopify never
+  upscales, so asking for a width larger than the original returns the original bytes —
+  advertising it as e.g. "2400w" makes the browser mis-pick and download an oversized
+  candidate for its slot. We keep every candidate honest, plus one exact-native entry.
+
+  preload:true    -> eager + fetchpriority high + sync decode (LCP element)
+  eager_first     -> eager + fetchpriority low (above-fold, but not the LCP)
+  (default)       -> lazy + fetchpriority auto
+
   Usage:
     {% render 'responsive-image', image: section.settings.image, sizes: '100vw', preload: true, class: 'kk-hero__img', alt: '...' %}
 {%- endcomment -%}
@@ -15,34 +24,83 @@
 
   assign loading_attr = 'lazy'
   assign fetchpriority_attr = 'auto'
+  assign decoding_attr = 'async'
   if is_lcp
     assign loading_attr = 'eager'
     assign fetchpriority_attr = 'high'
+    assign decoding_attr = 'sync'
   elsif eager_early
     assign loading_attr = 'eager'
     assign fetchpriority_attr = 'low'
   endif
 
-  assign main_url = image | image_url: width: 2400
-  if main_url contains '//'
-    assign main_url = main_url | prepend: 'https:'
+  assign native_w = image.width | default: 0
+
+  if image == blank
+    assign native_w = 0
   endif
 
-  assign srcset_parts = ''
+  comment
+    Build the candidate list: every requested width that the source can actually
+    deliver, plus the native width itself when the request list overshoots it.
+    That keeps a retina candidate available without lying about its size.
+  endcomment
+  assign kept_widths = ''
   assign sep = ''
+  assign largest_kept = 0
+  assign overshot = false
   assign width_list = img_widths | split: ','
   for w in width_list
-    assign ww = w | strip
-    assign u_w = image | image_url: width: ww
-    if u_w contains '//'
-      assign u_w = u_w | prepend: 'https:'
+    assign ww = w | strip | times: 1
+    if ww <= native_w
+      assign kept_widths = kept_widths | append: sep | append: ww
+      assign sep = ','
+      if ww > largest_kept
+        assign largest_kept = ww
+      endif
+    else
+      assign overshot = true
     endif
-    assign src_parts = srcset_parts | append: sep | append: u_w | append: ' ' | append: ww | append: 'w'
-    assign srcset_parts = src_parts
-    assign sep = ', '
   endfor
+  if overshot and native_w > largest_kept
+    assign kept_widths = kept_widths | append: sep | append: native_w
+    assign sep = ','
+    assign largest_kept = native_w
+  endif
+  if kept_widths == blank
+    assign kept_widths = native_w | append: ''
+    assign largest_kept = native_w
+  endif
+
+  comment
+    Fallback src for no-srcset clients: a mid-weight candidate, never the largest.
+  endcomment
+  assign main_url = ''
+  assign srcset_parts = ''
+  if native_w > 0
+    assign kept_list = kept_widths | split: ','
+    assign mid_index = kept_list.size | minus: 1 | divided_by: 2
+    assign fallback_w = kept_list[mid_index] | times: 1
+
+    assign main_url = image | image_url: width: fallback_w
+    if main_url contains '//'
+      assign main_url = main_url | prepend: 'https:'
+    endif
+
+    assign sep = ''
+    for w in kept_list
+      assign ww = w | times: 1
+      assign u_w = image | image_url: width: ww
+      if u_w contains '//'
+        assign u_w = u_w | prepend: 'https:'
+      endif
+      assign src_parts = srcset_parts | append: sep | append: u_w | append: ' ' | append: ww | append: 'w'
+      assign srcset_parts = src_parts
+      assign sep = ', '
+    endfor
+  endif
 -%}
-{%- if image != blank -%}
+{%- if image != blank and native_w > 0 -%}
   <img
     src="{{ main_url }}"
     srcset="{{ srcset_parts }}"
@@ -52,7 +110,7 @@
     alt="{{ img_alt | escape }}"
     loading="{{ loading_attr }}"
     fetchpriority="{{ fetchpriority_attr }}"
-    decoding="async"
+    decoding="{{ decoding_attr }}"
     {% if img_class != blank %}class="{{ img_class }}"{% endif %}>
 {%- else -%}
   <div class="kk-img-ph" aria-hidden="true">

@@ -35,7 +35,9 @@
       { "type": "text", "id": "twitter_handle", "label": "X / Twitter handle", "default": "@kingkillersco" },
       { "type": "url", "id": "social_instagram", "label": "Instagram URL" },
       { "type": "url", "id": "social_facebook", "label": "Facebook URL" },
-      { "type": "url", "id": "social_trustpilot", "label": "Trustpilot URL" }
+      { "type": "url", "id": "social_trustpilot", "label": "Trustpilot URL" },
+      { "type": "url", "id": "social_youtube", "label": "YouTube URL" },
+      { "type": "url", "id": "social_tiktok", "label": "TikTok URL" }
     ]
   },
   {
@@ -43,6 +45,7 @@
     "settings": [
       { "type": "color", "id": "theme_color", "label": "Browser theme color", "default": "#070707" },
       { "type": "range", "id": "free_ship_threshold", "label": "Free shipping threshold", "min": 0, "max": 250, "step": 5, "unit": "$", "default": 100 },
+      { "type": "range", "id": "return_window_days", "label": "Return window", "min": 7, "max": 90, "step": 1, "unit": "d", "default": 30, "info": "Used in the product return-policy schema. Keep it identical to the guarantee stated in your on-page copy." },
       { "type": "checkbox", "id": "enable_google_font", "label": "Load Archivo and Inter from Google Fonts", "default": true }
     ]
   }

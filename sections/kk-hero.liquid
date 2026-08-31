@@ -1,8 +1,9 @@
 
 {%- comment -%}
-  LCP hero. The background image is the LCP element, so it's preloaded
-  (preload:true -> eager + fetchpriority high + Link preload header). Height is reserved
-  in CSS via min-height + aspect-ratio on the media to keep CLS at 0.
+  LCP hero. The background image is the LCP element, so it is marked as such
+  (preload:true -> loading=eager + fetchpriority=high + decoding=sync) and sits in the
+  first chunk of body HTML where the preload scanner finds it immediately. Height is
+  reserved in CSS via min-height + aspect-ratio on the media to keep CLS at 0.
 {%- endcomment -%}
 <section class="kk-hero" aria-labelledby="hero-{{ section.id }}">
   <div class="kk-hero__media" aria-hidden="true">

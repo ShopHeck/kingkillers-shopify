@@ -68,7 +68,7 @@
     {%- paginate collection.products by 24 -%}
       <div class="kk-best__grid">
         {%- for product in collection.products -%}
-          {% render 'product-card', product: product %}
+          {% render 'product-card', product: product, index: forloop.index, eager_count: 4 %}
         {%- else -%}
           <div class="kk-plp__empty">
             <h2>No products found</h2>
@@ -85,6 +85,58 @@
 </section>
 
 {% render 'structured-data-breadcrumb', collection: collection %}
+
+{%- comment -%}
+  ItemList tells search engines the order and identity of the products on this page,
+  which is what drives carousel-style collection results. Only emit it on the clean,
+  indexable view — a faceted or paginated slice is not the canonical list.
+{%- endcomment -%}
+{%- liquid
+  comment
+    `paginate` is only in scope inside its own block, so read the page number from the
+    global `current_page` instead.
+  endcomment
+  assign emit_item_list = true
+  if current_page > 1
+    assign emit_item_list = false
+  endif
+  for filter in collection.filters
+    if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank
+      assign emit_item_list = false
+      break
+    endif
+  endfor
+
+  comment
+    Outside the paginate block collection.products returns up to 50 items; the visible
+    grid shows 24, so cap the count to match what the page actually lists.
+  endcomment
+  assign list_count = collection.products.size
+  if list_count > 24
+    assign list_count = 24
+  endif
+-%}
+{%- if emit_item_list and list_count > 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": {{ collection.title | json }},
+  "url": {{ collection.url | prepend: shop.url | json }},
+  "numberOfItems": {{ list_count }},
+  "itemListElement": [
+    {%- for product in collection.products limit: 24 -%}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.index }},
+      "url": {{ product.url | prepend: shop.url | json }},
+      "name": {{ product.title | json }}
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}
 
 {% schema %}
 {

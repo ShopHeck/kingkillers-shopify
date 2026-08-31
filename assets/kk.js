@@ -195,6 +195,21 @@
 
   /* ----------------------------- Click handlers ------------------------------ */
   d.addEventListener('click', function (e) {
+    // "Notify me when back" toggle on sold-out product cards. This used to be an
+    // inline <script> duplicated into every card in the grid.
+    var notifyBtn = e.target.closest('[data-notify-toggle]');
+    if (notifyBtn) {
+      var wrap = notifyBtn.closest('[data-notify]');
+      var notifyForm = wrap && wrap.querySelector('.kk-notify__form');
+      if (notifyForm) {
+        notifyForm.hidden = !notifyForm.hidden;
+        if (!notifyForm.hidden) {
+          var emailInput = notifyForm.querySelector('input[type=email]');
+          if (emailInput) emailInput.focus();
+        }
+      }
+    }
+
     if (e.target.closest('[data-cart-toggle]')) { e.preventDefault(); openDrawer(); fetchCart(); }
     if (e.target.closest('[data-drawer-close]')) { closeDrawer(); }
     

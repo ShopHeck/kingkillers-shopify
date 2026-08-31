@@ -1,6 +1,5 @@
-
 {%- comment -%}
-  Title / description / Open Graph / Twitter card.
+  Title / description / robots / Open Graph / Twitter / hreflang.
   page_title & page_description are populated per-resource by Shopify.
 {%- endcomment -%}
 {%- liquid
@@ -15,6 +14,62 @@
   if request.page_type == 'index'
     assign og_title = settings.brand_name | default: shop.name | append: ' | Fighter-Owned Combat Sports Apparel'
   endif
+
+  comment
+    Indexability. These page types either duplicate canonical content or expose
+    session-specific state; letting them into the index burns crawl budget and can
+    surface a stranger's cart or a thin internal-search result in the SERPs.
+  endcomment
+  assign noindex_types = 'search,cart,customers/account,customers/login,customers/register,customers/order,customers/addresses,customers/reset_password,customers/activate_account,gift_card,password,404'
+  assign robots_directive = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+  assign type_list = noindex_types | split: ','
+  for t in type_list
+    if request.page_type == t
+      assign robots_directive = 'noindex, follow'
+      break
+    endif
+  endfor
+  comment
+    Shopify canonicalises ?page=N to itself, so paginated pages stay indexable, but
+    a collection narrowed by facets is a near-duplicate of its parent.
+  endcomment
+  if request.page_type == 'collection'
+    for filter in collection.filters
+      if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank
+        assign robots_directive = 'noindex, follow'
+        break
+      endif
+    endfor
+  endif
+
+  comment
+    Social image. Falls back through the most specific image available so pages other
+    than products are never shared without one.
+  endcomment
+  assign share_img = nil
+  if request.page_type == 'product' and product.featured_media.preview_image != blank
+    assign share_img = product.featured_media.preview_image
+  elsif request.page_type == 'article' and article.image != blank
+    assign share_img = article.image
+  elsif request.page_type == 'collection' and collection.image != blank
+    assign share_img = collection.image
+  elsif settings.share_image != blank
+    assign share_img = settings.share_image
+  elsif shop.brand.square_logo != blank
+    assign share_img = shop.brand.square_logo
+  elsif shop.brand.logo != blank
+    assign share_img = shop.brand.logo
+  endif
+
+  if share_img != blank
+    assign share_w = 1200
+    if share_img.width < 1200
+      assign share_w = share_img.width
+    endif
+    assign share_h = share_img.height | times: share_w | divided_by: share_img.width
+    assign share_url = share_img | image_url: width: share_w | prepend: 'https:'
+    assign share_alt = share_img.alt | default: og_title
+  endif
 -%}
 <title>{{ page_title }}{% unless page_title contains shop.name %} – {{ shop.name }}{% endunless %}</title>
 
@@ -22,23 +77,41 @@
   <meta name="description" content="{{ og_desc | strip_html | escape }}">
 {%- endif -%}
 
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="robots" content="{{ robots_directive }}">
 
 <meta property="og:site_name" content="{{ shop.name | escape }}">
 <meta property="og:url" content="{{ canonical_url }}">
 <meta property="og:title" content="{{ og_title | escape }}">
 <meta property="og:description" content="{{ og_desc | strip_html | escape }}">
-<meta property="og:type" content="{% if request.page_type == 'product' %}product{% else %}website{% endif %}">
+<meta property="og:type" content="{% if request.page_type == 'product' %}product{% elsif request.page_type == 'article' %}article{% else %}website{% endif %}">
 <meta property="og:locale" content="{{ request.locale.iso_code }}">
-{%- if request.page_type == 'product' and product.featured_media -%}
-  <meta property="og:image" content="https:{{ product.featured_media | image_url: width: 1200 }}">
-{%- elsif settings.share_image != blank -%}
-  <meta property="og:image" content="https:{{ settings.share_image | image_url: width: 1200 }}">
+{%- if share_img != blank -%}
+  <meta property="og:image" content="{{ share_url }}">
+  <meta property="og:image:secure_url" content="{{ share_url }}">
+  <meta property="og:image:width" content="{{ share_w }}">
+  <meta property="og:image:height" content="{{ share_h }}">
+  <meta property="og:image:alt" content="{{ share_alt | escape }}">
+{%- endif -%}
+{%- if request.page_type == 'product' -%}
+  <meta property="product:price:amount" content="{{ product.selected_or_first_available_variant.price | divided_by: 100.0 }}">
+  <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+  <meta property="product:availability" content="{% if product.selected_or_first_available_variant.available %}in stock{% else %}out of stock{% endif %}">
 {%- endif -%}
 
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="{% if share_img != blank %}summary_large_image{% else %}summary{% endif %}">
 <meta name="twitter:title" content="{{ og_title | escape }}">
 <meta name="twitter:description" content="{{ og_desc | strip_html | escape }}">
+{%- if share_img != blank -%}
+  <meta name="twitter:image" content="{{ share_url }}">
+  <meta name="twitter:image:alt" content="{{ share_alt | escape }}">
+{%- endif -%}
 {%- if settings.twitter_handle != blank -%}
   <meta name="twitter:site" content="{{ settings.twitter_handle }}">
+  <meta name="twitter:creator" content="{{ settings.twitter_handle }}">
 {%- endif -%}
+
+{%- comment -%}
+  hreflang alternates are intentionally NOT emitted here: Shopify already injects them
+  through content_for_header for every configured market and language. A second set
+  would compete with those and is a common source of hreflang conflicts.
+{%- endcomment -%}

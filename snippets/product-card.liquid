@@ -1,9 +1,31 @@
 
 {%- comment -%}
   Product card: review stars, price anchoring (Save %), AJAX quick-add.
-  Usage: {% render 'product-card', product: product %}
+
+  Pass `index` (1-based grid position) and `eager_count` (how many leading cards
+  are actually above the fold on THIS page) so only those load eagerly. Everything
+  else waits for the lazy loader — without this a 24-product grid fires 24 eager
+  image requests that compete with the LCP element for bandwidth. `eager_count`
+  defaults to 0 because most grids sit well below the fold.
+
+  Usage: {% render 'product-card', product: product, index: forloop.index, eager_count: 4 %}
 {%- endcomment -%}
 {%- liquid
+  assign card_index = index | default: 99
+  assign eager_budget = eager_count | default: 0
+  assign above_fold = false
+  if card_index <= eager_budget
+    assign above_fold = true
+  endif
+
+  assign rating_value = 0
+  assign has_rating = false
+  if product.metafields.reviews.rating.value != blank
+    assign has_rating = true
+    assign rating_value = product.metafields.reviews.rating.value.rating | times: 1.0
+    assign rating_pct = rating_value | divided_by: 5.0 | times: 100
+  endif
+
   assign on_sale = false
   if product.compare_at_price > product.price
     assign on_sale = true
@@ -18,7 +40,7 @@
        widths: '300, 450, 600, 900',
        class: 'kk-pc__img',
        alt: product.title,
-       eager_first: true %}
+       eager_first: above_fold %}
     {%- if product.metafields.custom.badge != blank -%}
       <span class="kk-pc__badge">{{ product.metafields.custom.badge.value }}</span>
     {%- elsif product.tags contains 'Best Seller' -%}
@@ -31,9 +53,10 @@
     {%- if on_sale -%}<span class="kk-pc__save">Save {{ save_pct }}%</span>{%- endif -%}
   </a>
   <div class="kk-pc__info">
-    {%- if product.metafields.reviews.rating.value != blank -%}
-      <span class="kk-pc__stars" aria-label="Rated {{ product.metafields.reviews.rating.value.rating }} out of 5">
-        <span aria-hidden="true">★★★★★</span>
+    {%- if has_rating -%}
+      <span class="kk-pc__stars">
+        <span class="kk-stars" style="--rating-fill: {{ rating_pct }}%" role="img"
+              aria-label="Rated {{ rating_value | round: 1 }} out of 5 from {{ product.metafields.reviews.rating_count.value }} reviews"></span>
         <span class="kk-pc__rev">({{ product.metafields.reviews.rating_count.value }})</span>
       </span>
     {%- endif -%}
@@ -59,13 +82,3 @@
     {%- endif -%}
   </div>
 </article>
-
-<script>
-if(!window.kkNotifyInit){window.kkNotifyInit=true;
-document.addEventListener('click',function(e){
-var b=e.target.closest('[data-notify-toggle]');
-if(b){var wrap=b.closest('[data-notify]');var f=wrap&&wrap.querySelector('.kk-notify__form');
-if(f){f.hidden=!f.hidden;if(!f.hidden){var inp=f.querySelector('input[type=email]');if(inp)inp.focus();}}}
-});
-}
-</script>

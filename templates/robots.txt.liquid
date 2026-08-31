@@ -1,29 +1,40 @@
 # Custom robots.txt.liquid for King Killers
 # For more information about this file and how Shopify uses it, check:
 # https://help.shopify.com/manual/promoting-marketing/seo/editing-robots-txt
+#
+# WHITESPACE WARNING: robots.txt is line-oriented, so every directive has to land on
+# its own column-0 line. Never right-trim a directive ({{ drop -}}) in this file — that
+# eats the newline behind it and silently welds the whole group onto one unparseable
+# line, taking Shopify's default Disallow rules and the Sitemap directive with it.
 
-{%- for group in robots.default_groups -%}
-  {{- group.user_agent -}}
+{% for group in robots.default_groups -%}
+{{ group.user_agent }}
+{% for rule in group.rules -%}
+{{ rule }}
+{% endfor -%}
+{%- if group.sitemap != blank -%}
+{{ group.sitemap }}
+{% endif %}
+{% endfor -%}
 
-  {%- for rule in group.rules -%}
-    {{- rule -}}
-  {%- endfor -%}
-
-  {%- if group.user_agent.value == '*' -%}
-    # Allow AI crawlers to discover and cite brand entities
-    User-agent: GPTBot
-    Allow: /
-    User-agent: ChatGPT-User
-    Allow: /
-    User-agent: ClaudeBot
-    Allow: /
-    User-agent: PerplexityBot
-    Allow: /
-    User-agent: OAI-SearchBot
-    Allow: /
-  {%- endif -%}
-
-  {%- if group.sitemap != blank -%}
-    {{- group.sitemap -}}
-  {%- endif -%}
-{%- endfor -%}
+# AI / answer-engine crawlers: explicitly welcome to read and cite brand pages, but
+# held to the same off-limits paths as everyone else. A named group makes these agents
+# ignore the "*" group entirely, so the disallows have to be restated here or they
+# would crawl admin, cart, checkout and search URLs.
+{% assign ai_agents = 'GPTBot,OAI-SearchBot,ChatGPT-User,ClaudeBot,Claude-User,Claude-SearchBot,PerplexityBot,Perplexity-User,Google-Extended,Applebot-Extended' | split: ',' -%}
+{% for agent in ai_agents -%}
+User-agent: {{ agent }}
+{% endfor -%}
+Disallow: /admin
+Disallow: /cart
+Disallow: /orders
+Disallow: /account
+Disallow: /checkout
+Disallow: /checkouts/
+Disallow: /search
+Disallow: /apple-app-site-association
+Disallow: /.well-known/shopify/monorail
+Disallow: /*?*oseid=*
+Disallow: /*preview_theme_id*
+Disallow: /*preview_script_id*
+Allow: /
