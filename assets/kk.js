@@ -7,7 +7,11 @@
 (function () {
   'use strict';
   var d = document;
-  var THRESHOLD = window.kkFreeShipThreshold || 10000; // cents
+  // cents. A 0 threshold is a real setting (free shipping on everything), not an
+  // absent one, so don't let `||` fall back to 10000 and invent a $100 goal.
+  var THRESHOLD = typeof window.kkFreeShipThreshold === 'number' && isFinite(window.kkFreeShipThreshold)
+    ? window.kkFreeShipThreshold
+    : 10000;
 
   /* ---------- Money formatting (matches Shopify default; no library) ---------- */
   function money(cents) {
@@ -46,15 +50,22 @@
     if (!drawer) return;
     d.querySelectorAll('[data-cart-count]').forEach(function (n) { n.textContent = cart.item_count; });
 
-    var pct = Math.min(100, Math.round((cart.total_price / THRESHOLD) * 100));
-    var bar = drawer.querySelector('[data-ship-bar]');
-    var msg = drawer.querySelector('[data-ship-msg]');
-    if (bar) bar.style.width = pct + '%';
-    if (msg) {
-      var remaining = THRESHOLD - cart.total_price;
-      msg.textContent = remaining > 0
-        ? 'You\u2019re ' + money(remaining) + ' away from FREE shipping.'
-        : '\uD83C\uDF89 You\u2019ve unlocked FREE shipping!';
+    var shipBlock = drawer.querySelector('.kk-drawer__ship');
+    if (THRESHOLD <= 0) {
+      // Nothing to progress towards — match the cart page, which omits the bar.
+      if (shipBlock) shipBlock.hidden = true;
+    } else {
+      if (shipBlock) shipBlock.hidden = false;
+      var pct = Math.min(100, Math.round((cart.total_price / THRESHOLD) * 100));
+      var bar = drawer.querySelector('[data-ship-bar]');
+      var msg = drawer.querySelector('[data-ship-msg]');
+      if (bar) bar.style.width = pct + '%';
+      if (msg) {
+        var remaining = THRESHOLD - cart.total_price;
+        msg.textContent = remaining > 0
+          ? 'You\u2019re ' + money(remaining) + ' away from FREE shipping.'
+          : '\uD83C\uDF89 You\u2019ve unlocked FREE shipping!';
+      }
     }
 
     var body = drawer.querySelector('[data-drawer-body]');

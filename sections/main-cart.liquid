@@ -5,12 +5,24 @@
   without a cart template, so all of those landed on nothing.
 {%- endcomment -%}
 {%- liquid
+  comment
+    The free-shipping threshold is a range setting with min 0, and Liquid's `default`
+    filter only substitutes for nil/false/empty — a literal 0 passes straight through.
+    Dividing by it raises Liquid::ZeroDivisionError, which would take out this whole
+    page, checkout form included. So the progress maths stays inside the > 0 guard;
+    a 0 threshold means shipping is always free and the progress bar has nothing to
+    say, which is why the markup below omits it entirely.
+  endcomment
   assign ship_threshold = settings.free_ship_threshold | default: 100
   assign ship_threshold_cents = ship_threshold | times: 100
-  assign remaining = ship_threshold_cents | minus: cart.total_price
-  assign ship_progress = cart.total_price | times: 100 | divided_by: ship_threshold_cents
-  if ship_progress > 100
-    assign ship_progress = 100
+  assign show_ship_progress = false
+  if ship_threshold_cents > 0
+    assign show_ship_progress = true
+    assign remaining = ship_threshold_cents | minus: cart.total_price
+    assign ship_progress = cart.total_price | times: 100 | divided_by: ship_threshold_cents
+    if ship_progress > 100
+      assign ship_progress = 100
+    endif
   endif
 -%}
 <section class="kk-section kk-cartpage" aria-labelledby="cart-title">
@@ -26,7 +38,7 @@
         <a href="{{ routes.all_products_collection_url }}" class="kk-btn kk-btn--primary">Shop all gear</a>
       </div>
     {%- else -%}
-      {%- if ship_threshold_cents > 0 -%}
+      {%- if show_ship_progress -%}
         <div class="kk-cartpage__ship">
           <div class="kk-drawer__bar"><span style="width:{{ ship_progress }}%"></span></div>
           <p class="kk-cartpage__shipmsg">
@@ -91,7 +103,7 @@
             <button type="submit" name="checkout" class="kk-btn kk-btn--primary">Checkout</button>
           </div>
         </div>
-        <p class="kk-cartpage__reassure">✓ Free shipping ${{ ship_threshold }}+ · ✓ {{ settings.return_window_days | default: 30 }}-day money-back guarantee</p>
+        <p class="kk-cartpage__reassure">✓ {% if show_ship_progress %}Free shipping ${{ ship_threshold }}+{% else %}Free shipping on every order{% endif %} · ✓ {{ settings.return_window_days | default: 30 }}-day money-back guarantee</p>
       </form>
     {%- endif -%}
   </div>
