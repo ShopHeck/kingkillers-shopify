@@ -80,14 +80,44 @@ rebuy and what was a mistake. Set it up before launch or you'll be guessing in w
 
 ---
 
-## Working constraints (as of this branch)
+## What is already built in Shopify
 
-- **Shopify MCP is disconnected.** The connector must be re-authorized against the
-  King Killers store before any of this can be pushed live. Everything here is written
-  so that push is mechanical.
-- **No image generation in this environment.** [`04-image-direction.md`](04-image-direction.md)
-  gives you production-ready prompt packs to run in your own image tool, plus the
-  compositing discipline that keeps logos and graphics accurate.
-- **Existing catalog not yet reconciled.** You indicated some women's SKUs already
-  exist. Once the store is connected, run the reconciliation step in
-  [`06-launch-runbook.md`](06-launch-runbook.md) before creating anything new.
+Live on **kingkillers.co** as of 2 Sep 2026. Every product is **DRAFT** — nothing is
+purchasable until you flip it.
+
+- **8 product metafield definitions** (`custom.fit_note`, `fabric`, `care`,
+  `model_stats`, `size_chart_key`, `features`, `badge`, `material`), pinned in the admin.
+- **8 smart collections**, published, populating themselves from the `w:` tag taxonomy.
+- **4 existing draft products rewritten** — real copy, namespaced tags, SEO titles and
+  meta descriptions, metafields filled.
+- **4 new garments + 3 kits created** with full copy, SEO, metafields and SKUs.
+- **11 products in Round One**, wired to the launch collection by tag.
+
+Exact IDs, handles, prices and open issues are recorded in
+[`/data/womens-activewear/round-one.json`](../../data/womens-activewear/round-one.json).
+
+In this branch, on the theme side:
+
+- `snippets/size-picker.liquid` — tappable size pills replacing the variant `<select>`
+- `snippets/size-chart.liquid` — body-measurement charts driven by metafield
+- `sections/kk-fit-fabric.liquid` — metafield-driven fit / fabric / care block
+- `sections/kk-collection-hero.liquid` — editorial hero for launch collections
+- `templates/collection.womens.json`, `templates/product.womens.json`
+
+---
+
+## Known gaps — read before setting a launch date
+
+- **Nothing is sourced for four of the eight garments.** The Contender rash guard,
+  Southpaw fight short, Warcry tank and Regicide hoodie are specified and written but
+  have no supplier. Filter Shopify on the tag `w:todo:sourcing`.
+- **There are no product images.** No image generation ran here.
+  [`04-image-direction.md`](04-image-direction.md) gives you production-ready prompt packs
+  and the compositing discipline that keeps logos and graphics accurate.
+- **The size chart is a standard US grade, not your garments.** Reconcile it against real
+  samples before launch or it will cause the returns it exists to prevent.
+- **`templateSuffix` is not applied.** Apply it only after this branch merges and the
+  theme deploys — a suffix pointing at a missing template breaks the page.
+- **The legacy `womens` collection is still wrong** and was deliberately left alone. It
+  is a live collection with 189 products; narrowing it is your call. See
+  [`02-merchandising-architecture.md`](02-merchandising-architecture.md).
