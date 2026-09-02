@@ -29,7 +29,7 @@
           "type": "qa",
           "settings": {
             "question": "How do I pick my size?",
-            "answer": "<p>Use the size chart on this page — every number is a body measurement in inches, taken over a sports bra with the tape snug and level. Compression pieces run true to size and should feel tight; if you are between sizes, take the smaller one. Relaxed pieces also run true to size. Still unsure? Email us your measurements and what you train and we will tell you which size to take.</p>"
+            "answer": "<p>Use the size chart on this page rather than guessing from your usual size. For apparel the numbers are body measurements in inches — measure over a sports bra with the tape snug and level. Socks are listed by US shoe size. Compression pieces run true to size and should feel tight; if you are between sizes, take the smaller one. Relaxed pieces also run true to size. Still unsure? Email us your measurements and what you train and we will tell you which size to take.</p>"
           }
         },
         "qa_fit": {
@@ -70,7 +70,6 @@
       "type": "kk-fit-fabric",
       "settings": {
         "heading": "Fit & Fabric",
-        "show_size_chart": true,
         "fit_help": "<p>Every measurement on our size chart is a body measurement, not a garment measurement. Measure over a sports bra with the tape snug and level. Still unsure? Email us your measurements and what you train.</p>"
       }
     }

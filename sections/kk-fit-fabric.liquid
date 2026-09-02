@@ -24,9 +24,14 @@
   comment
     A product configured with only a size chart is a valid setup — it must still
     render, or the PDP's size-chart trigger has nothing to open.
+
+    Deliberately keyed off the metafield alone, with no merchant toggle: the
+    "Size guide" trigger lives in main-product.liquid and Liquid gives it no way
+    to read this section's settings, so a toggle could put the trigger and its
+    target out of sync with no way to reconcile them.
   endcomment
   assign has_chart = false
-  if section.settings.show_size_chart and mf.size_chart_key != blank
+  if mf.size_chart_key != blank
     assign has_chart = true
   endif
 
@@ -100,7 +105,6 @@
   "enabled_on": { "templates": ["product"] },
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Fit & Fabric" },
-    { "type": "checkbox", "id": "show_size_chart", "label": "Show size chart", "default": true },
     { "type": "richtext", "id": "fit_help", "label": "Extra fit guidance", "default": "<p>Every measurement on our size chart is a body measurement, not a garment measurement. Measure over a sports bra with the tape snug and level.</p>" }
   ],
   "presets": [{ "name": "Fit & fabric" }]
