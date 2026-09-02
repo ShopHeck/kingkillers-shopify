@@ -15,10 +15,10 @@ waitlist building (needs two weeks to produce a list worth emailing).
 | 8 metafield definitions created and pinned | Products are all DRAFT |
 | 8 smart collections created, published, populating from tags | 4 of 8 garments have no supplier (`w:todo:sourcing`) |
 | 4 existing drafts rewritten with real copy, tags, SEO, metafields | Zero product images |
-| 4 new garments + 3 kits created with SKUs and full copy | `templateSuffix` not applied (waiting on theme deploy) |
-| Theme: size picker, size chart, fit block, collection hero, 2 templates | `model_stats` empty on every product |
-| Tag taxonomy defined and applied | Size chart not reconciled against real garments |
-| | Legacy `womens` collection still pointed at `Unisex` |
+| 4 new garments + 3 kits created with SKUs and full copy | No women's PDP has been visually verified |
+| Theme: size chart, fit / fabric block and `product.womens` template | `model_stats` empty on every product |
+| `templateSuffix: "womens"` applied to all 12 products | Size chart not reconciled against real garments |
+| Tag taxonomy defined and applied | Legacy `womens` collection still pointed at `Unisex` |
 
 ---
 

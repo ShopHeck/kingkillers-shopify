@@ -123,8 +123,9 @@ the theme, and all of which pushing that copy would have deleted.
   and the compositing discipline that keeps logos and graphics accurate.
 - **The size chart is a standard US grade, not your garments.** Reconcile it against real
   samples before launch or it will cause the returns it exists to prevent.
-- **`templateSuffix` is not applied.** Apply it only after this branch merges and the
-  theme deploys — a suffix pointing at a missing template breaks the page.
+- **The women's PDP has not been visually verified.** The `womens` template suffix is
+  applied to all 12 products, but preview at least one product in the theme editor before
+  making any product active.
 - **The legacy `womens` collection is still wrong** and was deliberately left alone. It
   is a live collection with 189 products; narrowing it is your call. See
   [`02-merchandising-architecture.md`](02-merchandising-architecture.md).
