@@ -1,0 +1,112 @@
+{%- comment -%}
+  PDP fit, fabric, features and care — driven entirely by product metafields so the
+  block is identical across the line and a merchant fills it in once per product.
+
+  Reads:
+    custom.features     (list.single_line_text_field)
+    custom.fit_note     (single_line_text_field)
+    custom.model_stats  (single_line_text_field)
+    custom.fabric       (multi_line_text_field)
+    custom.care         (multi_line_text_field)
+    custom.size_chart_key -> rendered via the size-chart snippet
+
+  Renders nothing at all if the product has none of these, so it is safe to leave in
+  the template for every product type.
+{%- endcomment -%}
+{%- liquid
+  assign mf = product.metafields.custom
+
+  assign has_content = false
+  if mf.features != blank or mf.fit_note != blank or mf.fabric != blank or mf.care != blank or mf.model_stats != blank
+    assign has_content = true
+  endif
+
+  comment
+    A product configured with only a size chart is a valid setup — it must still
+    render, or the PDP's size-chart trigger has nothing to open.
+
+    Deliberately keyed off the metafield alone, with no merchant toggle: the
+    "Size guide" trigger lives in main-product.liquid and Liquid gives it no way
+    to read this section's settings, so a toggle could put the trigger and its
+    target out of sync with no way to reconcile them.
+  endcomment
+  assign has_chart = false
+  if mf.size_chart_key != blank
+    assign has_chart = true
+  endif
+
+  assign has_any = false
+  if has_content or has_chart
+    assign has_any = true
+  endif
+-%}
+{%- if has_any -%}
+{{ 'kk-womens.css' | asset_url | stylesheet_tag }}
+<section class="kk-section kk-fitfab" aria-labelledby="fitfab-title">
+  <div class="kk-wrap">
+    {%- if has_content -%}
+      <h2 id="fitfab-title" class="kk-h2">{{ section.settings.heading | default: 'Fit &amp; Fabric' }}</h2>
+    {%- else -%}
+      <h2 id="fitfab-title" class="kk-h2">Size &amp; Fit</h2>
+    {%- endif -%}
+
+    <div class="kk-fitfab__grid">
+      {%- if mf.features != blank -%}
+        <div class="kk-fitfab__col">
+          <h3 class="kk-fitfab__h">Built with</h3>
+          <ul class="kk-fitfab__list">
+            {%- for feature in mf.features.value -%}
+              <li>{{ feature }}</li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- if mf.fit_note != blank or mf.model_stats != blank -%}
+        <div class="kk-fitfab__col">
+          <h3 class="kk-fitfab__h">Fit</h3>
+          {%- if mf.fit_note != blank -%}
+            <p class="kk-fitfab__fit">{{ mf.fit_note.value }}</p>
+          {%- endif -%}
+          {%- if mf.model_stats != blank -%}
+            <p class="kk-fitfab__model">{{ mf.model_stats.value }}</p>
+          {%- endif -%}
+          {%- if section.settings.fit_help != blank -%}
+            <div class="rte kk-fitfab__note">{{ section.settings.fit_help }}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if mf.fabric != blank or mf.care != blank -%}
+        <div class="kk-fitfab__col">
+          {%- if mf.fabric != blank -%}
+            <h3 class="kk-fitfab__h">Fabric</h3>
+            <p class="kk-fitfab__body">{{ mf.fabric.value | newline_to_br }}</p>
+          {%- endif -%}
+          {%- if mf.care != blank -%}
+            <h3 class="kk-fitfab__h kk-fitfab__h--sub">Care</h3>
+            <p class="kk-fitfab__body">{{ mf.care.value | newline_to_br }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if has_chart -%}
+      {% render 'size-chart', product: product %}
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fit & fabric",
+  "tag": "section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Fit & Fabric" },
+    { "type": "richtext", "id": "fit_help", "label": "Extra fit guidance", "default": "<p>Every measurement on our size chart is a body measurement, not a garment measurement. Measure over a sports bra with the tape snug and level.</p>" }
+  ],
+  "presets": [{ "name": "Fit & fabric" }]
+}
+{% endschema %}

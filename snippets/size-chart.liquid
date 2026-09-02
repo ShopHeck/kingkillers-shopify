@@ -1,0 +1,106 @@
+{%- comment -%}
+  Women's size chart. Rendered from product.metafields.custom.size_chart_key so a
+  merchant never has to paste a table into a description again.
+
+  Keys: womens-bottoms · womens-tops · womens-bra · womens-socks
+  Usage: {% render 'size-chart', product: product %}
+
+  Measurements are BODY measurements in inches. Measure over a sports bra, not over
+  a gi. If you are between two sizes the fit note on the product tells you which way
+  to go — that decision is per-garment, not per-customer.
+{%- endcomment -%}
+{%- liquid
+  assign chart = product.metafields.custom.size_chart_key.value | default: 'womens-bottoms'
+-%}
+<details class="kk-size" id="kk-size-chart" open>
+  <summary class="kk-size__toggle">
+    <span>Size chart &amp; measurements</span>
+    {%- if product.metafields.custom.fit_note != blank -%}
+      <em class="kk-size__fitnote">{{ product.metafields.custom.fit_note.value }}</em>
+    {%- endif -%}
+  </summary>
+
+  <div class="kk-size__body">
+    {%- if product.metafields.custom.model_stats != blank -%}
+      <p class="kk-size__model">{{ product.metafields.custom.model_stats.value }}</p>
+    {%- endif -%}
+
+    <div class="kk-size__scroll">
+      {%- case chart -%}
+        {%- when 'womens-bra' -%}
+          <table class="kk-size__table">
+            <caption>Women's bra sizing — body measurements in inches</caption>
+            <thead><tr><th scope="col">Size</th><th scope="col">Underbust</th><th scope="col">Bust</th><th scope="col">Typical bra size</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">XS</th><td>26–28</td><td>31–32</td><td>30A – 32B</td></tr>
+              <tr><th scope="row">S</th><td>28–30</td><td>33–34</td><td>32B – 34B</td></tr>
+              <tr><th scope="row">M</th><td>30–32</td><td>35–36</td><td>34B – 36C</td></tr>
+              <tr><th scope="row">L</th><td>32–35</td><td>37–39</td><td>36C – 38D</td></tr>
+              <tr><th scope="row">XL</th><td>35–38</td><td>40–42</td><td>38D – 40DD</td></tr>
+              <tr><th scope="row">2XL</th><td>38–41</td><td>43–45</td><td>40DD – 42DDD</td></tr>
+            </tbody>
+          </table>
+          <h4 class="kk-size__h">How to measure</h4>
+          <dl class="kk-size__how">
+            <dt>Underbust</dt><dd>Around your ribcage directly under the bust, tape snug and level.</dd>
+            <dt>Bust</dt><dd>Around the fullest part, tape level, without compressing.</dd>
+          </dl>
+
+        {%- when 'womens-tops' -%}
+          <table class="kk-size__table">
+            <caption>Women's tops — body measurements in inches</caption>
+            <thead><tr><th scope="col">Size</th><th scope="col">Bust</th><th scope="col">Natural waist</th><th scope="col">Hip</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">XS</th><td>31–32</td><td>24–25</td><td>34–35</td></tr>
+              <tr><th scope="row">S</th><td>33–34</td><td>26–27</td><td>36–37</td></tr>
+              <tr><th scope="row">M</th><td>35–36</td><td>28–29</td><td>38–39</td></tr>
+              <tr><th scope="row">L</th><td>37–39</td><td>30–32</td><td>40–42</td></tr>
+              <tr><th scope="row">XL</th><td>40–42</td><td>33–35</td><td>43–45</td></tr>
+              <tr><th scope="row">2XL</th><td>43–45</td><td>36–38</td><td>46–48</td></tr>
+            </tbody>
+          </table>
+          <h4 class="kk-size__h">How to measure</h4>
+          <dl class="kk-size__how">
+            <dt>Bust</dt><dd>Around the fullest part, tape level and not compressing.</dd>
+            <dt>Natural waist</dt><dd>The narrowest part of your torso, usually just above the navel.</dd>
+            <dt>Hip</dt><dd>Around the fullest part of the seat, feet together.</dd>
+          </dl>
+
+        {%- when 'womens-socks' -%}
+          <table class="kk-size__table">
+            <caption>Sock sizing — US women's shoe size</caption>
+            <thead><tr><th scope="col">Size</th><th scope="col">US women's</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">S/M</th><td>5 – 8</td></tr>
+              <tr><th scope="row">L/XL</th><td>8.5 – 11</td></tr>
+            </tbody>
+          </table>
+
+        {%- else -%}
+          <table class="kk-size__table">
+            <caption>Women's bottoms — body measurements in inches</caption>
+            <thead><tr><th scope="col">Size</th><th scope="col">Natural waist</th><th scope="col">Hip</th><th scope="col">Inseam</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">XS</th><td>24–25</td><td>34–35</td><td>28</td></tr>
+              <tr><th scope="row">S</th><td>26–27</td><td>36–37</td><td>28.5</td></tr>
+              <tr><th scope="row">M</th><td>28–29</td><td>38–39</td><td>29</td></tr>
+              <tr><th scope="row">L</th><td>30–32</td><td>40–42</td><td>29.5</td></tr>
+              <tr><th scope="row">XL</th><td>33–35</td><td>43–45</td><td>30</td></tr>
+              <tr><th scope="row">2XL</th><td>36–38</td><td>46–48</td><td>30</td></tr>
+            </tbody>
+          </table>
+          <h4 class="kk-size__h">How to measure</h4>
+          <dl class="kk-size__how">
+            <dt>Natural waist</dt><dd>The narrowest part of your torso. High-rise pieces sit here or just above.</dd>
+            <dt>Hip</dt><dd>Around the fullest part of the seat, feet together.</dd>
+            <dt>Inseam</dt><dd>Inner leg, from crotch seam to hem. Listed for reference — it is the garment, not you.</dd>
+          </dl>
+      {%- endcase -%}
+    </div>
+
+    <p class="kk-size__help">
+      Still between sizes? Email <a href="mailto:{{ shop.email }}">{{ shop.email }}</a> with your
+      measurements and what you train — we will tell you which size to take.
+    </p>
+  </div>
+</details>
