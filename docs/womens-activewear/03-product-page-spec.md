@@ -10,7 +10,7 @@ about.
 |---|---|---|---|
 | 1 | Gallery, 6 shots | `main-product` | First image is preloaded as LCP |
 | 2 | Badge, rating, title, price | `main-product` | Identity and price before the ask |
-| 3 | **Size picker** | `size-picker.liquid` | Tappable pills, not a `<select>` |
+| 3 | Size pills | `main-product.liquid` | Already in the live theme |
 | 4 | Add to cart | `main-product` | |
 | 5 | Reassurance strip | `main-product` | Free ship / guarantee / fighter-owned |
 | 6 | Trust accordions | `main-product` | Size help, shipping, checkout |
@@ -23,37 +23,13 @@ about.
 
 ## What changed on the PDP
 
-### The variant `<select>` is gone
+### Size selection was already solved
 
-The old PDP put every variant in one dropdown: `Small – $44.99`, `Medium – $44.99`, and
-so on. On a six-size garment that is bad; on a Size × Colour garment with eighteen
-variants it is a conversion hole. Shoppers cannot scan a dropdown, cannot see at a glance
-which sizes exist, and on mobile it opens a native picker that hides the product image.
-
-`snippets/size-picker.liquid` replaces it with tappable pills, rendered **one row per
-product option** rather than one pill per variant. That distinction matters: iterating
-variants on a Size × Colour product produces a wall of indistinguishable "S" buttons.
-A Size × Colour product gets a Size row and a Colour row.
-
-- **Unavailable combinations stay visible** with a diagonal strike and `aria-disabled`.
-  A shopper needs to see that her size existed and sold out — silently removing it reads
-  as "this brand does not make my size," which is the opposite of the message.
-- They stay **clickable**, though. On a multi-option product, hard-disabling them traps a
-  shopper who wants to check whether another colour has her size. Add to Cart reflects the
-  resolved variant's availability, which is where "sold out" actually belongs.
-- Clicking an option that yields a combination which does not exist **snaps to a real
-  variant** carrying that value, preferring an available one, rather than leaving the
-  picker pointing at nothing.
-- A note underneath reports how many options are sold out in the current combination.
-- Arrow keys move within an option row; each row is a proper `radiogroup`.
-- The "Size chart" button is rendered `hidden` and revealed by `kk.js` only when a
-  `[data-size-chart]` is actually on the page. Products still on the default
-  `product.json` template have no `kk-fit-fabric` section, and a visible button that does
-  nothing is worse than no button.
-
-It resolves the selected combination to a variant, then writes that variant's `data-*`
-attributes onto the existing `[data-pdp-variant]` hidden input, so the price /
-availability / image-swap logic already in `kk.js` works unchanged. Minimal blast radius.
+An earlier draft of this document described a `size-picker.liquid` snippet replacing a
+variant `<select>`. That was written against `main`'s copy of the theme, which is stale.
+The live PDP already renders size pills with sold-out handling, plus a quantity selector,
+a back-in-stock form, a trust row and star ratings. The picker was dropped; shipping it
+would have deleted all of that.
 
 ### Fit & fabric is metafield-driven
 
@@ -160,18 +136,20 @@ None are blocking. All three are worth an hour before the line goes ACTIVE.
 
 ## Applying the template
 
-The `product.womens` and `collection.womens` templates live in this branch. Shopify
-serves them via `templateSuffix`, which is **not yet set on any product or collection** —
-deliberately, because a `templateSuffix` pointing at a template the live theme does not
-have yet breaks the page.
+`templates/product.womens.json` is live, and all 12 women's products carry
+`templateSuffix: "womens"`.
 
-Order of operations:
+The order matters, and getting it wrong takes pages down:
 
-1. Merge this branch. The live theme (`kingkillers-shopify/shopify-theme`) is
-   GitHub-connected, so merging deploys the templates.
-2. Confirm the templates appear in the theme editor.
-3. Set `templateSuffix: "womens"` on the eleven Round One products and the eight women's
-   collections.
-4. Then, and only then, flip products to ACTIVE.
+1. Ship theme code to **`shopify-theme`** — the branch the live theme deploys from.
+   `main` is a stale copy; merging there deploys nothing.
+2. Confirm the files reached the live theme.
+3. Set `templateSuffix` on the products.
+4. Preview a PDP in the theme editor.
+5. Only then flip products to ACTIVE.
 
-Doing 3 before 1 takes the pages down.
+Steps 1–3 are done. Step 4 is outstanding — no page has been visually verified.
+
+No collection template was shipped: the live theme already has `kk-collection-copy`,
+which renders editorial copy from `collection.metafields.custom.seo_copy` and emits
+CollectionPage + ItemList JSON-LD. Populating that metafield needs no theme change.

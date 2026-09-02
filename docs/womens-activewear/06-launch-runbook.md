@@ -67,11 +67,15 @@ waitlist building (needs two weeks to produce a list worth emailing).
 
 ## T-minus 3 weeks — Storefront build
 
-- [ ] **Merge this branch.** The live theme is GitHub-connected, so merging deploys the
-      size picker, size chart, fit block, hero and templates.
-- [ ] Verify the templates appear in the theme editor.
-- [ ] Set `templateSuffix: "womens"` on the 11 Round One products and the 8 collections.
-      *Not before the merge — a suffix pointing at a missing template breaks the page.*
+- [x] **Ship the theme code to `shopify-theme`.** Done in PR #13. That branch, at the
+      repo root, is what the live theme deploys from — **not** `main`, whose
+      `kingkillers-theme/` directory is a stale copy. Merging to `main` deploys nothing.
+- [x] Verify the files reached the live theme. They landed within seconds of the merge.
+- [x] Set `templateSuffix: "womens"` on the women's products. Applied to all 12.
+      *Never before the theme deploy — a suffix pointing at a missing template breaks
+      the page.*
+- [ ] **Preview a women's PDP in the theme editor.** Nothing in the theme work has been
+      visually verified. This is the outstanding gate.
 - [ ] Upload imagery with the naming convention and alt-text formula.
 - [ ] Configure Search & Discovery filters. Size first. Rename the facet labels.
 - [ ] Fix the legacy `womens` collection rule (see

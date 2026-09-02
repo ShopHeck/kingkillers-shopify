@@ -98,11 +98,18 @@ Exact IDs, handles, prices and open issues are recorded in
 
 In this branch, on the theme side:
 
-- `snippets/size-picker.liquid` — tappable size pills replacing the variant `<select>`
+Shipped to the live theme in PR #13, on the `shopify-theme` branch:
+
 - `snippets/size-chart.liquid` — body-measurement charts driven by metafield
 - `sections/kk-fit-fabric.liquid` — metafield-driven fit / fabric / care block
-- `sections/kk-collection-hero.liquid` — editorial hero for launch collections
-- `templates/collection.womens.json`, `templates/product.womens.json`
+- `assets/kk-womens.css` — styles scoped to those two components
+- `templates/product.womens.json` — applied to all 12 women's products
+- `sections/main-product.liquid` — one line, pointing "Size guide" at the chart
+
+**Dropped after seeing the real theme:** a size picker, a collection hero and a
+collection template. The live PDP already had size pills, a quantity selector, a
+back-in-stock form and star ratings — none of which exist in `main`'s stale copy of
+the theme, and all of which pushing that copy would have deleted.
 
 ---
 
