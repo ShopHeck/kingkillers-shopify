@@ -328,18 +328,23 @@ a{color:inherit}
    Women's line: size picker, size chart, fit & fabric, collection hero
    --------------------------------------------------------------------------- */
 
-/* Size picker — tappable pills replace the multi-variant <select> */
+/* Variant picker — one pill row per product option, replacing the variant <select> */
 .kk-sizes{margin:0 0 20px}
+.kk-sizes__group{margin:0 0 16px}
+.kk-sizes__group:last-of-type{margin-bottom:0}
 .kk-sizes__head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
 .kk-sizes__label{font-family:var(--display);font-weight:800;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
-.kk-sizes__guide{background:none;border:none;padding:0;cursor:pointer;font:inherit;font-size:.82rem;color:var(--blood);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.kk-sizes__chosen b{color:var(--ink)}
+.kk-sizes__guide{background:none;border:none;padding:0;cursor:pointer;font:inherit;font-size:.82rem;color:var(--blood);font-weight:700;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
 .kk-sizes__guide:hover{color:var(--blood-bright)}
 .kk-sizes__row{display:flex;flex-wrap:wrap;gap:8px}
 .kk-sizes__pill{position:relative;min-width:56px;min-height:48px;padding:12px 14px;background:var(--bg-card);color:var(--ink);border:1px solid var(--line-strong);border-radius:10px;font-family:var(--display);font-weight:800;font-size:.9rem;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:border-color .16s ease,background .16s ease,transform .16s ease}
-.kk-sizes__pill:hover:not(:disabled){border-color:var(--blood);transform:translateY(-1px)}
+.kk-sizes__pill:hover{border-color:var(--blood);transform:translateY(-1px)}
 .kk-sizes__pill.is-active{background:var(--blood);border-color:var(--blood);color:#fff}
-.kk-sizes__pill.is-out,.kk-sizes__pill:disabled{color:var(--ink-faint);border-color:var(--line);cursor:not-allowed;background:transparent}
-/* Diagonal strike so a sold-out size reads as "was here, gone" rather than missing */
+/* Unavailable combinations stay visible and clickable — on a multi-option product,
+   disabling them would trap a shopper checking whether another colour has her size. */
+.kk-sizes__pill.is-out{color:var(--ink-faint);border-color:var(--line);background:transparent}
+.kk-sizes__pill.is-out.is-active{background:var(--bg-card);color:var(--ink-dim);border-color:var(--line-strong)}
 .kk-sizes__oos{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top left,transparent calc(50% - 1px),var(--ink-faint) calc(50% - 1px),var(--ink-faint) calc(50% + 1px),transparent calc(50% + 1px))}
 .kk-sizes__oos-note{margin:10px 0 0;font-size:.8rem;color:var(--ink-faint)}
 

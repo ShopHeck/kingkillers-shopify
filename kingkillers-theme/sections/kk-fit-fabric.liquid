@@ -15,15 +15,34 @@
 {%- endcomment -%}
 {%- liquid
   assign mf = product.metafields.custom
-  assign has_any = false
+
+  assign has_content = false
   if mf.features != blank or mf.fit_note != blank or mf.fabric != blank or mf.care != blank or mf.model_stats != blank
+    assign has_content = true
+  endif
+
+  comment
+    A product configured with only a size chart is a valid setup — it must still
+    render, or the PDP's size-chart trigger has nothing to open.
+  endcomment
+  assign has_chart = false
+  if section.settings.show_size_chart and mf.size_chart_key != blank
+    assign has_chart = true
+  endif
+
+  assign has_any = false
+  if has_content or has_chart
     assign has_any = true
   endif
 -%}
 {%- if has_any -%}
 <section class="kk-section kk-fitfab" aria-labelledby="fitfab-title">
   <div class="kk-wrap">
-    <h2 id="fitfab-title" class="kk-h2">{{ section.settings.heading | default: 'Fit &amp; Fabric' }}</h2>
+    {%- if has_content -%}
+      <h2 id="fitfab-title" class="kk-h2">{{ section.settings.heading | default: 'Fit &amp; Fabric' }}</h2>
+    {%- else -%}
+      <h2 id="fitfab-title" class="kk-h2">Size &amp; Fit</h2>
+    {%- endif -%}
 
     <div class="kk-fitfab__grid">
       {%- if mf.features != blank -%}
@@ -66,7 +85,7 @@
       {%- endif -%}
     </div>
 
-    {%- if section.settings.show_size_chart -%}
+    {%- if has_chart -%}
       {% render 'size-chart', product: product %}
     {%- endif -%}
   </div>

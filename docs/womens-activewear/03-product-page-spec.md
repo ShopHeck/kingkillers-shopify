@@ -30,18 +30,30 @@ so on. On a six-size garment that is bad; on a Size × Colour garment with eight
 variants it is a conversion hole. Shoppers cannot scan a dropdown, cannot see at a glance
 which sizes exist, and on mobile it opens a native picker that hides the product image.
 
-`snippets/size-picker.liquid` replaces it with tappable pills:
+`snippets/size-picker.liquid` replaces it with tappable pills, rendered **one row per
+product option** rather than one pill per variant. That distinction matters: iterating
+variants on a Size × Colour product produces a wall of indistinguishable "S" buttons.
+A Size × Colour product gets a Size row and a Colour row.
 
-- **Sold-out sizes stay visible**, disabled, with a diagonal strike. A shopper needs to
-  see that her size existed and sold out — silently removing it reads as "this brand does
-  not make my size," which is the opposite of the message.
-- A count line underneath ("2 sizes sold out") makes the state explicit.
-- Arrow keys move between sizes; the row is a proper `radiogroup`.
-- A "Size chart" button opens and scrolls to the chart in the Fit & Fabric section.
+- **Unavailable combinations stay visible** with a diagonal strike and `aria-disabled`.
+  A shopper needs to see that her size existed and sold out — silently removing it reads
+  as "this brand does not make my size," which is the opposite of the message.
+- They stay **clickable**, though. On a multi-option product, hard-disabling them traps a
+  shopper who wants to check whether another colour has her size. Add to Cart reflects the
+  resolved variant's availability, which is where "sold out" actually belongs.
+- Clicking an option that yields a combination which does not exist **snaps to a real
+  variant** carrying that value, preferring an available one, rather than leaving the
+  picker pointing at nothing.
+- A note underneath reports how many options are sold out in the current combination.
+- Arrow keys move within an option row; each row is a proper `radiogroup`.
+- The "Size chart" button is rendered `hidden` and revealed by `kk.js` only when a
+  `[data-size-chart]` is actually on the page. Products still on the default
+  `product.json` template have no `kk-fit-fabric` section, and a visible button that does
+  nothing is worse than no button.
 
-It writes the chosen variant's `data-*` attributes onto the existing `[data-pdp-variant]`
-hidden input, so the price / availability / image-swap logic already in `kk.js` works
-unchanged. Minimal blast radius.
+It resolves the selected combination to a variant, then writes that variant's `data-*`
+attributes onto the existing `[data-pdp-variant]` hidden input, so the price /
+availability / image-swap logic already in `kk.js` works unchanged. Minimal blast radius.
 
 ### Fit & fabric is metafield-driven
 
@@ -50,7 +62,9 @@ unchanged. Minimal blast radius.
 identical across the line and a merchant fills it in once per product in the admin.
 
 It renders **nothing at all** when the metafields are empty, so it is safe to leave in a
-template used by other product types.
+template used by other product types. One exception: a product configured with only
+`size_chart_key` still renders, under a "Size & Fit" heading, because otherwise the PDP's
+size-chart trigger would have nothing to open.
 
 ---
 
