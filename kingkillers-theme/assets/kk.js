@@ -313,6 +313,10 @@
 
     if (variant) variant.addEventListener('change', syncVariantState);
 
+    /* The sticky bar's CTA is a type="button" outside the product form, so it has to
+       forward its click into the real submit. */
+    if (stickySubmit) stickySubmit.addEventListener('click', function () { if (submit) submit.click(); });
+
     /* ---- Option-based variant picker -------------------------------------
        One pill row per product option. Resolves the selected combination to a
        variant, then copies that variant's data-* attributes onto
