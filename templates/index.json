@@ -64,6 +64,22 @@
       "name": "KK Trust strip",
       "settings": {}
     },
+    "fall_winter_2026": {
+      "type": "kk-seasonal-promo",
+      "disabled": true,
+      "settings": {
+        "collection": "fall-winter-2026",
+        "image_alt": "King Killers Fall Winter 2026 apparel",
+        "media_word": "FW26",
+        "eyebrow": "The Next Round · Fall / Winter 2026",
+        "heading": "Cold Camps. Hard Rounds.",
+        "body": "<p>A focused seasonal system in black, charcoal, Competition Red, bone and Antique Gold. Built to layer. Made to train. Designed to move from the gym to the street.</p>",
+        "proof_one": "Performance-first fits",
+        "proof_two": "Men's, women's and unisex capsules",
+        "proof_three": "Limited seasonal release",
+        "button_label": "Enter the Collection"
+      }
+    },
     "cats": {
       "type": "kk-category-bento",
       "blocks": {
@@ -253,6 +269,7 @@
   "order": [
     "hero",
     "kk_trust_Tf7aHf",
+    "fall_winter_2026",
     "cats",
     "best",
     "entity",

@@ -3,5 +3,31 @@
   "settings_schema": {
     "brand": { "name": "Brand & NAP" },
     "performance": { "name": "Performance" }
+  },
+  "seasonal": {
+    "collection_name": "KK Seasonal collection",
+    "promo_name": "KK Seasonal promo",
+    "hero_image": "Hero image",
+    "promo_image": "Campaign image",
+    "capsule_image": "Capsule image",
+    "image_alt": "Image alt text",
+    "eyebrow": "Eyebrow",
+    "heading": "Heading",
+    "title": "Title",
+    "body": "Body",
+    "background_word": "Background word",
+    "primary_button": "Primary button label",
+    "secondary_button": "Secondary button label",
+    "secondary_link": "Secondary button link",
+    "release_note": "Release note",
+    "show_palette": "Show color palette",
+    "capsule_name": "Capsule",
+    "collection": "Collection",
+    "link_label": "Link label",
+    "accent": "Accent color",
+    "proof_one": "Proof point one",
+    "proof_two": "Proof point two",
+    "proof_three": "Proof point three",
+    "hide_collection_header": "Hide collection title and description"
   }
 }

@@ -1,0 +1,99 @@
+{
+  "sections": {
+    "seasonal": {
+      "type": "kk-seasonal-collection",
+      "blocks": {
+        "core": {
+          "type": "capsule",
+          "settings": {
+            "eyebrow": "Capsule 01 · Core performance",
+            "title": "Built for the Work",
+            "text": "<p>Disciplined black layers, tonal crowned-skull marks and oxblood details across training-first silhouettes.</p>",
+            "link_label": "Shop core performance",
+            "accent": "#c81010"
+          }
+        },
+        "women": {
+          "type": "capsule",
+          "settings": {
+            "eyebrow": "Capsule 02 · Women's fight club",
+            "title": "Pretty Dangerous",
+            "text": "<p>Supportive activewear, sculpting layers and the rose emblem in a focused oxblood-on-black system.</p>",
+            "link_label": "Shop Pretty Dangerous",
+            "accent": "#c81010"
+          }
+        },
+        "men": {
+          "type": "capsule",
+          "settings": {
+            "eyebrow": "Capsule 03 · Men's + unisex",
+            "title": "No Crown Given",
+            "text": "<p>Heavyweight fleece, fight-ready shorts and low-key metallic marks for the coldest rounds.</p>",
+            "link_label": "Shop No Crown Given",
+            "accent": "#d4af37"
+          }
+        }
+      },
+      "block_order": ["core", "women", "men"],
+      "settings": {
+        "eyebrow": "Fall / Winter 2026 · Limited Drop",
+        "heading": "Cold Camps. Hard Rounds.",
+        "body": "<p>A focused seasonal system in black, charcoal, Competition Red, bone and Antique Gold. Performance layers and heavyweight staples built for the gym, the street and every cold round between.</p>",
+        "ghost_word": "FALL / WINTER",
+        "primary_label": "Shop the Drop",
+        "secondary_label": "Get Drop Alerts",
+        "secondary_url": "#footer-newsletter",
+        "release_note": "Fighter owned · Performance driven · Limited seasonal run",
+        "show_palette": true
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "hide_header": true,
+        "enable_filtering": true,
+        "enable_sorting": true
+      }
+    },
+    "copy": {
+      "type": "kk-collection-copy",
+      "settings": {}
+    },
+    "trust": {
+      "type": "kk-trust",
+      "blocks": {
+        "fighter": {
+          "type": "item",
+          "settings": {
+            "title": "Fighter Owned",
+            "text": "Designed from inside the fight game"
+          }
+        },
+        "performance": {
+          "type": "item",
+          "settings": {
+            "title": "Built to Train",
+            "text": "Performance-first silhouettes and layers"
+          }
+        },
+        "drop": {
+          "type": "item",
+          "settings": {
+            "title": "Limited Drop",
+            "text": "Focused seasonal colors and graphics"
+          }
+        },
+        "guarantee": {
+          "type": "item",
+          "settings": {
+            "title": "30-Day Guarantee",
+            "text": "Try the gear without taking the risk"
+          }
+        }
+      },
+      "block_order": ["fighter", "performance", "drop", "guarantee"],
+      "settings": {}
+    }
+  },
+  "order": ["seasonal", "main", "copy", "trust"]
+}
