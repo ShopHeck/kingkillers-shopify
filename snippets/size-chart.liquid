@@ -12,7 +12,7 @@
 {%- liquid
   assign chart = product.metafields.custom.size_chart_key.value | default: 'womens-bottoms'
 -%}
-<details class="kk-size" data-size-chart>
+<details class="kk-size" id="kk-size-chart" open>
   <summary class="kk-size__toggle">
     <span>Size chart &amp; measurements</span>
     {%- if product.metafields.custom.fit_note != blank -%}

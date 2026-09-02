@@ -35,8 +35,8 @@
         "qa_fit": {
           "type": "qa",
           "settings": {
-            "question": "Is the women's rash guard cut differently from the men's?",
-            "answer": "<p>Yes. It is drafted on a women's block, not graded down from the men's pattern — princess seams through the torso, a raised neckline that holds in a collar tie, extended body length, and a silicone waist gripper so it does not ride up during guard passes and scrambles. No thumbholes, because thumbholes snag in grappling.</p>"
+            "question": "Is King Killers women's gear cut on a women's pattern?",
+            "answer": "<p>Yes. The women's line is drafted on women's blocks rather than graded down from the men's patterns, so the proportions through the bust, waist and hip are different — and the construction is chosen for the sport rather than borrowed from it. The specific fabric, features and construction for this piece are listed under Fit &amp; Fabric on this page.</p>"
           }
         },
         "qa_returns": {

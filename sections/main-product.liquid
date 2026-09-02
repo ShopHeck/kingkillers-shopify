@@ -114,7 +114,11 @@
                   {%- if default_variant -%}{{ default_variant.title }}{%- else -%}Choose one{%- endif -%}
                 </span>
               </span>
-              <a class="kk-pdp__size-guide" href="#size-help">Size guide</a>
+              {%- comment -%}
+                Products with a configured size chart get the measurement table;
+                everything else falls back to the prose block in the buy box.
+              {%- endcomment -%}
+              <a class="kk-pdp__size-guide" href="#{% if product.metafields.custom.size_chart_key != blank %}kk-size-chart{% else %}size-help{% endif %}">Size guide</a>
             </div>
             <div class="kk-pdp__pills" role="listbox" aria-label="Choose {{ product.options_with_values.first.name | default: 'size' }}">
               {%- for variant in product.variants -%}
