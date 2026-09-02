@@ -159,7 +159,25 @@
       .then(function () { openDrawer(); if (btn) btn.textContent = 'Added ✓'; })
       .catch(function () { if (btn) btn.textContent = 'Try Again'; })
       .finally(function () {
-        setTimeout(function () { if (btn) { btn.disabled = false; btn.textContent = label; } }, 1300);
+        setTimeout(function () {
+          if (!btn) return;
+          /* Restore from the current variant, not from a label snapshotted at submit
+             time. Sold-out options are deliberately clickable, so the shopper can
+             switch to an unavailable variant while this request is in flight; blindly
+             re-enabling would leave an active Add to Cart on a sold-out variant that
+             can only produce failed requests. Re-firing change re-runs
+             syncVariantState, which sets both the inline and sticky buttons from the
+             variant that is actually selected now. */
+          var pdpRoot = form.closest('[data-pdp]');
+          var variantInput = pdpRoot ? pdpRoot.querySelector('[data-pdp-variant]') : null;
+          if (variantInput) {
+            variantInput.dispatchEvent(new Event('change', { bubbles: true }));
+          } else {
+            /* Quick-add cards have no variant picker — nothing can have changed. */
+            btn.disabled = false;
+            btn.textContent = label;
+          }
+        }, 1300);
       });
   });
 
