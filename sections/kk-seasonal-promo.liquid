@@ -1,0 +1,74 @@
+{%- liquid
+  assign promo_collection = section.settings.collection
+  assign promo_image = section.settings.image | default: promo_collection.image
+  assign promo_url = promo_collection.url
+-%}
+
+{%- if promo_collection != blank or request.design_mode -%}
+  <section class="kk-drop-promo kk-section" aria-labelledby="DropPromoHeading-{{ section.id }}">
+    <div class="kk-wrap kk-drop-promo__inner">
+      <div class="kk-drop-promo__media">
+        {% render 'responsive-image',
+          image: promo_image,
+          sizes: '(max-width: 760px) 100vw, 52vw',
+          widths: '480, 720, 960, 1280',
+          class: 'kk-drop-promo__image',
+          alt: section.settings.image_alt
+        %}
+        <span aria-hidden="true">{{ section.settings.media_word }}</span>
+      </div>
+      <div class="kk-drop-promo__copy">
+        {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="kk-drop-promo__heading" id="DropPromoHeading-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.body != blank -%}<div class="kk-drop-promo__body rte">{{ section.settings.body }}</div>{%- endif -%}
+        <ul class="kk-drop-promo__proof" role="list">
+          {%- if section.settings.proof_one != blank -%}<li>{{ section.settings.proof_one }}</li>{%- endif -%}
+          {%- if section.settings.proof_two != blank -%}<li>{{ section.settings.proof_two }}</li>{%- endif -%}
+          {%- if section.settings.proof_three != blank -%}<li>{{ section.settings.proof_three }}</li>{%- endif -%}
+        </ul>
+        {%- if promo_url != blank and section.settings.button_label != blank -%}
+          <a class="kk-btn kk-btn--primary" href="{{ promo_url }}">{{ section.settings.button_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .kk-drop-promo{background:linear-gradient(145deg,#0a0a0b,#111013);border-block:1px solid rgba(255,255,255,.08)}
+  .kk-drop-promo__inner{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);gap:clamp(36px,7vw,96px);align-items:center}
+  .kk-drop-promo__media{position:relative;height:580px;overflow:hidden;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:#111}
+  .kk-drop-promo__image,.kk-drop-promo__media .kk-img-ph{display:block;width:100%;height:100%;object-fit:cover}
+  .kk-drop-promo__media>span{position:absolute;right:-.04em;bottom:-.08em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.16);font-family:var(--display);font-size:clamp(4rem,10vw,8rem);font-weight:900;line-height:.78;letter-spacing:-.05em;text-transform:uppercase}
+  .kk-drop-promo__heading{max-width:10ch;margin:0 0 22px;font-family:var(--display);font-size:clamp(2.8rem,6vw,5.8rem);font-weight:900;line-height:.87;letter-spacing:-.04em;text-transform:uppercase;text-wrap:balance}
+  .kk-drop-promo__body{max-width:52ch;color:var(--ink-dim);font-size:1.04rem;line-height:1.7}
+  .kk-drop-promo__proof{display:grid;gap:10px;margin:26px 0 30px;padding:0;list-style:none;color:#d4d4d8;font-family:var(--display);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+  .kk-drop-promo__proof li{display:flex;align-items:center;gap:10px}
+  .kk-drop-promo__proof li::before{content:"";width:7px;height:7px;flex:0 0 7px;transform:rotate(45deg);background:var(--gold)}
+  @media (max-width:820px){.kk-drop-promo__inner{grid-template-columns:1fr}.kk-drop-promo__media{height:520px}.kk-drop-promo__copy{max-width:680px}}
+  @media (max-width:560px){.kk-drop-promo__media{height:430px}}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:seasonal.promo_name",
+  "tag": "section",
+  "enabled_on": { "templates": ["index", "page", "collection"] },
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "t:seasonal.collection" },
+    { "type": "image_picker", "id": "image", "label": "t:seasonal.promo_image" },
+    { "type": "text", "id": "image_alt", "label": "t:seasonal.image_alt", "default": "King Killers Fall Winter apparel" },
+    { "type": "text", "id": "media_word", "label": "t:seasonal.background_word", "default": "FW26" },
+    { "type": "text", "id": "eyebrow", "label": "t:seasonal.eyebrow", "default": "The Next Round · Fall / Winter 2026" },
+    { "type": "text", "id": "heading", "label": "t:seasonal.heading", "default": "Cold Camps. Hard Rounds." },
+    { "type": "richtext", "id": "body", "label": "t:seasonal.body", "default": "<p>A focused seasonal system in black, charcoal, Competition Red, bone and Antique Gold. Built to layer. Made to train. Designed to move from the gym to the street.</p>" },
+    { "type": "text", "id": "proof_one", "label": "t:seasonal.proof_one", "default": "Performance-first fits" },
+    { "type": "text", "id": "proof_two", "label": "t:seasonal.proof_two", "default": "Men's, women's and unisex capsules" },
+    { "type": "text", "id": "proof_three", "label": "t:seasonal.proof_three", "default": "Limited seasonal release" },
+    { "type": "text", "id": "button_label", "label": "t:seasonal.primary_button", "default": "Enter the Collection" }
+  ],
+  "presets": [
+    { "name": "t:seasonal.promo_name" }
+  ]
+}
+{% endschema %}

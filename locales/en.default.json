@@ -9,5 +9,15 @@
   },
   "products": {
     "product": { "add_to_cart": "Add to cart", "sold_out": "Sold out", "quick_add": "Quick add" }
+  },
+  "seasonal": {
+    "palette_label": "Fall and winter color palette",
+    "capsules_label": "Fall and winter apparel capsules",
+    "shop_heading": "Shop the fall and winter collection",
+    "black": "Black",
+    "charcoal": "Charcoal",
+    "red": "Competition red",
+    "bone": "Bone",
+    "gold": "Antique gold"
   }
 }
