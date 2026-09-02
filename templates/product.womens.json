@@ -1,0 +1,84 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_scarcity": true,
+        "scarcity_threshold": 10,
+        "size_help": "<p><strong>Compression pieces run true to size</strong> and are meant to be tight — a loose rash guard is a handle for your opponent. Between sizes on compression? Take the smaller size. Relaxed pieces also run true to size; size down only for a closer crop. Full body measurements are in the size chart below.</p>",
+        "shipping_returns": "<p>Most pieces are <strong>made to order (about 3–6 business days)</strong>, then ship. Free shipping on orders over $100. Try it risk-free with a 30-day money-back guarantee.</p>",
+        "checkout_reassurance": "<p>Secure checkout with major cards and accelerated payment options where available. Fighter-owned brand based in Tampa / St. Petersburg, Florida.</p>"
+      }
+    },
+    "related": {
+      "type": "kk-featured-products",
+      "settings": {
+        "eyebrow": "Complete the Kit",
+        "heading": "Trains Well With",
+        "subtext": "<p>The pieces this one was designed to sit next to. Buy them together as a kit and save.</p>",
+        "collection": "womens-activewear",
+        "products_to_show": 4,
+        "cta_label": "Shop all women's",
+        "cta_url": "/collections/womens-activewear"
+      }
+    },
+    "faq": {
+      "type": "kk-faq",
+      "blocks": {
+        "qa_size": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I pick my size?",
+            "answer": "<p>Use the size chart on this page — every number is a body measurement in inches, taken over a sports bra with the tape snug and level. Compression pieces run true to size and should feel tight; if you are between sizes, take the smaller one. Relaxed pieces also run true to size. Still unsure? Email us your measurements and what you train and we will tell you which size to take.</p>"
+          }
+        },
+        "qa_fit": {
+          "type": "qa",
+          "settings": {
+            "question": "Is the women's rash guard cut differently from the men's?",
+            "answer": "<p>Yes. It is drafted on a women's block, not graded down from the men's pattern — princess seams through the torso, a raised neckline that holds in a collar tie, extended body length, and a silicone waist gripper so it does not ride up during guard passes and scrambles. No thumbholes, because thumbholes snag in grappling.</p>"
+          }
+        },
+        "qa_returns": {
+          "type": "qa",
+          "settings": {
+            "question": "What if the size I ordered doesn't fit?",
+            "answer": "<p>Every order is covered by a 30-day money-back guarantee. If it is a fit issue we will exchange it for the right size rather than just refunding you — email us your measurements and we will pick the size for you.</p>"
+          }
+        },
+        "qa_care": {
+          "type": "qa",
+          "settings": {
+            "question": "How should I wash it?",
+            "answer": "<p>Machine wash cold, inside out, with like colors — and wash training gear the same day you train in it. Do not bleach. Hang dry where possible: heat is what kills the elastane and the silicone grippers, not the washing. Never iron a print.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "qa_size",
+        "qa_fit",
+        "qa_returns",
+        "qa_care"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "heading": "Before You Gear Up",
+        "subtext": "Fit questions answered up front, because guessing your size is how you end up returning it."
+      }
+    },
+    "fitfab": {
+      "type": "kk-fit-fabric",
+      "settings": {
+        "heading": "Fit & Fabric",
+        "show_size_chart": true,
+        "fit_help": "<p>Every measurement on our size chart is a body measurement, not a garment measurement. Measure over a sports bra with the tape snug and level. Still unsure? Email us your measurements and what you train.</p>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "fitfab",
+    "related",
+    "faq"
+  ]
+}
