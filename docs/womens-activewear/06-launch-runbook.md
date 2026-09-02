@@ -15,10 +15,10 @@ waitlist building (needs two weeks to produce a list worth emailing).
 | 8 metafield definitions created and pinned | Products are all DRAFT |
 | 8 smart collections created, published, populating from tags | 4 of 8 garments have no supplier (`w:todo:sourcing`) |
 | 4 existing drafts rewritten with real copy, tags, SEO, metafields | Zero product images |
-| 4 new garments + 3 kits created with SKUs and full copy | `templateSuffix` not applied (waiting on theme deploy) |
-| Theme: size picker, size chart, fit block, collection hero, 2 templates | `model_stats` empty on every product |
-| Tag taxonomy defined and applied | Size chart not reconciled against real garments |
-| | Legacy `womens` collection still pointed at `Unisex` |
+| 4 new garments + 3 kits created with SKUs and full copy | No women's PDP has been visually verified |
+| Theme: size chart, fit / fabric block and `product.womens` template | `model_stats` empty on every product |
+| `templateSuffix: "womens"` applied to all 12 products | Size chart not reconciled against real garments |
+| Tag taxonomy defined and applied | Legacy `womens` collection still pointed at `Unisex` |
 
 ---
 
@@ -67,11 +67,15 @@ waitlist building (needs two weeks to produce a list worth emailing).
 
 ## T-minus 3 weeks — Storefront build
 
-- [ ] **Merge this branch.** The live theme is GitHub-connected, so merging deploys the
-      size picker, size chart, fit block, hero and templates.
-- [ ] Verify the templates appear in the theme editor.
-- [ ] Set `templateSuffix: "womens"` on the 11 Round One products and the 8 collections.
-      *Not before the merge — a suffix pointing at a missing template breaks the page.*
+- [x] **Ship the theme code to `shopify-theme`.** Done in PR #13. That branch, at the
+      repo root, is what the live theme deploys from — **not** `main`, whose
+      `kingkillers-theme/` directory is a stale copy. Merging to `main` deploys nothing.
+- [x] Verify the files reached the live theme. They landed within seconds of the merge.
+- [x] Set `templateSuffix: "womens"` on the women's products. Applied to all 12.
+      *Never before the theme deploy — a suffix pointing at a missing template breaks
+      the page.*
+- [ ] **Preview a women's PDP in the theme editor.** Nothing in the theme work has been
+      visually verified. This is the outstanding gate.
 - [ ] Upload imagery with the naming convention and alt-text formula.
 - [ ] Configure Search & Discovery filters. Size first. Rename the facet labels.
 - [ ] Fix the legacy `womens` collection rule (see

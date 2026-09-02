@@ -98,11 +98,18 @@ Exact IDs, handles, prices and open issues are recorded in
 
 In this branch, on the theme side:
 
-- `snippets/size-picker.liquid` — tappable size pills replacing the variant `<select>`
+Shipped to the live theme in PR #13, on the `shopify-theme` branch:
+
 - `snippets/size-chart.liquid` — body-measurement charts driven by metafield
 - `sections/kk-fit-fabric.liquid` — metafield-driven fit / fabric / care block
-- `sections/kk-collection-hero.liquid` — editorial hero for launch collections
-- `templates/collection.womens.json`, `templates/product.womens.json`
+- `assets/kk-womens.css` — styles scoped to those two components
+- `templates/product.womens.json` — applied to all 12 women's products
+- `sections/main-product.liquid` — one line, pointing "Size guide" at the chart
+
+**Dropped after seeing the real theme:** a size picker, a collection hero and a
+collection template. The live PDP already had size pills, a quantity selector, a
+back-in-stock form and star ratings — none of which exist in `main`'s stale copy of
+the theme, and all of which pushing that copy would have deleted.
 
 ---
 
@@ -116,8 +123,9 @@ In this branch, on the theme side:
   and the compositing discipline that keeps logos and graphics accurate.
 - **The size chart is a standard US grade, not your garments.** Reconcile it against real
   samples before launch or it will cause the returns it exists to prevent.
-- **`templateSuffix` is not applied.** Apply it only after this branch merges and the
-  theme deploys — a suffix pointing at a missing template breaks the page.
+- **The women's PDP has not been visually verified.** The `womens` template suffix is
+  applied to all 12 products, but preview at least one product in the theme editor before
+  making any product active.
 - **The legacy `womens` collection is still wrong** and was deliberately left alone. It
   is a live collection with 189 products; narrowing it is your call. See
   [`02-merchandising-architecture.md`](02-merchandising-architecture.md).

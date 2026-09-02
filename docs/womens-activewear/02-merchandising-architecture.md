@@ -74,9 +74,12 @@ assistant quotes when asked "where do I buy women's BJJ rash guards."
 
 **Note on thin collections.** Leggings, bras and rash guards each hold one product. That
 is correct for Round One and it is not a problem *provided* the collection page does not
-look broken. The `collection.womens` template opens with an editorial hero, so a
-one-product collection still reads as intentional. Revisit once the line has depth: a
-category collection with one product and no hero is worse than no collection at all.
+look broken. No custom collection template was shipped — the live theme already has
+`kk-collection-copy`, which renders editorial copy from
+`collection.metafields.custom.seo_copy` above the JSON-LD it emits. Populate that
+metafield on the thin collections rather than adding theme code. Revisit once the line
+has depth: a category collection with one product and no framing is worse than no
+collection at all.
 
 ---
 
