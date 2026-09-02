@@ -323,3 +323,77 @@ a{color:inherit}
 @media (max-width:600px){
   .kk-blog__grid{grid-template-columns:1fr}
 }
+
+/* ---------------------------------------------------------------------------
+   Women's line: size picker, size chart, fit & fabric, collection hero
+   --------------------------------------------------------------------------- */
+
+/* Size picker — tappable pills replace the multi-variant <select> */
+.kk-sizes{margin:0 0 20px}
+.kk-sizes__head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.kk-sizes__label{font-family:var(--display);font-weight:800;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
+.kk-sizes__guide{background:none;border:none;padding:0;cursor:pointer;font:inherit;font-size:.82rem;color:var(--blood);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.kk-sizes__guide:hover{color:var(--blood-bright)}
+.kk-sizes__row{display:flex;flex-wrap:wrap;gap:8px}
+.kk-sizes__pill{position:relative;min-width:56px;min-height:48px;padding:12px 14px;background:var(--bg-card);color:var(--ink);border:1px solid var(--line-strong);border-radius:10px;font-family:var(--display);font-weight:800;font-size:.9rem;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:border-color .16s ease,background .16s ease,transform .16s ease}
+.kk-sizes__pill:hover:not(:disabled){border-color:var(--blood);transform:translateY(-1px)}
+.kk-sizes__pill.is-active{background:var(--blood);border-color:var(--blood);color:#fff}
+.kk-sizes__pill.is-out,.kk-sizes__pill:disabled{color:var(--ink-faint);border-color:var(--line);cursor:not-allowed;background:transparent}
+/* Diagonal strike so a sold-out size reads as "was here, gone" rather than missing */
+.kk-sizes__oos{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top left,transparent calc(50% - 1px),var(--ink-faint) calc(50% - 1px),var(--ink-faint) calc(50% + 1px),transparent calc(50% + 1px))}
+.kk-sizes__oos-note{margin:10px 0 0;font-size:.8rem;color:var(--ink-faint)}
+
+/* Size chart */
+.kk-size{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-elev);margin-top:30px;overflow:hidden}
+.kk-size__toggle{cursor:pointer;padding:18px 22px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;font-family:var(--display);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.92rem;list-style:none}
+.kk-size__toggle::-webkit-details-marker{display:none}
+.kk-size__toggle::after{content:"+";margin-left:auto;color:var(--blood);font-size:1.3rem;line-height:1}
+.kk-size[open] .kk-size__toggle::after{content:"–"}
+.kk-size__fitnote{font-family:var(--body);font-style:normal;font-weight:600;text-transform:none;letter-spacing:0;color:var(--blood);font-size:.86rem}
+.kk-size__body{padding:0 22px 24px}
+.kk-size__model{margin:0 0 16px;color:var(--ink-dim);font-size:.9rem}
+.kk-size__scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.kk-size__table{width:100%;min-width:460px;border-collapse:collapse;font-size:.9rem}
+.kk-size__table caption{text-align:left;color:var(--ink-faint);font-size:.8rem;padding-bottom:10px}
+.kk-size__table th,.kk-size__table td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line)}
+.kk-size__table thead th{font-family:var(--display);font-weight:800;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
+.kk-size__table tbody th{font-family:var(--display);font-weight:800;color:var(--ink)}
+.kk-size__table tbody td{color:var(--ink-dim)}
+.kk-size__table tbody tr:last-child th,.kk-size__table tbody tr:last-child td{border-bottom:none}
+.kk-size__h{font-family:var(--display);font-weight:800;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;margin:24px 0 10px;color:var(--ink)}
+.kk-size__how{margin:0;font-size:.88rem}
+.kk-size__how dt{font-weight:700;color:var(--ink);margin-top:10px}
+.kk-size__how dd{margin:2px 0 0;color:var(--ink-dim)}
+.kk-size__help{margin:22px 0 0;font-size:.86rem;color:var(--ink-faint)}
+.kk-size__help a{color:var(--blood)}
+
+/* Fit & fabric */
+.kk-fitfab__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:8px}
+.kk-fitfab__h{font-family:var(--display);font-weight:800;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--blood);margin:0 0 12px}
+.kk-fitfab__h--sub{margin-top:22px}
+.kk-fitfab__list{margin:0;padding:0;list-style:none}
+.kk-fitfab__list li{position:relative;padding-left:20px;margin-bottom:9px;color:var(--ink-dim);line-height:1.55}
+.kk-fitfab__list li::before{content:"";position:absolute;left:0;top:.55em;width:8px;height:2px;background:var(--blood)}
+.kk-fitfab__fit{margin:0 0 8px;font-weight:700;color:var(--ink);font-size:1.02rem}
+.kk-fitfab__model{margin:0 0 8px;color:var(--ink-faint);font-size:.88rem}
+.kk-fitfab__body{margin:0;color:var(--ink-dim);line-height:1.6;font-size:.94rem}
+.kk-fitfab__note{color:var(--ink-faint);font-size:.85rem;margin-top:12px}
+
+/* Collection hero */
+.kk-chero{position:relative;padding:clamp(56px,8vw,104px) 0 clamp(36px,5vw,64px);border-bottom:1px solid var(--line);overflow:hidden}
+.kk-chero__grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.kk-chero__title{font-family:var(--display);font-weight:900;font-size:clamp(2.4rem,7vw,5rem);line-height:.92;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 18px}
+.kk-chero__lead{font-size:clamp(1rem,1.7vw,1.2rem);line-height:1.6;color:var(--ink-dim);max-width:52ch;margin:0 0 26px}
+.kk-chero__ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:26px}
+.kk-chero__proof{display:flex;flex-wrap:wrap;gap:10px 26px;margin:0;padding:0;list-style:none}
+.kk-chero__proof li{position:relative;padding-left:22px;color:var(--ink-dim);font-size:.9rem;font-weight:600}
+.kk-chero__proof li::before{content:"✓";position:absolute;left:0;color:var(--blood);font-weight:900}
+.kk-chero__media{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);aspect-ratio:4/5;background:var(--bg-card)}
+.kk-chero__media img{width:100%;height:100%;object-fit:cover}
+.kk-chero__stat{position:absolute;left:0;bottom:0;right:0;padding:18px 20px;background:linear-gradient(to top,rgba(7,7,7,.94),transparent);font-family:var(--display);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.86rem}
+
+@media (max-width:900px){
+  .kk-fitfab__grid{grid-template-columns:1fr;gap:28px}
+  .kk-chero__grid{grid-template-columns:1fr;gap:32px}
+  .kk-chero__media{aspect-ratio:16/10;order:-1}
+}

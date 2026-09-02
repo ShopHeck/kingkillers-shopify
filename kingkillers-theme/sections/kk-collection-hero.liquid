@@ -1,0 +1,95 @@
+{%- comment -%}
+  Editorial collection hero. The default PLP opens on a grid, which tells a first-time
+  shopper nothing about why this line exists. This gives a launch collection a reason
+  to exist above the fold, then hands off to the grid.
+
+  Falls back to the collection's own title/description so it is safe to drop onto any
+  collection template without configuring it first.
+{%- endcomment -%}
+<section class="kk-chero" aria-labelledby="chero-title">
+  <div class="kk-wrap kk-chero__grid">
+    <div class="kk-chero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 id="chero-title" class="kk-chero__title">
+        {{ section.settings.heading | default: collection.title }}
+      </h1>
+      {%- if section.settings.lead != blank -%}
+        <div class="kk-chero__lead rte">{{ section.settings.lead }}</div>
+      {%- elsif collection.description != blank -%}
+        <div class="kk-chero__lead rte">{{ collection.description }}</div>
+      {%- endif -%}
+
+      <div class="kk-chero__ctas">
+        {%- if section.settings.cta_label != blank -%}
+          <a class="kk-btn kk-btn--primary" href="{{ section.settings.cta_url | default: '#plp-title' }}">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.cta2_label != blank -%}
+          <a class="kk-btn kk-btn--ghost" href="{{ section.settings.cta2_url | default: '#' }}">{{ section.settings.cta2_label }}</a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="kk-chero__proof">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'proof' -%}
+              <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <figure class="kk-chero__media">
+      {%- if section.settings.image != blank -%}
+        {% render 'responsive-image', image: section.settings.image, preload: true,
+           sizes: '(max-width:900px) 100vw, 42vw', widths: '480, 720, 960, 1200' %}
+      {%- elsif collection.image != blank -%}
+        {% render 'responsive-image', image: collection.image, preload: true,
+           sizes: '(max-width:900px) 100vw, 42vw', widths: '480, 720, 960, 1200' %}
+      {%- endif -%}
+      {%- if section.settings.stat != blank -%}
+        <figcaption class="kk-chero__stat">{{ section.settings.stat }}</figcaption>
+      {%- endif -%}
+    </figure>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection hero",
+  "tag": "section",
+  "enabled_on": { "templates": ["collection"] },
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Round One" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Leave blank to use the collection title." },
+    { "type": "richtext", "id": "lead", "label": "Lead paragraph", "info": "Leave blank to use the collection description." },
+    { "type": "image_picker", "id": "image", "label": "Hero image", "info": "Leave blank to use the collection image." },
+    { "type": "text", "id": "stat", "label": "Image caption / stat" },
+    { "type": "text", "id": "cta_label", "label": "Primary CTA label", "default": "Shop the drop" },
+    { "type": "url", "id": "cta_url", "label": "Primary CTA link" },
+    { "type": "text", "id": "cta2_label", "label": "Secondary CTA label", "default": "Find my size" },
+    { "type": "url", "id": "cta2_url", "label": "Secondary CTA link" }
+  ],
+  "blocks": [
+    {
+      "type": "proof",
+      "name": "Proof point",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Sizes XS–2XL" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection hero",
+      "blocks": [
+        { "type": "proof", "settings": { "text": "Sizes XS–2XL" } },
+        { "type": "proof", "settings": { "text": "Free shipping $100+" } },
+        { "type": "proof", "settings": { "text": "30-day money-back guarantee" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

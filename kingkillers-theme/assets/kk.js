@@ -311,7 +311,59 @@
       }
     }
 
-    if (variant && variant.tagName === 'SELECT') variant.addEventListener('change', syncVariantState);
+    if (variant) variant.addEventListener('change', syncVariantState);
+
+    /* Size pills -> hidden variant input. Copies the chosen pill's data-* attributes
+       onto [data-pdp-variant] so syncVariantState reads them exactly as it read a
+       <select>'s selected <option>. */
+    var sizePills = pdp.querySelectorAll('[data-size-option]');
+    sizePills.forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        if (pill.disabled) return;
+        sizePills.forEach(function (p) {
+          p.classList.remove('is-active');
+          p.setAttribute('aria-checked', 'false');
+        });
+        pill.classList.add('is-active');
+        pill.setAttribute('aria-checked', 'true');
+        if (!variant) return;
+        variant.value = pill.getAttribute('data-variant-id');
+        ['price', 'compare', 'available', 'image', 'srcset'].forEach(function (key) {
+          var val = pill.getAttribute('data-' + key);
+          if (val === null) variant.removeAttribute('data-' + key);
+          else variant.setAttribute('data-' + key, val);
+        });
+        variant.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+
+    /* Keyboard: left/right move between sizes, matching radiogroup expectations. */
+    var pickerRow = pdp.querySelector('.kk-sizes__row');
+    if (pickerRow) {
+      pickerRow.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        var enabled = Array.prototype.filter.call(sizePills, function (p) { return !p.disabled; });
+        var idx = enabled.indexOf(d.activeElement);
+        if (idx === -1) return;
+        e.preventDefault();
+        var next = e.key === 'ArrowRight' ? (idx + 1) % enabled.length : (idx - 1 + enabled.length) % enabled.length;
+        enabled[next].focus();
+        enabled[next].click();
+      });
+    }
+
+    /* "Size chart" button opens the chart in the Fit & fabric section and scrolls to it. */
+    var chartBtn = pdp.querySelector('[data-open-size-chart]');
+    if (chartBtn) {
+      chartBtn.addEventListener('click', function () {
+        var chart = d.querySelector('[data-size-chart]');
+        if (!chart) return;
+        chart.open = true;
+        chart.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var summary = chart.querySelector('summary');
+        if (summary) summary.focus();
+      });
+    }
     if (stickySubmit) stickySubmit.addEventListener('click', function () { if (submit) submit.click(); });
 
     thumbs.forEach(function (btn) {

@@ -1,0 +1,57 @@
+{%- comment -%}
+  Size / variant picker for apparel. Replaces a raw <select> of 6–18 variants, which
+  is the single worst conversion element you can put on a sized garment PDP.
+
+  Renders tappable pills. Sold-out sizes stay visible but disabled — a shopper needs to
+  see that their size existed and sold out, not silently find it missing.
+
+  Writes the chosen variant id (and its data-* attributes) onto the hidden input that
+  main-product.liquid already exposes as [data-pdp-variant], then fires a change event,
+  so the existing PDP price / availability / image sync logic works unmodified.
+
+  Usage: {% render 'size-picker', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign v = product.selected_or_first_available_variant
+  assign opt_name = product.options.first | default: 'Size'
+-%}
+<div class="kk-sizes" data-size-picker>
+  <div class="kk-sizes__head">
+    <span class="kk-sizes__label" id="size-label-{{ product.id }}">{{ opt_name }}</span>
+    <button type="button" class="kk-sizes__guide" data-open-size-chart>Size chart</button>
+  </div>
+
+  <div class="kk-sizes__row" role="radiogroup" aria-labelledby="size-label-{{ product.id }}">
+    {%- for variant in product.variants -%}
+      {%- assign var_image = variant.featured_media.preview_image | default: product.featured_media.preview_image -%}
+      {%- capture var_srcset -%}
+        {{ var_image | image_url: width: 480 }} 480w,
+        {{ var_image | image_url: width: 720 }} 720w,
+        {{ var_image | image_url: width: 960 }} 960w,
+        {{ var_image | image_url: width: 1200 }} 1200w,
+        {{ var_image | image_url: width: 1600 }} 1600w
+      {%- endcapture -%}
+      <button type="button"
+              class="kk-sizes__pill{% if variant.id == v.id %} is-active{% endif %}{% unless variant.available %} is-out{% endunless %}"
+              role="radio"
+              aria-checked="{% if variant.id == v.id %}true{% else %}false{% endif %}"
+              data-size-option
+              data-variant-id="{{ variant.id }}"
+              data-price="{{ variant.price | money }}"
+              data-compare="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money }}{% endif %}"
+              data-available="{{ variant.available }}"
+              data-image="{{ var_image | image_url: width: 1200 }}"
+              data-srcset="{{ var_srcset | strip | escape }}"
+              {% unless variant.available %}aria-disabled="true" disabled{% endunless %}>
+        <span>{{ variant.title | split: ' / ' | first }}</span>
+        {%- unless variant.available -%}<span class="kk-sizes__oos" aria-hidden="true"></span>{%- endunless -%}
+      </button>
+    {%- endfor -%}
+  </div>
+
+  {%- assign out_count = 0 -%}
+  {%- for variant in product.variants -%}{%- unless variant.available -%}{%- assign out_count = out_count | plus: 1 -%}{%- endunless -%}{%- endfor -%}
+  {%- if out_count > 0 -%}
+    <p class="kk-sizes__oos-note">{{ out_count }} size{% if out_count > 1 %}s{% endif %} sold out — crossed through above.</p>
+  {%- endif -%}
+</div>
