@@ -1,0 +1,121 @@
+{
+  "$comment": "Live Shopify state for the King Killers women's line, created 2026-09-02. Shop: kingkillers.co. Every product is DRAFT. Collections are smart collections populated by the w: tag taxonomy documented in docs/womens-activewear/02-merchandising-architecture.md",
+  "shop": "kingkillers.co",
+  "createdAt": "2026-09-02",
+  "metafieldDefinitions": [
+    { "namespace": "custom", "key": "fit_note",       "type": "single_line_text_field",      "id": "gid://shopify/MetafieldDefinition/218746847423" },
+    { "namespace": "custom", "key": "fabric",         "type": "multi_line_text_field",       "id": "gid://shopify/MetafieldDefinition/218746880191" },
+    { "namespace": "custom", "key": "care",           "type": "multi_line_text_field",       "id": "gid://shopify/MetafieldDefinition/218746912959" },
+    { "namespace": "custom", "key": "model_stats",    "type": "single_line_text_field",      "id": "gid://shopify/MetafieldDefinition/218746945727" },
+    { "namespace": "custom", "key": "size_chart_key", "type": "single_line_text_field",      "id": "gid://shopify/MetafieldDefinition/218746978495" },
+    { "namespace": "custom", "key": "features",       "type": "list.single_line_text_field", "id": "gid://shopify/MetafieldDefinition/218747011263" },
+    { "namespace": "custom", "key": "badge",          "type": "single_line_text_field",      "id": "gid://shopify/MetafieldDefinition/218747044031" },
+    { "namespace": "custom", "key": "material",       "type": "single_line_text_field",      "id": "gid://shopify/MetafieldDefinition/218747076799" }
+  ],
+  "collections": [
+    { "handle": "womens-activewear",      "title": "Women's Activewear",           "id": "gid://shopify/Collection/378266157247", "rule": "TAG EQUALS w:line" },
+    { "handle": "womens-round-one",       "title": "Round One — The First Drop",   "id": "gid://shopify/Collection/378266190015", "rule": "TAG EQUALS w:drop:round-one" },
+    { "handle": "womens-leggings",        "title": "Women's Leggings",             "id": "gid://shopify/Collection/378266222783", "rule": "TAG EQUALS w:cat:leggings" },
+    { "handle": "womens-training-shorts", "title": "Women's Training Shorts",      "id": "gid://shopify/Collection/378266255551", "rule": "TAG EQUALS w:cat:shorts OR w:cat:compression" },
+    { "handle": "womens-sports-bras",     "title": "Women's Sports Bras",          "id": "gid://shopify/Collection/378266288319", "rule": "TAG EQUALS w:cat:sports-bra" },
+    { "handle": "womens-rash-guards",     "title": "Women's Rash Guards",          "id": "gid://shopify/Collection/378266321087", "rule": "TAG EQUALS w:cat:rashguard" },
+    { "handle": "womens-tops",            "title": "Women's Tops & Tanks",         "id": "gid://shopify/Collection/378266353855", "rule": "TAG EQUALS w:cat:top OR w:cat:outerwear" },
+    { "handle": "womens-kits",            "title": "Women's Kits & Bundles",       "id": "gid://shopify/Collection/378266386623", "rule": "TAG EQUALS w:cat:bundle" }
+  ],
+  "products": [
+    {
+      "id": "gid://shopify/Product/7346957156543", "handle": "red-black-white-ps-hw-shorts",
+      "title": "Bloodline High-Waisted Training Short — Women's", "price": "44.99",
+      "origin": "rewritten", "previousTitle": "Red Black White Paint Splatter High Waisted Shorts",
+      "tier": "hero", "sourced": true, "skuBackfillNeeded": true
+    },
+    {
+      "id": "gid://shopify/Product/7340026953919", "handle": "neon-paint-splatter-hw-shorts",
+      "title": "Warpaint High-Waisted Training Short — Women's", "price": "44.99",
+      "origin": "rewritten", "previousTitle": "Neon Paint Splatter High Waisted Shorts",
+      "tier": "core", "sourced": true, "skuBackfillNeeded": true
+    },
+    {
+      "id": "gid://shopify/Product/7316162445503", "handle": "black-white-sports-bra",
+      "title": "Crown Seamless Training Bra — Women's", "price": "39.99",
+      "origin": "rewritten", "previousTitle": "Black & White Marble Seamless Sports Bra",
+      "tier": "core", "sourced": true, "skuBackfillNeeded": true,
+      "issue": "Runs XS–XL only. Every other product runs XS–2XL. Blocks 2XL on both kits."
+    },
+    {
+      "id": "gid://shopify/Product/7283054215359", "handle": "patriotic-high-waisted-yoga-leggings",
+      "title": "Patriot High-Waisted Training Legging — Women's", "price": "49.99",
+      "origin": "rewritten", "previousTitle": "Red White Blue Patriotic High Waisted Yoga Leggings",
+      "tier": "hero", "sourced": true, "skuBackfillNeeded": true
+    },
+    {
+      "id": "gid://shopify/Product/7263327060159", "handle": "4th-of-july-crop-tee",
+      "title": "Liberty Cropped Tee — Women's", "price": "34.99",
+      "origin": "rewritten", "previousTitle": "4th Of July Crop Top",
+      "tier": "seasonal", "inRoundOne": false, "sourced": true, "skuBackfillNeeded": true
+    },
+    {
+      "id": "gid://shopify/Product/8599029678271", "handle": "womens-contender-rash-guard",
+      "title": "Contender Long-Sleeve Rash Guard — Women's", "price": "59.99",
+      "origin": "created", "tier": "hero", "sourced": false,
+      "skuPattern": "KKW-RSH-CONTENDER-BLD-{SIZE}"
+    },
+    {
+      "id": "gid://shopify/Product/8599030694079", "handle": "womens-southpaw-fight-short",
+      "title": "Southpaw 2-in-1 Fight Short — Women's", "price": "54.99",
+      "origin": "created", "tier": "core", "sourced": false,
+      "skuPattern": "KKW-SHT-SOUTHPAW-BLK-{SIZE}"
+    },
+    {
+      "id": "gid://shopify/Product/8599030726847", "handle": "womens-warcry-tank",
+      "title": "Warcry Racerback Tank — Women's", "price": "29.99",
+      "origin": "created", "tier": "core", "sourced": false,
+      "skuPattern": "KKW-TNK-WARCRY-BLK-{SIZE}"
+    },
+    {
+      "id": "gid://shopify/Product/8599030759615", "handle": "womens-regicide-sleeveless-hoodie",
+      "title": "Regicide Cropped Sleeveless Hoodie — Women's", "price": "49.99",
+      "origin": "created", "tier": "depth", "sourced": false,
+      "skuPattern": "KKW-SHD-REGICIDE-BLK-{SIZE}",
+      "note": "Women's cut of a proven men's silhouette — five men's sleeveless hoodies are already ACTIVE at $54.99."
+    },
+    {
+      "id": "gid://shopify/Product/8599031775423", "handle": "womens-fight-kit",
+      "title": "The Fight Kit — Women's Rash Guard + Training Short", "price": "94.99", "compareAtPrice": "104.98",
+      "origin": "created", "tier": "kit", "sourced": false,
+      "contains": ["womens-contender-rash-guard", "red-black-white-ps-hw-shorts"]
+    },
+    {
+      "id": "gid://shopify/Product/8599031808191", "handle": "womens-training-kit",
+      "title": "The Training Kit — Women's Bra + Legging", "price": "79.99", "compareAtPrice": "89.98",
+      "origin": "created", "tier": "kit", "sourced": false,
+      "contains": ["black-white-sports-bra", "patriotic-high-waisted-yoga-leggings"]
+    },
+    {
+      "id": "gid://shopify/Product/8599031873727", "handle": "womens-full-arsenal-kit",
+      "title": "The Full Arsenal — Women's 4-Piece Kit", "price": "144.99", "compareAtPrice": "164.96",
+      "origin": "created", "tier": "kit", "sourced": false,
+      "contains": ["black-white-sports-bra", "patriotic-high-waisted-yoga-leggings", "red-black-white-ps-hw-shorts", "womens-warcry-tank"]
+    }
+  ],
+  "excludedFromRoundOne": [
+    { "id": "gid://shopify/Product/7299901915327", "title": "Women's Black & Purple Swirl Shorts",       "reason": "off-brand palette" },
+    { "id": "gid://shopify/Product/7340002246847", "title": "Black & Purple Galaxy HW Shorts",           "reason": "off-brand palette" },
+    { "id": "gid://shopify/Product/7340005589183", "title": "Black & White Swirl HW Shorts",             "reason": "off-brand palette" },
+    { "id": "gid://shopify/Product/7340011061439", "title": "Pink Camo HW Shorts",                       "reason": "off-brand palette" },
+    { "id": "gid://shopify/Product/7340015648959", "title": "Red & Black Swirl HW Shorts",               "reason": "redundant against Bloodline" },
+    { "id": "gid://shopify/Product/7340022137023", "title": "Graffiti Art HW Shorts",                    "reason": "off-brand" },
+    { "id": "gid://shopify/Product/7347101696191", "title": "Neon Jungle Print HW Shorts",               "reason": "off-brand" },
+    { "id": "gid://shopify/Product/7489762197695", "title": "Gold Paisley Versace Style Sports Bra",     "reason": "TRADEMARK RISK — 'Versace Style' in the title of a competing good. Rename or archive before it is ever published." }
+  ],
+  "openIssues": [
+    "All 12 products are DRAFT. Nothing is live.",
+    "4 garments + 3 kits have no supplier — filter Shopify on tag w:todo:sourcing.",
+    "No product imagery exists. See docs/womens-activewear/04-image-direction.md.",
+    "custom.model_stats is empty on every product — needs a real fit model.",
+    "Size chart in snippets/size-chart.liquid is a standard US grade, NOT measured off supplier garments. Reconcile before launch.",
+    "templateSuffix 'womens' not applied — do this only AFTER this branch merges and the theme deploys.",
+    "Crown Seamless Training Bra runs XS–XL; blocks 2XL on the Training Kit and Full Arsenal.",
+    "Legacy collection 'womens' (gid://shopify/Collection/285543694527) still uses rule TAG EQUALS \"Women's Clothing\" OR \"Unisex\" — 189 products, mostly unisex men's tees. Left unchanged deliberately; see docs 02."
+  ]
+}

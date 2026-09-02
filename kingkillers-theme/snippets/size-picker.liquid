@@ -1,0 +1,99 @@
+{%- comment -%}
+  Variant picker for apparel. Replaces a raw <select> of 6–18 variants, which is the
+  worst conversion element you can put on a sized garment PDP.
+
+  Renders one row of tappable pills PER PRODUCT OPTION, not one pill per variant — so a
+  Size × Colour product gets a Size row and a Colour row rather than a wall of
+  indistinguishable "S" buttons.
+
+  Unavailable combinations stay visible with a diagonal strike and aria-disabled, but
+  remain clickable: on a multi-option product, disabling them would trap a shopper who
+  wants to check whether another colour has her size. Add to Cart reflects the resolved
+  variant's availability, which is where "sold out" actually belongs.
+
+  Writes the resolved variant id and its data-* attributes onto the [data-pdp-variant]
+  hidden input that main-product.liquid exposes, then fires a change event, so the
+  existing PDP price / availability / image-swap logic works unmodified.
+
+  Usage: {% render 'size-picker', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign v = product.selected_or_first_available_variant
+
+  comment
+    Put the size-chart trigger next to the size option where one exists, otherwise
+    next to the first option.
+  endcomment
+  assign chart_index = 0
+  for option in product.options_with_values
+    assign lname = option.name | downcase
+    if lname contains 'size'
+      assign chart_index = forloop.index0
+      break
+    endif
+  endfor
+-%}
+<div class="kk-sizes" data-size-picker>
+  <script type="application/json" data-variant-data>
+    [
+    {%- for variant in product.variants -%}
+      {%- comment -%}
+        image_url raises a Liquid error on blank input, and a product with no media is
+        the norm before a photoshoot — every product in the current women's line is in
+        that state. An error string here would corrupt this JSON, JSON.parse would
+        throw, and the picker would silently install no handlers at all. Emit empty
+        strings instead; syncVariantState already skips the image swap when they are.
+      {%- endcomment -%}
+      {%- assign var_image = variant.featured_media.preview_image | default: product.featured_media.preview_image -%}
+      {%- capture var_image_url -%}{%- if var_image != blank -%}{{ var_image | image_url: width: 1200 }}{%- endif -%}{%- endcapture -%}
+      {%- capture var_srcset -%}
+        {%- if var_image != blank -%}
+          {{ var_image | image_url: width: 480 }} 480w, {{ var_image | image_url: width: 720 }} 720w, {{ var_image | image_url: width: 960 }} 960w, {{ var_image | image_url: width: 1200 }} 1200w, {{ var_image | image_url: width: 1600 }} 1600w
+        {%- endif -%}
+      {%- endcapture -%}
+      {
+        "id": {{ variant.id | json }},
+        "options": {{ variant.options | json }},
+        "available": {{ variant.available | json }},
+        "price": {{ variant.price | money | json }},
+        "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}""{% endif %},
+        "image": {{ var_image_url | strip | json }},
+        "srcset": {{ var_srcset | strip | json }}
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+    ]
+  </script>
+
+  {%- for option in product.options_with_values -%}
+    {%- assign gi = forloop.index0 -%}
+    <div class="kk-sizes__group" data-option-group data-option-index="{{ gi }}">
+      <div class="kk-sizes__head">
+        <span class="kk-sizes__label" id="opt-{{ product.id }}-{{ gi }}">
+          {{ option.name }}<span class="kk-sizes__chosen">: <b data-option-current>{{ option.selected_value }}</b></span>
+        </span>
+        {%- if gi == chart_index -%}
+          {%- comment -%}
+            Hidden by default and revealed by kk.js only when a [data-size-chart] exists
+            on the page. Products still on templates/product.json have no kk-fit-fabric
+            section, so the trigger would otherwise be a visible no-op.
+          {%- endcomment -%}
+          <button type="button" class="kk-sizes__guide" data-open-size-chart hidden>Size chart</button>
+        {%- endif -%}
+      </div>
+
+      <div class="kk-sizes__row" role="radiogroup" aria-labelledby="opt-{{ product.id }}-{{ gi }}">
+        {%- for value in option.values -%}
+          <button type="button"
+                  class="kk-sizes__pill{% if value == option.selected_value %} is-active{% endif %}"
+                  role="radio"
+                  aria-checked="{% if value == option.selected_value %}true{% else %}false{% endif %}"
+                  data-option-value="{{ value | escape }}">
+            <span>{{ value }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endfor -%}
+
+  <p class="kk-sizes__oos-note" data-oos-note hidden></p>
+</div>

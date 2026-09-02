@@ -159,7 +159,25 @@
       .then(function () { openDrawer(); if (btn) btn.textContent = 'Added ✓'; })
       .catch(function () { if (btn) btn.textContent = 'Try Again'; })
       .finally(function () {
-        setTimeout(function () { if (btn) { btn.disabled = false; btn.textContent = label; } }, 1300);
+        setTimeout(function () {
+          if (!btn) return;
+          /* Restore from the current variant, not from a label snapshotted at submit
+             time. Sold-out options are deliberately clickable, so the shopper can
+             switch to an unavailable variant while this request is in flight; blindly
+             re-enabling would leave an active Add to Cart on a sold-out variant that
+             can only produce failed requests. Re-firing change re-runs
+             syncVariantState, which sets both the inline and sticky buttons from the
+             variant that is actually selected now. */
+          var pdpRoot = form.closest('[data-pdp]');
+          var variantInput = pdpRoot ? pdpRoot.querySelector('[data-pdp-variant]') : null;
+          if (variantInput) {
+            variantInput.dispatchEvent(new Event('change', { bubbles: true }));
+          } else {
+            /* Quick-add cards have no variant picker — nothing can have changed. */
+            btn.disabled = false;
+            btn.textContent = label;
+          }
+        }, 1300);
       });
   });
 
@@ -311,8 +329,167 @@
       }
     }
 
-    if (variant && variant.tagName === 'SELECT') variant.addEventListener('change', syncVariantState);
+    if (variant) variant.addEventListener('change', syncVariantState);
+
+    /* The sticky bar's CTA is a type="button" outside the product form, so it has to
+       forward its click into the real submit. */
     if (stickySubmit) stickySubmit.addEventListener('click', function () { if (submit) submit.click(); });
+
+    /* ---- Option-based variant picker -------------------------------------
+       One pill row per product option. Resolves the selected combination to a
+       variant, then copies that variant's data-* attributes onto
+       [data-pdp-variant] so syncVariantState reads them exactly as it read a
+       <select>'s selected <option>. */
+    var picker = pdp.querySelector('[data-size-picker]');
+    if (picker && variant) {
+      var dataEl = picker.querySelector('[data-variant-data]');
+      var variants = [];
+      try { variants = JSON.parse(dataEl.textContent); } catch (err) { variants = []; }
+      var groups = Array.prototype.slice.call(picker.querySelectorAll('[data-option-group]'));
+      var oosNote = picker.querySelector('[data-oos-note]');
+
+      if (variants.length && groups.length) {
+        var selected = groups.map(function (g) {
+          var active = g.querySelector('.kk-sizes__pill.is-active');
+          return active ? active.getAttribute('data-option-value') : null;
+        });
+
+        function exactMatch(sel) {
+          for (var i = 0; i < variants.length; i++) {
+            var ok = true;
+            for (var j = 0; j < sel.length; j++) {
+              if (variants[i].options[j] !== sel[j]) { ok = false; break; }
+            }
+            if (ok) return variants[i];
+          }
+          return null;
+        }
+
+        /* Is there an available variant with `val` at position gi, consistent with
+           the selections in every OTHER group? */
+        function comboAvailable(gi, val) {
+          return variants.some(function (vr) {
+            if (!vr.available || vr.options[gi] !== val) return false;
+            for (var j = 0; j < selected.length; j++) {
+              if (j !== gi && selected[j] != null && vr.options[j] !== selected[j]) return false;
+            }
+            return true;
+          });
+        }
+
+        function paint() {
+          var unavailable = 0;
+          groups.forEach(function (g, gi) {
+            var current = g.querySelector('[data-option-current]');
+            if (current) current.textContent = selected[gi] || '';
+            g.querySelectorAll('[data-option-value]').forEach(function (pill) {
+              var val = pill.getAttribute('data-option-value');
+              var isSel = val === selected[gi];
+              pill.classList.toggle('is-active', isSel);
+              pill.setAttribute('aria-checked', isSel ? 'true' : 'false');
+
+              var ok = comboAvailable(gi, val);
+              if (!ok) unavailable++;
+              pill.classList.toggle('is-out', !ok);
+              /* aria-disabled, not disabled: on a multi-option product a shopper
+                 must still be able to click through to another colour. */
+              if (ok) pill.removeAttribute('aria-disabled');
+              else pill.setAttribute('aria-disabled', 'true');
+
+              var strike = pill.querySelector('.kk-sizes__oos');
+              if (!ok && !strike) {
+                strike = d.createElement('span');
+                strike.className = 'kk-sizes__oos';
+                strike.setAttribute('aria-hidden', 'true');
+                pill.appendChild(strike);
+              } else if (ok && strike) {
+                strike.remove();
+              }
+            });
+          });
+
+          if (oosNote) {
+            if (unavailable > 0) {
+              oosNote.textContent = unavailable + ' option' + (unavailable > 1 ? 's are' : ' is') +
+                ' sold out in this combination — crossed through above.';
+              oosNote.hidden = false;
+            } else {
+              oosNote.hidden = true;
+            }
+          }
+        }
+
+        function apply() {
+          var match = exactMatch(selected);
+          if (match) {
+            variant.value = match.id;
+            variant.setAttribute('data-price', match.price);
+            variant.setAttribute('data-compare', match.compare || '');
+            variant.setAttribute('data-available', match.available ? 'true' : 'false');
+            variant.setAttribute('data-image', match.image || '');
+            variant.setAttribute('data-srcset', match.srcset || '');
+            variant.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          paint();
+        }
+
+        picker.addEventListener('click', function (e) {
+          var pill = e.target.closest('[data-option-value]');
+          if (!pill || !picker.contains(pill)) return;
+          var group = pill.closest('[data-option-group]');
+          var gi = groups.indexOf(group);
+          if (gi === -1) return;
+
+          var val = pill.getAttribute('data-option-value');
+          var next = selected.slice();
+          next[gi] = val;
+
+          /* If that exact combination does not exist, snap to a real variant that
+             has the clicked value — preferring an available one — rather than
+             leaving the picker pointing at nothing. */
+          if (!exactMatch(next)) {
+            var fallback = variants.filter(function (vr) { return vr.options[gi] === val; });
+            var pick = fallback.filter(function (vr) { return vr.available; })[0] || fallback[0];
+            if (pick) next = pick.options.slice(0, groups.length);
+          }
+
+          selected = next;
+          apply();
+        });
+
+        /* Left/right arrows move within an option row, matching radiogroup expectations. */
+        picker.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          var group = d.activeElement && d.activeElement.closest('[data-option-group]');
+          if (!group || !picker.contains(group)) return;
+          var pills = Array.prototype.slice.call(group.querySelectorAll('[data-option-value]'));
+          var idx = pills.indexOf(d.activeElement);
+          if (idx === -1) return;
+          e.preventDefault();
+          var n = e.key === 'ArrowRight' ? (idx + 1) % pills.length : (idx - 1 + pills.length) % pills.length;
+          pills[n].focus();
+          pills[n].click();
+        });
+
+        paint();
+      }
+    }
+
+    /* "Size chart" trigger. Hidden in Liquid and revealed only when a chart is
+       actually on the page — products still on the default product template have no
+       kk-fit-fabric section, and a visible button that does nothing is worse than
+       no button. */
+    var chartEl = d.querySelector('[data-size-chart]');
+    var chartBtn = pdp.querySelector('[data-open-size-chart]');
+    if (chartBtn && chartEl) {
+      chartBtn.hidden = false;
+      chartBtn.addEventListener('click', function () {
+        chartEl.open = true;
+        chartEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var summary = chartEl.querySelector('summary');
+        if (summary) summary.focus();
+      });
+    }
 
     thumbs.forEach(function (btn) {
       btn.addEventListener('click', function () {

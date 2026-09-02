@@ -1,0 +1,75 @@
+{
+  "sections": {
+    "hero": {
+      "type": "kk-collection-hero",
+      "blocks": {
+        "p1": { "type": "proof", "settings": { "text": "Sizes XS–2XL" } },
+        "p2": { "type": "proof", "settings": { "text": "Women's-specific patterns" } },
+        "p3": { "type": "proof", "settings": { "text": "Free shipping $100+" } },
+        "p4": { "type": "proof", "settings": { "text": "30-day money-back guarantee" } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4"],
+      "settings": {
+        "eyebrow": "Women's — Round One",
+        "heading": "Built To Train In. Not To Pose In.",
+        "lead": "<p>Most women's fight gear is a men's pattern graded down. Ours isn't. Women's-specific blocks, squat-proof knits, gussets where you need them and grippers where things ride up — designed in Tampa by fighters and wear-tested on the mat before it ships.</p>",
+        "stat": "Designed in Tampa · Sizes XS–2XL",
+        "cta_label": "Shop the drop",
+        "cta_url": "#plp-title",
+        "cta2_label": "Find my size",
+        "cta2_url": "#plp-title"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": { "enable_filtering": true, "enable_sorting": true }
+    },
+    "faq": {
+      "type": "kk-faq",
+      "blocks": {
+        "q1": {
+          "type": "qa",
+          "settings": {
+            "question": "How does King Killers women's sizing run?",
+            "answer": "<p>Compression pieces — rash guards, leggings and training shorts — run true to size and are meant to be tight. If you are between two sizes on those, take the smaller one. Relaxed pieces like tanks, crops and hoodies also run true to size; size down only if you want a closer crop. Every product page carries a size chart with body measurements in inches and a fit note telling you which way to go.</p>"
+          }
+        },
+        "q2": {
+          "type": "qa",
+          "settings": {
+            "question": "Is the King Killers women's rash guard cut differently from the men's?",
+            "answer": "<p>Yes. It is drafted on a women's block, not graded down from the men's pattern. It has princess seams through the torso, a raised neckline that holds in a collar tie, extended body length and a silicone waist gripper so it does not ride up during guard passes and scrambles. There are no thumbholes, because thumbholes snag in grappling.</p>"
+          }
+        },
+        "q3": {
+          "type": "qa",
+          "settings": {
+            "question": "Are the leggings and shorts squat-proof?",
+            "answer": "<p>Yes. The high-rise training shorts and leggings use a four-way stretch performance knit selected for opacity under load. They are opacity-tested in a deep squat before we approve a fabric.</p>"
+          }
+        },
+        "q4": {
+          "type": "qa",
+          "settings": {
+            "question": "What sizes does the women's line come in?",
+            "answer": "<p>XS through 2XL across the line. Most combat sports brands stop at L for women; we did not, because the people who train do not stop at L.</p>"
+          }
+        },
+        "q5": {
+          "type": "qa",
+          "settings": {
+            "question": "What if the size I ordered doesn't fit?",
+            "answer": "<p>Every order is covered by a 30-day money-back guarantee. If it is a fit issue, email us and we will exchange it for the right size — tell us your measurements and what you train and we will pick the size for you.</p>"
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5"],
+      "settings": {
+        "eyebrow": "Sizing & Fit",
+        "heading": "Before You Order",
+        "subtext": "Fit questions answered up front, because guessing your size is how you end up returning it."
+      }
+    }
+  },
+  "order": ["hero", "main", "faq"]
+}
