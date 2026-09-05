@@ -29,7 +29,7 @@
         "item_7JeXA9": {
           "type": "item",
           "settings": {
-            "title": "Made in the USA",
+            "title": "Fighter designed",
             "text": "Designed & sold exclusively by King Killers"
           }
         },
@@ -43,8 +43,8 @@
         "item_HdmGGm": {
           "type": "item",
           "settings": {
-            "title": "Guaranteed",
-            "text": "30-day money-back, no questions asked"
+            "title": "Returns & exchanges",
+            "text": "Eligibility and exclusions apply"
           }
         }
       },

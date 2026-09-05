@@ -1,0 +1,82 @@
+[
+  {
+    "contentOpacity": "1",
+    "firstCardTop": null,
+    "fonts": "loaded",
+    "h1Count": 1,
+    "height": 1000,
+    "overflow": false,
+    "url": "http://127.0.0.1:8769/product?variant=102",
+    "width": 1440
+  },
+  {
+    "contentOpacity": "1",
+    "firstCardTop": 535.8046875,
+    "fonts": "loaded",
+    "h1Count": 1,
+    "height": 1000,
+    "overflow": false,
+    "url": "http://127.0.0.1:8769/collection",
+    "width": 1440
+  },
+  {
+    "contentOpacity": "1",
+    "firstCardTop": null,
+    "fonts": "loaded",
+    "h1Count": 1,
+    "height": 1000,
+    "overflow": false,
+    "url": "http://127.0.0.1:8769/contact",
+    "width": 1440
+  },
+  {
+    "contentOpacity": "1",
+    "firstCardTop": null,
+    "fonts": "loaded",
+    "h1Count": 1,
+    "height": 1000,
+    "overflow": false,
+    "url": "http://127.0.0.1:8769/article",
+    "width": 1440
+  },
+  {
+    "contentOpacity": "1",
+    "firstCardTop": null,
+    "fonts": "loaded",
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "url": "http://127.0.0.1:8769/product?variant=102",
+    "width": 390
+  },
+  {
+    "contentOpacity": "1",
+    "firstCardTop": 469.21875,
+    "fonts": "loaded",
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "url": "http://127.0.0.1:8769/collection",
+    "width": 390
+  },
+  {
+    "contentOpacity": "1",
+    "firstCardTop": null,
+    "fonts": "loaded",
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "url": "http://127.0.0.1:8769/contact",
+    "width": 390
+  },
+  {
+    "contentOpacity": "1",
+    "firstCardTop": null,
+    "fonts": "loaded",
+    "h1Count": 1,
+    "height": 844,
+    "overflow": false,
+    "url": "http://127.0.0.1:8769/article",
+    "width": 390
+  }
+]

@@ -8,6 +8,8 @@
       <h1 id="blog-title" class="kk-h2">{{ blog.title }}</h1>
     </header>
 
+    {% render 'journal-navigation' %}
+    {% if blog.all_tags.size > 0 %}<nav class="kk-journal-nav" aria-label="{{ 'storefront.blog.topics' | t }}"><a href="{{ blog.url }}">{{ 'storefront.blog.all' | t }}</a>{% for tag in blog.all_tags limit: 12 %}{{ tag | link_to_tag: tag }}{% endfor %}</nav>{% endif %}
     {%- paginate blog.articles by 12 -%}
       {%- if blog.articles.size > 0 -%}
         <div class="kk-blog__grid">

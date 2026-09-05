@@ -1,14 +1,24 @@
-
 {
   "accessibility": {
     "skip_to_content": "Skip to content"
   },
   "general": {
-    "cart": { "title": "Your cart", "empty": "Your cart is empty", "checkout": "Checkout" },
-    "search": { "title": "Search", "placeholder": "Search products" }
+    "cart": {
+      "title": "Your cart",
+      "empty": "Your cart is empty",
+      "checkout": "Checkout"
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search products"
+    }
   },
   "products": {
-    "product": { "add_to_cart": "Add to cart", "sold_out": "Sold out", "quick_add": "Quick add" }
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "quick_add": "Quick add"
+    }
   },
   "seasonal": {
     "palette_label": "Fall and winter color palette",
@@ -19,5 +29,64 @@
     "red": "Competition red",
     "bone": "Bone",
     "gold": "Antique gold"
+  },
+  "storefront": {
+    "product": {
+      "choose": "Choose options",
+      "from": "From",
+      "remaining": "Only {{ count }} left in stock."
+    },
+    "cart": {
+      "error": "We could not update your cart. Please check your selection and try again.",
+      "adding": "Adding…",
+      "added": "Added ✓"
+    },
+    "returns": {
+      "title": "Returns & exchanges",
+      "eligibility": "Check eligibility before ordering",
+      "details": "Return policy",
+      "summary": "Eligible items may be returned within 30 days with prior approval. Items must be unworn with tags and packaging. Exclusions apply, including sale items, hats, rash guards, swimwear and custom items. Return shipping is paid by the customer unless we made an error."
+    },
+    "shipping": {
+      "title": "Delivery information",
+      "details": "Shipping policy",
+      "summary": "Production time and delivery estimates vary by product and destination. Check the shipping policy before ordering; available shipping rates are shown at checkout."
+    },
+    "fit": {
+      "open": "Open the full size chart in a new tab",
+      "guidance": "Compare the measurements for this exact product with a similar garment that fits you well. Lay the garment flat to measure it; sizing can differ between styles. Check the chart’s units and whether it lists garment or body measurements.",
+      "details": "View product details and measurements",
+      "help": "Ask us about fit"
+    },
+    "contact": {
+      "eyebrow": "In your corner",
+      "title": "Contact King Killers",
+      "intro": "Need help with an order, sizing or your gear? Send us the details below. Include your order number if you have one.",
+      "help": "Customer help",
+      "faq": "Frequently asked questions",
+      "name": "Name",
+      "email": "Email",
+      "order": "Order number (optional)",
+      "message": "How can we help?",
+      "send": "Send message",
+      "success": "Thanks for contacting us. Your message has been sent.",
+      "description": "Contact King Killers for help with orders, sizing, shipping and return eligibility. Send a message through our customer support form."
+    },
+    "blog": {
+      "topics": "Explore the journal",
+      "news": "Fight news",
+      "gear": "Gear guides",
+      "all": "All articles",
+      "shop": "Find your training gear",
+      "shop_link": "Explore the collections"
+    },
+    "navigation": {
+      "shop": "Shop by category",
+      "shorts": "Shorts",
+      "joggers": "Joggers",
+      "women": "Women",
+      "all": "All gear",
+      "rashguards": "Rash guards"
+    }
   }
 }

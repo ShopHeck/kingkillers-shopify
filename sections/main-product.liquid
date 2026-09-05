@@ -3,7 +3,8 @@
   trust row, sticky ATC. Product & Breadcrumb JSON-LD + @app blocks for reviews/upsells.
 {%- endcomment -%}
 {%- liquid
-  assign hero_image = product.featured_media.preview_image
+  assign current_variant = product.selected_or_first_available_variant
+  assign hero_image = current_variant.featured_media.preview_image | default: product.featured_media.preview_image
   assign hero_alt = hero_image.alt | default: product.title
   assign variant_widths = '480,720,960,1200' | split: ','
 
@@ -23,7 +24,7 @@
          widths: '480, 720, 960, 1200, 1600', class: 'kk-pdp__img', alt: hero_alt %}
       {%- if product.images.size > 1 -%}
         <div class="kk-pdp__thumbs">
-          {%- for image in product.images limit: 6 -%}
+          {%- for image in product.images -%}
             {%- comment -%}
               Clamp to the source width for the same reason the responsive-image snippet
               does: Shopify never upscales, so a "1600w" candidate on a 900px original
@@ -70,41 +71,20 @@
           <span class="kk-stars" style="--rating-fill: {{ pdp_rating_pct }}%" aria-hidden="true"></span>
           <span class="kk-pc__rev">{{ pdp_rating | round: 1 }} · {{ product.metafields.reviews.rating_count.value }} reviews</span>
         </a>
-      {%- else -%}
-        <p class="kk-pdp__rating kk-pdp__rating--soft">Fighter-tested gear · 4.8★ store average</p>
+
       {%- endif -%}
 
       <h1 id="pdp-title" class="kk-pdp__title">{{ product.title }}</h1>
       <div class="kk-pdp__price" data-pdp-price>
-        <span>{{ product.selected_or_first_available_variant.price | money }}</span>
-        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
-          <s>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
+        <span>{{ current_variant.price | money }}</span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <s>{{ current_variant.compare_at_price | money }}</s>
         {%- endif -%}
       </div>
 
       {% form 'product', product, class: 'kk-pdp__form', novalidate: 'novalidate' %}
         {%- unless product.has_only_default_variant -%}
-          {%- assign prefer_titles = 'M,Medium,MED,m' | split: ',' -%}
-          {%- assign default_variant = nil -%}
-          {%- for variant in product.variants -%}
-            {%- if variant.available -%}
-              {%- for pref in prefer_titles -%}
-                {%- if variant.title == pref or variant.option1 == pref -%}
-                  {%- assign default_variant = variant -%}
-                  {%- break -%}
-                {%- endif -%}
-              {%- endfor -%}
-            {%- endif -%}
-            {%- if default_variant -%}{%- break -%}{%- endif -%}
-          {%- endfor -%}
-          {%- if default_variant == nil -%}
-            {%- for variant in product.variants -%}
-              {%- if variant.available -%}
-                {%- assign default_variant = variant -%}
-                {%- break -%}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- endif -%}
+          {%- assign default_variant = current_variant -%}
 
           <div class="kk-pdp__size" data-pdp-size>
             <div class="kk-pdp__size-head">
@@ -120,17 +100,18 @@
               {%- endcomment -%}
               <a class="kk-pdp__size-guide" href="#{% if template.suffix == 'womens' and product.metafields.custom.size_chart_key != blank %}kk-size-chart{% else %}size-help{% endif %}">Size guide</a>
             </div>
-            <div class="kk-pdp__pills" role="listbox" aria-label="Choose {{ product.options_with_values.first.name | default: 'size' }}">
+            <div class="kk-pdp__pills" role="group" aria-label="Choose {{ product.options_with_values.first.name | default: 'size' }}">
               {%- for variant in product.variants -%}
                 <button
                   type="button"
                   class="kk-pdp__pill{% if default_variant and variant.id == default_variant.id %} is-selected{% endif %}{% unless variant.available %} is-soldout{% endunless %}"
-                  role="option"
-                  aria-selected="{% if default_variant and variant.id == default_variant.id %}true{% else %}false{% endif %}"
+
+                  aria-pressed="{% if default_variant and variant.id == default_variant.id %}true{% else %}false{% endif %}"
                   data-pdp-pill
                   data-variant-id="{{ variant.id }}"
                   data-title="{{ variant.title | escape }}"
-                  {% unless variant.available %}disabled aria-disabled="true"{% endunless %}
+                  aria-label="{{ variant.title | escape }}{% unless variant.available %} — {{ 'products.product.sold_out' | t }}{% endunless %}"
+
                 >
                   {{ variant.title }}
                 </button>
@@ -138,7 +119,7 @@
             </div>
           </div>
 
-          <select name="id" class="kk-pdp__variants kk-pdp__variants--sr" aria-label="Variant" data-pdp-variant tabindex="-1">
+          <select name="id" class="kk-pdp__variants kk-pdp__variants--sr" aria-label="Variant" data-pdp-variant>
             {%- for variant in product.variants -%}
               {%- comment -%}
                 Only emit swap data when the variant has its OWN media. Size variants
@@ -164,15 +145,15 @@
                       {% if var_image != blank %}data-image="{{ var_image | image_url: width: 1200 }}"
                       data-srcset="{{ var_srcset | strip | escape }}"{% endif %}
                       {% if default_variant and variant.id == default_variant.id %}selected{% endif %}
-                      {% unless variant.available %}disabled{% endunless %}>
+                      >
                 {{ variant.title }} – {{ variant.price | money }}{% unless variant.available %} (Sold out){% endunless %}
               </option>
             {%- endfor -%}
           </select>
         {%- else -%}
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}"
-                 data-available="{{ product.selected_or_first_available_variant.available }}"
-                 data-quantity-max="{% if product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_policy == 'deny' %}{{ product.selected_or_first_available_variant.inventory_quantity }}{% endif %}"
+          <input type="hidden" name="id" value="{{ current_variant.id }}"
+                 data-available="{{ current_variant.available }}"
+                 data-quantity-max="{% if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' %}{{ current_variant.inventory_quantity }}{% endif %}"
                  data-pdp-variant>
         {%- endunless -%}
 
@@ -185,10 +166,11 @@
               <button type="button" data-pdp-quantity-change="1" aria-label="Increase quantity" aria-controls="Quantity-{{ section.id }}">&plus;</button>
             </div>
           </div>
-          <button type="submit" class="kk-btn kk-btn--primary kk-btn--full" data-pdp-submit {% unless product.available %}disabled{% endunless %}>
-            {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+          <button type="submit" class="kk-btn kk-btn--primary kk-btn--full" data-pdp-submit {% unless current_variant.available %}disabled{% endunless %}>
+            {% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}
           </button>
         </div>
+        <p class="kk-form-error" data-cart-error role="alert" hidden></p>
       {% endform %}
 
       {%- unless product.available -%}
@@ -204,19 +186,19 @@
 
       <ul class="kk-pdp__trustrow" aria-label="Purchase benefits">
         <li><strong>Free shipping $100+</strong><span>Stack gear and save on delivery</span></li>
-        <li><strong>Made to order</strong><span>Built in 3–6 business days, then ships</span></li>
-        <li><strong>30-day guarantee</strong><span>No-questions money-back returns</span></li>
+        <li><strong>{{ 'storefront.shipping.title' | t }}</strong><span><a href="{{ shop.shipping_policy.url }}">{{ 'storefront.shipping.details' | t }}</a></span></li>
+        <li><strong>{{ 'storefront.returns.title' | t }}</strong><span><a href="{{ shop.refund_policy.url }}">{{ 'storefront.returns.eligibility' | t }}</a></span></li>
         <li><strong>Fighter owned</strong><span>Designed by real BJJ, boxing &amp; MMA athletes</span></li>
       </ul>
 
       <div class="kk-pdp__trust" aria-label="Product trust and fit details">
         <details class="kk-pdp__detail" id="size-help" open>
           <summary>Size &amp; fit help</summary>
-          <div class="rte">{{ section.settings.size_help }}</div>
+          {% render 'product-fit-guide', product: product, section: section %}
         </details>
         <details class="kk-pdp__detail">
           <summary>Shipping &amp; returns</summary>
-          <div class="rte">{{ section.settings.shipping_returns }}</div>
+          {% render 'purchase-policy' %}
         </details>
         <details class="kk-pdp__detail">
           <summary>Secure checkout</summary>
@@ -224,13 +206,16 @@
         </details>
       </div>
 
-      {%- if section.settings.show_scarcity and product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= section.settings.scarcity_threshold -%}
-        <p class="kk-pdp__scarcity">Only {{ product.selected_or_first_available_variant.inventory_quantity }} left in stock. Order soon!</p>
+      {%- if section.settings.show_scarcity -%}
+        <p class="kk-pdp__scarcity" data-pdp-stock data-stock-threshold="{{ section.settings.scarcity_threshold | default: 10 }}"{% unless current_variant.available and current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= section.settings.scarcity_threshold %} hidden{% endunless %}>{{ 'storefront.product.remaining' | t: count: current_variant.inventory_quantity }}</p>
       {%- endif -%}
 
-      <div class="kk-pdp__desc rte">{{ product.description }}</div>
+      <div id="product-details" class="kk-pdp__desc rte">{{ product.description }}</div>
 
       <div id="kk-reviews" class="kk-pdp__apps">
+        {%- assign has_review_block = false -%}
+        {%- for block in section.blocks -%}{%- if block.type contains 'judgeme' or block.type contains 'judge-me' -%}{%- assign has_review_block = true -%}{%- endif -%}{%- endfor -%}
+        {%- if section.settings.enable_judgeme_reviews != false and has_review_block == false -%}{% render 'product-reviews', product: product %}{%- endif -%}
         {%- for block in section.blocks -%}
           {%- case block.type -%}
             {%- when '@app' -%}{% render block %}
@@ -239,13 +224,14 @@
       </div>
     </div>
   </div>
-  <div class="kk-pdp__sticky" data-pdp-sticky aria-label="Quick add to cart">
+  <div class="kk-pdp__sticky" data-pdp-sticky hidden aria-label="Quick add to cart">
     <div class="kk-pdp__sticky-info">
       <strong>{{ product.title }}</strong>
-      <span data-pdp-sticky-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+      <span data-pdp-sticky-variant>{% unless product.has_only_default_variant %}{{ current_variant.title | escape }}{% endunless %}</span>
+      <span data-pdp-sticky-price>{{ current_variant.price | money }}</span>
     </div>
-    <button type="button" class="kk-btn kk-btn--primary" data-pdp-sticky-submit {% unless product.available %}disabled{% endunless %}>
-      {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+    <button type="button" class="kk-btn kk-btn--primary" data-pdp-sticky-submit {% unless current_variant.available %}disabled{% endunless %}>
+      {% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}
     </button>
   </div>
 </section>
@@ -257,14 +243,51 @@
 {
   "name": "Product information",
   "tag": "section",
-  "enabled_on": { "templates": ["product"] },
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  },
   "settings": [
-    { "type": "checkbox", "id": "show_scarcity", "label": "Show low stock indicator", "default": true },
-    { "type": "range", "id": "scarcity_threshold", "label": "Low stock threshold", "min": 2, "max": 30, "step": 1, "default": 10 },
-    { "type": "richtext", "id": "size_help", "label": "Size and fit help", "default": "<p><strong>True to size for training.</strong> Between sizes? Size up for a relaxed gym-to-street fit, or stick to your normal size for a locked-in athletic fit. Check the size chart on the product images when available.</p>" },
-    { "type": "richtext", "id": "shipping_returns", "label": "Shipping and returns copy", "default": "<p>Most pieces are made to order (about 3–6 business days) then ship. Free shipping on orders over $100. Try it risk-free with a 30-day money-back guarantee.</p>" },
-    { "type": "richtext", "id": "checkout_reassurance", "label": "Checkout reassurance", "default": "<p>Secure checkout with major cards and accelerated payment options where available. Fighter-owned brand based in Tampa / St. Petersburg, Florida.</p>" }
+    {
+      "type": "image_picker",
+      "id": "size_chart",
+      "label": "Product measurement chart",
+      "info": "Connect a product-specific file metafield dynamic source. Use the approved supplier chart for this exact product."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scarcity",
+      "label": "Show low stock indicator",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "scarcity_threshold",
+      "label": "Low stock threshold",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "richtext",
+      "id": "checkout_reassurance",
+      "label": "Checkout reassurance",
+      "default": "<p>Secure checkout with major cards and accelerated payment options where available. Fighter-owned brand based in Tampa / St. Petersburg, Florida.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_judgeme_reviews",
+      "label": "Built-in Judge.me review widget",
+      "default": true,
+      "info": "Turn off when adding a Judge.me Review Widget app block to avoid duplicate reviews."
+    }
   ],
-  "blocks": [ { "type": "@app" } ]
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ]
 }
 {% endschema %}

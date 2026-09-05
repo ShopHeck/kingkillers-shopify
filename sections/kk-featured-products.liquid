@@ -4,7 +4,7 @@
   blocks, max_blocks and presets (so it's editor-addable & removable). Includes an
   editor preview fallback so the grid never looks empty when no collection is chosen.
 {%- endcomment -%}
-<section id="bestsellers" class="kk-section kk-best" aria-labelledby="best-{{ section.id }}">
+<section id="bestsellers" class="kk-section kk-best" aria-labelledby="best-{{ section.id }}"{% if request.page_type == 'product' %} data-recommendations-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&amp;product_id={{ product.id }}&amp;limit={{ section.settings.products_to_show }}&amp;intent=related"{% endif %}>
   <div class="kk-wrap">
     <header class="kk-best__head">
       {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
@@ -12,17 +12,24 @@
       {%- if section.settings.subtext != blank -%}<div class="kk-lead rte">{{ section.settings.subtext }}</div>{%- endif -%}
     </header>
 
+    {%- assign viewed_product_id = product.id -%}
     <div class="kk-best__grid">
       {%- assign coll = section.settings.collection -%}
-      {%- if coll != blank and coll.products_count > 0 -%}
+      {%- assign recommendation_products = coll.products -%}
+      {%- if recommendations.performed? and recommendations.products_count > 0 -%}{%- assign recommendation_products = recommendations.products -%}{%- endif -%}
+      {%- if recommendation_products.size > 0 -%}
         {%- comment -%}
           No eager_count: this row sits below the hero, trust strip and bento grid on
           every template that uses it, so every card is safely lazy.
         {%- endcomment -%}
-        {%- for product in coll.products limit: section.settings.products_to_show -%}
+        {%- assign shown_count = 0 -%}
+        {%- for product in recommendation_products -%}
+          {%- if product.id == viewed_product_id -%}{%- continue -%}{%- endif -%}
           {% render 'product-card', product: product, index: forloop.index %}
+          {%- assign shown_count = shown_count | plus: 1 -%}
+          {%- if shown_count >= section.settings.products_to_show -%}{%- break -%}{%- endif -%}
         {%- endfor -%}
-      {%- else -%}
+      {%- elsif request.design_mode -%}
         {%- comment -%} Theme-editor fallback so merchants see a populated grid. {%- endcomment -%}
         {%- for i in (1..section.settings.products_to_show) -%}
           <article class="kk-pc kk-pc--ph">

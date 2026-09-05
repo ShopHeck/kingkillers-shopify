@@ -7,24 +7,6 @@
   assign v = product.selected_or_first_available_variant
   assign price = v.price | divided_by: 100.00
 
-  comment
-    Google's merchant listing results want a return window and shipping terms. Both
-    are already promised in the visible PDP copy, so pull them from the same theme
-    settings the copy uses rather than hard-coding a second version of the policy.
-  endcomment
-  assign return_days = settings.return_window_days | default: 30
-  assign free_ship_min = settings.free_ship_threshold | default: 100
-  assign free_ship_min_cents = free_ship_min | times: 100
-  assign qualifies_for_free_shipping = false
-  if v.price >= free_ship_min_cents
-    assign qualifies_for_free_shipping = true
-  endif
-
-  comment
-    priceValidUntil is advisory, but Google warns when it is missing or in the past.
-    Roll it a year forward from today so it never goes stale on its own.
-  endcomment
-  assign price_valid_until = 'now' | date: '%s' | plus: 31536000 | date: '%Y-%m-%d'
 -%}
 <script type="application/ld+json">
 {
@@ -59,39 +41,11 @@
   {%- endif -%}
   "offers": {
     "@type": "Offer",
-    "url": {{ product.url | prepend: shop.url | json }},
+    "url": {{ v.url | prepend: shop.url | json }},
     "priceCurrency": {{ cart.currency.iso_code | json }},
     "price": {{ price | json }},
-    "priceValidUntil": {{ price_valid_until | json }},
     "availability": "https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}",
     "itemCondition": "https://schema.org/NewCondition",
-    "hasMerchantReturnPolicy": {
-      "@type": "MerchantReturnPolicy",
-      "applicableCountry": "US",
-      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-      "merchantReturnDays": {{ return_days }},
-      "returnMethod": "https://schema.org/ReturnByMail",
-      "returnFees": "https://schema.org/FreeReturn"
-    },
-    {%- if qualifies_for_free_shipping -%}
-    "shippingDetails": {
-      "@type": "OfferShippingDetails",
-      "shippingDestination": {
-        "@type": "DefinedRegion",
-        "addressCountry": "US"
-      },
-      "shippingRate": {
-        "@type": "MonetaryAmount",
-        "value": 0,
-        "currency": {{ cart.currency.iso_code | json }}
-      },
-      "deliveryTime": {
-        "@type": "ShippingDeliveryTime",
-        "handlingTime": { "@type": "QuantitativeValue", "minValue": 3, "maxValue": 6, "unitCode": "DAY" },
-        "transitTime": { "@type": "QuantitativeValue", "minValue": 2, "maxValue": 7, "unitCode": "DAY" }
-      }
-    },
-    {%- endif -%}
     "seller": { "@id": {{ shop.url | append: '/#organization' | json }} }
   }
 }

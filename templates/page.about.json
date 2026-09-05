@@ -64,7 +64,7 @@
         "guarantee": {
           "type": "item",
           "settings": {
-            "title": "30-Day Guarantee",
+            "title": "Returns & Exchanges",
             "text": "Try the gear without taking the risk"
           }
         }
@@ -136,7 +136,7 @@
         "cta1_url": "shopify://collections/best-sellers",
         "cta2_label": "Read Customer Reviews",
         "cta2_url": "/pages/reviews",
-        "fine": "Free shipping over $100 · 30-day money-back guarantee"
+        "fine": "Free shipping over $100 · Eligible returns within 30 days; exclusions apply"
       }
     }
   },

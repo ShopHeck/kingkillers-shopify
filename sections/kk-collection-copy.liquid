@@ -17,21 +17,7 @@
   "name": {{ collection.title | json }},
   "description": {{ collection.description | strip_html | truncate: 300 | json }},
   "url": {{ shop.url | append: collection.url | json }},
-  "isPartOf": { "@type": "WebSite", "name": {{ shop.name | json }}, "url": {{ shop.url | json }} },
-  "mainEntity": {
-    "@type": "ItemList",
-    "numberOfItems": {{ collection.products_count | json }},
-    "itemListElement": [
-      {%- for product in collection.products limit: 12 -%}
-      {
-        "@type": "ListItem",
-        "position": {{ forloop.index }},
-        "url": {{ shop.url | append: product.url | json }},
-        "name": {{ product.title | json }}
-      }{%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    ]
-  }
+  "isPartOf": { "@type": "WebSite", "name": {{ shop.name | json }}, "url": {{ shop.url | json }} }
 }
 {%- endcapture -%}
 <script type="application/ld+json">{{ kk_collection_schema | strip_newlines }}</script>

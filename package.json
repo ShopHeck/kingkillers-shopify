@@ -1,0 +1,6 @@
+{
+  "name": "kingkillers-storefront",
+  "private": true,
+  "scripts": {"test": "node --test tests/*.test.mjs", "preview:fixtures": "node scripts/preview-fixtures.mjs"},
+  "devDependencies": {"jsdom": "^26.1.0", "liquidjs": "^10.21.1"}
+}

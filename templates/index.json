@@ -13,7 +13,7 @@
       "type": "kk-hero",
       "settings": {
         "image": "shopify://shop_images/hero-image.jpg",
-        "eyebrow": "Fighter Owned · Made in the USA",
+        "eyebrow": "Fighter Owned · Designed for Training",
         "heading": "Gear Built to Outlast the Fight.",
         "sub": "<p>Combat-sports apparel engineered for athletes who hunt the people at the top. Train, fight and live in gear forged by real fighters.</p>",
         "ghost_word": "KILL KINGS",
@@ -36,7 +36,7 @@
         "item_XLggX6": {
           "type": "item",
           "settings": {
-            "title": "Made in the USA",
+            "title": "Fighter designed",
             "text": "Designed & sold exclusively by King Killers"
           }
         },
@@ -50,8 +50,8 @@
         "item_7B9c6m": {
           "type": "item",
           "settings": {
-            "title": "Guaranteed",
-            "text": "30-day money-back, no questions asked"
+            "title": "Returns & exchanges",
+            "text": "Eligibility and exclusions apply"
           }
         }
       },
@@ -175,7 +175,7 @@
       "settings": {
         "eyebrow": "What is King Killers?",
         "heading": "A fighter-owned apparel brand for athletes who hunt the person at the top.",
-        "body": "<p>King Killers Apparel is a US-based small business founded in 2021 by professional fighter Michael “Heck” Heckert. Every piece is designed by real competitors and made in the USA — bold, durable and built for the gym, the cage and the street.</p>"
+        "body": "<p>King Killers Apparel is a US-based small business founded in 2021 by professional fighter Michael “Heck” Heckert. Every piece is designed by real competitors for training — bold, durable and built for the gym, the cage and the street.</p>"
       }
     },
     "story": {
@@ -199,7 +199,7 @@
           "type": "qa",
           "settings": {
             "question": "What is King Killers Apparel?",
-            "answer": "<p>King Killers is a fighter-owned combat sports clothing brand based in Tampa / St. Petersburg, Florida, founded in 2021. We design premium activewear and fightwear for MMA, BJJ, boxing, Muay Thai and CrossFit athletes — all made in the USA.</p>"
+            "answer": "<p>King Killers is a fighter-owned combat sports clothing brand based in Tampa / St. Petersburg, Florida, founded in 2021. We design premium activewear and fightwear for MMA, BJJ, boxing, Muay Thai and CrossFit athletes — all designed for training.</p>"
           }
         },
         "qa_RWgYhR": {
@@ -213,14 +213,14 @@
           "type": "qa",
           "settings": {
             "question": "Does King Killers offer free shipping and returns?",
-            "answer": "<p>Yes — free shipping on orders over $100 and a 30-day money-back guarantee. Most items are made to order (about 3–6 business days) before shipping. Support typically responds within 24 hours.</p>"
+            "answer": "<p>Production and delivery estimates vary by product and destination. See the <a href=\"/policies/shipping-policy\">shipping policy</a> for current estimates and exceptions. Shipping rates are confirmed at checkout.</p><p>Returns require prior approval and are limited to eligible unworn items within 30 days. Exclusions and return shipping charges apply. Read the <a href=\"/policies/refund-policy\">return policy</a> before ordering.</p>"
           }
         },
         "qa_n8bXeK": {
           "type": "qa",
           "settings": {
             "question": "How do the 2-in-1 shorts fit?",
-            "answer": "<p>Our 2-in-1 shorts use a double-layer design with an inner compression liner and an outer shell. Customers consistently report they run true to size and stay put through intense workouts.</p>"
+            "answer": "<p>Our 2-in-1 shorts use a double-layer design with an inner compression liner and an outer shell. Check the measurement chart for the specific style before choosing your size.</p>"
           }
         }
       },
@@ -234,7 +234,7 @@
       "settings": {
         "eyebrow": "Questions",
         "heading": "Before You Gear Up",
-        "subtext": "Everything you need to know — and answers AI assistants can quote."
+        "subtext": "Fit, care, shipping and returns — answers to your questions."
       }
     },
     "finalcta": {
@@ -243,12 +243,12 @@
         "bg_word": "KING KILLERS",
         "eyebrow": "Ready to Hunt Kings?",
         "heading": "Stop Blending In. Start Standing Out.",
-        "sub": "<p>Join the athletes who train, fight and live in fighter-built gear. Free shipping over $100 · 30-day money-back guarantee.</p>",
+        "sub": "<p>Join the athletes who train, fight and live in fighter-built gear. Free shipping over $100 · Eligible returns within 30 days; exclusions apply.</p>",
         "cta1_label": "Shop Best Sellers",
         "cta1_url": "shopify://collections/best-sellers",
         "cta2_label": "Browse the Catalog",
         "cta2_url": "/collections/catalog",
-        "fine": "No risk. If it's not your best gear, send it back within 30 days."
+        "fine": "Check return eligibility and exclusions before ordering."
       }
     },
     "blog_highlights": {

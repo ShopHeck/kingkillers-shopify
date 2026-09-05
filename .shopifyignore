@@ -1,0 +1,7 @@
+node_modules/
+tests/
+scripts/
+docs/
+.preview/
+package.json
+package-lock.json

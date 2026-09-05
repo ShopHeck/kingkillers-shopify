@@ -1,0 +1,7 @@
+{% doc %}
+  Displays the published policy links and return eligibility beside purchase controls.
+{% enddoc %}
+<div class="rte kk-purchase-policy">
+  <p>{{ 'storefront.shipping.summary' | t }} <a href="{{ shop.shipping_policy.url }}">{{ 'storefront.shipping.details' | t }}</a></p>
+  <p>{{ 'storefront.returns.summary' | t }} <a href="{{ shop.refund_policy.url }}">{{ 'storefront.returns.details' | t }}</a></p>
+</div>

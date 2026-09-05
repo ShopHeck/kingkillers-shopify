@@ -1,0 +1,7 @@
+{% doc %}
+  Connects the store's existing editorial hubs without duplicating articles.
+{% enddoc %}
+<nav class="kk-journal-nav" aria-label="{{ 'storefront.blog.topics' | t }}">
+  {% if blogs.news != blank %}<a href="{{ blogs.news.url }}">{{ 'storefront.blog.news' | t }}</a>{% endif %}
+  {% if blogs.gear != blank %}<a href="{{ blogs.gear.url }}">{{ 'storefront.blog.gear' | t }}</a>{% endif %}
+</nav>

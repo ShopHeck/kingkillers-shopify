@@ -11,6 +11,10 @@
   assign og_title = page_title | replace: "&amp;#39;", "'" | replace: "&amp;quot;", "" | replace: "&#39;", "'" | replace: "&quot;", "" | replace: "&amp;", "&"
   assign og_desc_raw = page_description | default: shop.description | default: settings.brand_description
   assign og_desc = og_desc_raw | replace: "&amp;#39;", "'" | replace: "&amp;quot;", "" | replace: "&#39;", "'" | replace: "&quot;", "" | replace: "&amp;", "&"
+  if request.page_type == 'page' and page.handle == 'contact'
+    assign og_title = 'storefront.contact.title' | t
+    assign og_desc = 'storefront.contact.description' | t
+  endif
   if request.page_type == 'index'
     assign og_title = settings.brand_name | default: shop.name | append: ' | Fighter-Owned Combat Sports Apparel'
   endif
@@ -34,6 +38,9 @@
     a collection narrowed by facets is a near-duplicate of its parent.
   endcomment
   if request.page_type == 'collection'
+    if collection.all_products_count == 0
+      assign robots_directive = 'noindex, follow'
+    endif
     for filter in collection.filters
       if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank
         assign robots_directive = 'noindex, follow'
@@ -71,7 +78,7 @@
     assign share_alt = share_img.alt | default: og_title
   endif
 -%}
-<title>{{ page_title }}{% unless page_title contains shop.name %} – {{ shop.name }}{% endunless %}</title>
+<title>{% if request.page_type == 'page' and page.handle == 'contact' %}{{ og_title | escape }}{% else %}{{ page_title | escape }}{% endif %}{% unless page_title contains shop.name %} – {{ shop.name }}{% endunless %}</title>
 
 {%- if og_desc != blank -%}
   <meta name="description" content="{{ og_desc | strip_html | escape }}">

@@ -7,6 +7,8 @@
 (function () {
   'use strict';
   var d = document;
+  var strings = window.kkStrings || {};
+  var root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
   // cents. A 0 threshold is a real setting (free shipping on everything), not an
   // absent one, so don't let `||` fall back to 10000 and invent a $100 goal.
   var THRESHOLD = typeof window.kkFreeShipThreshold === 'number' && isFinite(window.kkFreeShipThreshold)
@@ -15,7 +17,7 @@
 
   /* ---------- Money formatting (matches Shopify default; no library) ---------- */
   function money(cents) {
-    return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return new Intl.NumberFormat(document.documentElement.lang || 'en', { style: 'currency', currency: window.kkCurrency || 'USD' }).format(cents / 100);
   }
 
   /* ---------------------------- Cart drawer ---------------------------------- */
@@ -51,7 +53,7 @@
     d.querySelectorAll('[data-cart-count]').forEach(function (n) { n.textContent = cart.item_count; });
 
     var shipBlock = drawer.querySelector('.kk-drawer__ship');
-    if (THRESHOLD <= 0) {
+    if (THRESHOLD <= 0 || window.kkCurrency !== window.kkShopCurrency) {
       // Nothing to progress towards — match the cart page, which omits the bar.
       if (shipBlock) shipBlock.hidden = true;
     } else {
@@ -63,8 +65,8 @@
       if (msg) {
         var remaining = THRESHOLD - cart.total_price;
         msg.textContent = remaining > 0
-          ? 'You\u2019re ' + money(remaining) + ' away from FREE shipping.'
-          : '\uD83C\uDF89 You\u2019ve unlocked FREE shipping!';
+          ? 'You\u2019re ' + money(remaining) + ' away from the free-shipping threshold. Eligibility is confirmed at checkout.'
+          : 'Free-shipping threshold reached. Eligibility is confirmed at checkout.';
       }
     }
 
@@ -76,7 +78,7 @@
         body.innerHTML = cart.items.map(function (it) {
           var variantText = it.variant_title ? '<span class="kk-drawer__variant">' + esc(it.variant_title) + '</span>' : '';
           return '<div class="kk-drawer__item" data-key="' + esc(it.key) + '">' +
-            (it.image ? '<img src="' + esc(it.image.replace(/(\.[^.]+)$/, '_120x$1')) + '" width="60" height="60" alt="" loading="lazy">' : '') +
+            (it.image ? '<img src="' + esc(it.image) + '" width="60" height="60" alt="" loading="lazy">' : '') +
             '<div class="kk-drawer__item-info">' +
               '<span class="kk-drawer__name">' + esc(it.product_title) + '</span>' +
               variantText +
@@ -104,15 +106,17 @@
         upsellEl.removeAttribute('data-product-id');
       } else {
         var firstProductId = cart.items[0].product_id;
-        if (upsellEl.getAttribute('data-product-id') !== String(firstProductId)) {
-          upsellEl.setAttribute('data-product-id', firstProductId);
-          fetch('/recommendations/products.json?product_id=' + firstProductId + '&limit=3')
+        var recommendationKey = cart.items.map(function (item) { return item.product_id; }).sort().join(',');
+        if (upsellEl.getAttribute('data-product-id') !== recommendationKey) {
+          upsellEl.setAttribute('data-product-id', recommendationKey);
+          fetch(root + 'recommendations/products.json?product_id=' + firstProductId + '&limit=3')
             .then(function (res) { return res.json(); })
             .then(function (data) {
+              if (upsellEl.getAttribute('data-product-id') !== recommendationKey) return;
               var products = data.products || [];
               var cartProductIds = cart.items.map(function (it) { return it.product_id; });
               products = products.filter(function (p) {
-                return cartProductIds.indexOf(p.id) === -1 && p.variants && p.variants.length > 0;
+                return p.available && cartProductIds.indexOf(p.id) === -1 && p.variants && p.variants.length > 0;
               }).slice(0, 2);
 
               if (!products.length) {
@@ -131,7 +135,7 @@
                         '<span class="kk-drawer__upsell-name">' + esc(p.title) + '</span>' +
                         '<span class="kk-drawer__upsell-price">' + money(variant.price) + '</span>' +
                       '</div>' +
-                      '<button class="kk-btn kk-btn--ghost kk-drawer__upsell-add" data-upsell-variant="' + variant.id + '" aria-label="Add ' + esc(p.title) + ' to cart">Add</button>' +
+                      '<a class="kk-btn kk-btn--ghost kk-drawer__upsell-add" href="' + esc(p.url) + '">' + esc(strings.choose || 'Choose options') + '</a>' +
                     '</div>';
                   }).join('') +
                 '</div>';
@@ -146,7 +150,7 @@
   }
 
   function fetchCart() {
-    return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+    return fetch(root + 'cart.js', { headers: { Accept: 'application/json' } })
       .then(function (r) { return r.json(); })
       .then(renderCart);
   }
@@ -156,27 +160,45 @@
     var form = e.target.closest('[data-quick-add], .kk-pdp__form');
     if (!form) return;
     e.preventDefault();
+    if (form.dataset.pending === 'true' || !form.reportValidity()) return;
     var btn = form.querySelector('button[type="submit"]');
+    if (btn && btn.disabled) return;
     var label = btn ? btn.textContent : '';
-    if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
-
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { Accept: 'application/json' },
-      body: new FormData(form)
+    var error = form.querySelector('[data-cart-error]');
+    if (error) { error.hidden = true; error.textContent = ''; }
+    form.dataset.pending = 'true';
+    form.setAttribute('aria-busy', 'true');
+    if (btn) { btn.disabled = true; btn.textContent = strings.adding || 'Adding…'; }
+    var added = false;
+    fetch(root + 'cart/add.js', {
+      method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form)
     })
-      .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
-      .then(function () { return fetchCart(); })
-      .then(function () { openDrawer(); if (btn) btn.textContent = 'Added ✓'; })
-      .catch(function () { if (btn) btn.textContent = 'Try Again'; })
+      .then(function (r) {
+        return r.json().then(function (data) {
+          if (!r.ok) throw new Error(data.description || strings.addError);
+          added = true;
+        });
+      })
+      .then(fetchCart)
+      .then(function () { openDrawer(); })
+      .catch(function (err) {
+        // The add succeeded: do not invite a second add when the drawer refresh fails.
+        if (added) { window.location.assign(root + 'cart'); return; }
+        if (error) { error.textContent = err.message || strings.addError; error.hidden = false; }
+      })
       .finally(function () {
-        setTimeout(function () { if (btn) { btn.disabled = false; btn.textContent = label; } }, 1300);
+        delete form.dataset.pending;
+        form.removeAttribute('aria-busy');
+        if (btn) { btn.disabled = false; btn.textContent = label; }
+        form.dispatchEvent(new CustomEvent('kk:cart-settled'));
       });
   });
 
   function updateCartItem(key, qty) {
     if (updatingItems[key]) return;
     updatingItems[key] = true;
+    var error = drawer && drawer.querySelector('[data-drawer-error]');
+    if (error) error.hidden = true;
     if (drawer) {
       var panel = drawer.querySelector('.kk-drawer__panel');
       var item = null;
@@ -184,7 +206,7 @@
       if (panel) panel.style.opacity = '0.6';
       if (item) item.querySelectorAll('button').forEach(function (btn) { btn.disabled = true; });
     }
-    fetch('/cart/change.js', {
+    fetch(root + 'cart/change.js', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -194,11 +216,17 @@
     })
       .then(function (r) { if (!r.ok) throw new Error('update failed'); return r.json(); })
       .then(renderCart)
-      .catch(function (err) { console.error(err); })
+      .catch(function () {
+        var error = drawer && drawer.querySelector('[data-drawer-error]');
+        if (error) { error.hidden = false; error.textContent = strings.addError || 'Unable to update cart.'; }
+      })
       .finally(function () {
         if (drawer) {
           var panel = drawer.querySelector('.kk-drawer__panel');
           if (panel) panel.style.opacity = '';
+          drawer.querySelectorAll('[data-key]').forEach(function (item) {
+            if (item.getAttribute('data-key') === key) item.querySelectorAll('button').forEach(function (button) { button.disabled = false; });
+          });
         }
         delete updatingItems[key];
       });
@@ -206,6 +234,9 @@
 
   /* ----------------------------- Click handlers ------------------------------ */
   d.addEventListener('click', function (e) {
+    var fitLink = e.target.closest('a[href="#size-help"], a[href="#kk-size-chart"]');
+    if (fitLink) { var detail = d.querySelector(fitLink.getAttribute('href')); if (detail) detail.open = true; }
+
     // "Notify me when back" toggle on sold-out product cards. This used to be an
     // inline <script> duplicated into every card in the grid.
     var notifyBtn = e.target.closest('[data-notify-toggle]');
@@ -257,31 +288,6 @@
       updateCartItem(key, 0);
     }
 
-    var upsellAdd = e.target.closest('[data-upsell-variant]');
-    if (upsellAdd) {
-      e.preventDefault();
-      var variantId = upsellAdd.getAttribute('data-upsell-variant');
-      upsellAdd.disabled = true;
-      upsellAdd.textContent = '…';
-
-      var formData = new FormData();
-      formData.append('id', variantId);
-      formData.append('quantity', 1);
-
-      fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: formData
-      })
-        .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
-        .then(function () { return fetchCart(); })
-        .then(function () { openDrawer(); })
-        .catch(function (err) { console.error(err); })
-        .finally(function () {
-          upsellAdd.disabled = false;
-          upsellAdd.textContent = 'Add';
-        });
-    }
   });
   d.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeDrawer();
@@ -339,6 +345,11 @@
       var available = selected.getAttribute('data-available') !== 'false';
       var selectedId = selected.value || selected.getAttribute('value') || '';
       var quantityMax = parseInt(selected.getAttribute('data-quantity-max'), 10);
+      var stock = pdp.querySelector('[data-pdp-stock]');
+      if (stock) {
+        stock.hidden = !available || !Number.isFinite(quantityMax) || quantityMax <= 0 || quantityMax > Number(stock.dataset.stockThreshold);
+        stock.textContent = (strings.remaining || 'Only __count__ left in stock.').replace('__count__', quantityMax);
+      }
       price.innerHTML = '<span>' + esc(priceText) + '</span>' + (compareText ? '<s>' + esc(compareText) + '</s>' : '');
       if (stickyPrice) stickyPrice.textContent = priceText;
       if (quantity) {
@@ -348,14 +359,14 @@
       }
       [submit, stickySubmit].forEach(function (btn) {
         if (!btn) return;
-        btn.disabled = !available;
-        btn.textContent = available ? 'Add to Cart' : 'Sold Out';
+        btn.disabled = !available || (submit && submit.form.dataset.pending === 'true');
+        btn.textContent = available ? (strings.add || 'Add to Cart') : (strings.soldOut || 'Sold Out');
       });
 
       pills.forEach(function (pill) {
         var isSel = pill.getAttribute('data-variant-id') === selectedId;
         pill.classList.toggle('is-selected', isSel);
-        pill.setAttribute('aria-selected', String(isSel));
+        pill.setAttribute('aria-pressed', String(isSel));
       });
       if (sizeLabel) {
         var title = '';
@@ -364,6 +375,8 @@
         });
         if (!title && selected.textContent) title = selected.textContent.split('–')[0].trim();
         if (title) sizeLabel.textContent = title;
+        var stickyVariant = pdp.querySelector('[data-pdp-sticky-variant]');
+        if (stickyVariant) stickyVariant.textContent = title;
       }
 
       // Switch image if variant has data-image
@@ -392,6 +405,9 @@
         }
       }
       syncVariantState();
+      var url = new URL(window.location.href);
+      url.searchParams.set('variant', variant.value);
+      window.history.replaceState({}, '', url);
     }
 
     pills.forEach(function (pill) {
@@ -401,7 +417,12 @@
       });
     });
 
-    if (variant && variant.tagName === 'SELECT') variant.addEventListener('change', syncVariantState);
+    if (variant && variant.tagName === 'SELECT') {
+      variant.setAttribute('tabindex', '-1');
+      variant.setAttribute('aria-hidden', 'true');
+      variant.addEventListener('change', function () { selectVariantId(variant.value); });
+    }
+    if (submit && submit.form) submit.form.addEventListener('kk:cart-settled', syncVariantState);
     if (quantity) {
       quantity.addEventListener('change', normaliseQuantity);
       quantity.addEventListener('blur', normaliseQuantity);
@@ -419,6 +440,13 @@
       });
     });
     if (stickySubmit) stickySubmit.addEventListener('click', function () { if (submit) submit.click(); });
+    var stickyBar = pdp.querySelector('[data-pdp-sticky]');
+    if (stickyBar && submit && 'IntersectionObserver' in window) {
+      var purchaseObserver = new IntersectionObserver(function (entries) {
+        stickyBar.hidden = entries[0].boundingClientRect.bottom > 0;
+      });
+      purchaseObserver.observe(submit);
+    }
 
     thumbs.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -438,13 +466,24 @@
     syncVariantState();
   });
 
-  /* -------------------------- Collection Filters ----------------------------- */
-  d.querySelectorAll('.kk-plp__tools').forEach(function (form) {
-    form.querySelectorAll('input[type="checkbox"], input[type="number"], select').forEach(function (el) {
-      el.addEventListener('change', function () {
-        form.submit();
-      });
-    });
+  // Load recommendations near the viewport; a failed/empty response leaves the curated row intact.
+  d.querySelectorAll('[data-recommendations-url]').forEach(function (section) {
+    function loadRecommendations() {
+      fetch(section.getAttribute('data-recommendations-url'))
+        .then(function (response) { if (!response.ok) throw new Error('Recommendations unavailable'); return response.text(); })
+        .then(function (html) {
+          var parsed = new DOMParser().parseFromString(html, 'text/html');
+          var grid = parsed.querySelector('.kk-best__grid');
+          var current = section.querySelector('.kk-best__grid');
+          if (grid && current && grid.querySelector('[data-product-id]')) current.replaceWith(grid);
+        }).catch(function () {});
+    }
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        if (entries.some(function (entry) { return entry.isIntersecting; })) { observer.disconnect(); loadRecommendations(); }
+      }, { rootMargin: '200px' });
+      observer.observe(section);
+    } else loadRecommendations();
   });
 
   /* --------------------------- Sticky header --------------------------------- */
@@ -469,7 +508,7 @@
         if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
       });
     }, { rootMargin: '0px 0px -8% 0px' });
-    d.querySelectorAll('.kk-section, .kk-pc').forEach(function (el) {
+    d.querySelectorAll('[data-reveal]').forEach(function (el) {
       el.classList.add('kk-reveal'); io.observe(el);
     });
   }
