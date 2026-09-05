@@ -14,8 +14,6 @@
       "settings": {
         "show_scarcity": true,
         "scarcity_threshold": 10,
-        "size_help": "<p><strong>True to size for training.</strong> Between sizes? Size up for a relaxed gym-to-street fit, or stick to your normal size for a locked-in athletic fit. Check product images for size charts when available.</p>",
-        "shipping_returns": "<p>Most pieces are <strong>made to order (about 3–6 business days)</strong>, then ship. Free shipping on orders over $100. Try it risk-free with a 30-day money-back guarantee.</p>",
         "checkout_reassurance": "<p>Secure checkout with major cards and accelerated payment options where available. Fighter-owned brand based in Tampa / St. Petersburg, Florida.</p>"
       }
     },
@@ -23,8 +21,8 @@
       "type": "kk-featured-products",
       "settings": {
         "eyebrow": "Complete the Kit",
-        "heading": "Pairs Well With",
-        "subtext": "<p>Add the pieces athletes actually reorder — shorts, tees, and training layers that hold up past one camp.</p>",
+        "heading": "You May Also Like",
+        "subtext": "<p>Explore more gear for your next training session.</p>",
         "collection": "best-sellers",
         "products_to_show": 4,
         "cta_label": "View Full Catalog",
@@ -38,21 +36,21 @@
           "type": "qa",
           "settings": {
             "question": "How should King Killers gear fit?",
-            "answer": "<p>Most pieces are built for training first. Choose your normal size for a locked-in athletic fit, or size up if you want more room for layering and recovery days.</p>"
+            "answer": "<p>Compare the measurement chart for this product with a similar garment that fits you well. Sizes vary by style; contact us before ordering if you need help.</p>"
           }
         },
         "qa_ship": {
           "type": "qa",
           "settings": {
             "question": "How long does shipping take?",
-            "answer": "<p>Most products are made to order (about 3–6 business days) before they ship. Orders over $100 get free shipping. Need it faster? Check the Ships Now collection when available.</p>"
+            "answer": "<p>Production and delivery estimates vary by product and destination. See the <a href=\"/policies/shipping-policy\">shipping policy</a> for current estimates and exceptions. Shipping rates are confirmed at checkout.</p>"
           }
         },
         "qa_returns": {
           "type": "qa",
           "settings": {
             "question": "What is the return policy?",
-            "answer": "<p>We offer a 30-day money-back guarantee. If it is not your best gear, send it back within 30 days.</p>"
+            "answer": "<p>Returns require prior approval and are limited to eligible unworn items within 30 days. Exclusions and return shipping charges apply. Read the <a href=\"/policies/refund-policy\">return policy</a> before ordering.</p>"
           }
         }
       },

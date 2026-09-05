@@ -1,0 +1,21 @@
+name: Storefront checks
+on:
+  pull_request:
+    branches: [shopify-theme]
+  push:
+    branches: [shopify-theme]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - name: Theme Check
+        run: npx --yes @shopify/cli@latest theme check --path . --fail-level error

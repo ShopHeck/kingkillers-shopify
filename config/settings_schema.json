@@ -12,7 +12,7 @@
     "settings": [
       { "type": "text", "id": "brand_name", "label": "Brand name", "default": "King Killers Apparel" },
       { "type": "text", "id": "brand_slogan", "label": "Brand slogan", "default": "Real Kings Kill Kings" },
-      { "type": "textarea", "id": "brand_description", "label": "Brand description", "default": "Fighter-owned combat sports apparel based in Tampa / St. Petersburg, Florida. Made in the USA." },
+      { "type": "textarea", "id": "brand_description", "label": "Brand description", "default": "Fighter-owned combat sports apparel based in Tampa / St. Petersburg, Florida. Fighter designed." },
       { "type": "text", "id": "founder_name", "label": "Founder name", "default": "Michael Heckert" },
       { "type": "text", "id": "founding_year", "label": "Founding year", "default": "2021" },
       { "type": "text", "id": "price_range", "label": "Typical price range", "default": "$19 - $69" },
@@ -45,7 +45,6 @@
     "settings": [
       { "type": "color", "id": "theme_color", "label": "Browser theme color", "default": "#070707" },
       { "type": "range", "id": "free_ship_threshold", "label": "Free shipping threshold", "min": 0, "max": 250, "step": 5, "unit": "$", "default": 100 },
-      { "type": "range", "id": "return_window_days", "label": "Return window", "min": 7, "max": 90, "step": 1, "unit": "d", "default": 30, "info": "Used in the product return-policy schema. Keep it identical to the guarantee stated in your on-page copy." },
       { "type": "checkbox", "id": "enable_google_font", "label": "Load Archivo and Inter from Google Fonts", "default": true }
     ]
   }

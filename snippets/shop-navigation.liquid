@@ -1,0 +1,16 @@
+{% doc %}
+  Category shortcuts render only when the corresponding published collection exists.
+{% enddoc %}
+<nav aria-label="{{ 'storefront.navigation.shop' | t }}">
+  <ul class="kk-shop-links">
+    {%- assign handles = 'mens-athletic-shorts,tapered-jogger-sweatpants,womens,rash-guards,catalog' | split: ',' -%}
+    {%- assign labels = 'shorts,joggers,women,rashguards,all' | split: ',' -%}
+    {%- for handle in handles -%}
+      {%- assign target_collection = collections[handle] -%}
+      {%- if target_collection != blank -%}
+        {%- assign translation_key = 'storefront.navigation.' | append: labels[forloop.index0] -%}
+        <li><a href="{{ target_collection.url }}"{% if collection.handle == handle %} aria-current="page"{% endif %}>{{ translation_key | t }}</a></li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</nav>

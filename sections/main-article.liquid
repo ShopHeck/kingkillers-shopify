@@ -1,3 +1,6 @@
+{%- assign featured_filename = article.image.src | split: '/' | last | split: '?' | first -%}
+{%- assign show_author = true -%}
+{%- if article.author == 'Shopify API' or article.author == blank -%}{%- assign show_author = false -%}{%- endif -%}
 {%- comment -%}
   Main article template rendering full post content.
 {%- endcomment -%}
@@ -5,19 +8,28 @@
   <div class="kk-wrap kk-wrap--narrow">
     <header class="kk-art__head">
       <a href="{{ blog.url }}" class="kk-art__back">&larr; Back to {{ blog.title }}</a>
-      <span class="kk-art__date">{{ article.published_at | time_tag: format: 'date' }} · by {{ article.author }}</span>
+      <span class="kk-art__date">{{ article.published_at | time_tag: format: 'date' }}{% if show_author %} · by {{ article.author | escape }}{% endif %}</span>
       <h1 id="art-title" class="kk-h2 kk-art__title">{{ article.title }}</h1>
     </header>
 
     {%- if article.image != blank -%}
+      {%- unless article.content contains featured_filename -%}
       <div class="kk-art__media">
         {% render 'responsive-image', image: article.image, sizes: '(max-width:750px) 100vw, 80vw', widths: '480, 720, 960, 1440', class: 'kk-art__img', preload: true %}
       </div>
+      {%- endunless -%}
     {%- endif -%}
 
+    {% render 'journal-navigation' %}
     <div class="kk-art__content rte">
       {{ article.content }}
     </div>
+    {% if section.settings.products != blank %}
+      <aside class="kk-art__shop" aria-labelledby="article-shop-title">
+        <h2 id="article-shop-title" class="kk-h3">{{ 'storefront.blog.shop' | t }}</h2>
+        <div class="kk-best__grid">{% for item in section.settings.products %}{% render 'product-card', product: item %}{% endfor %}</div>
+      </aside>
+    {% endif %}
   </div>
 </article>
 
@@ -26,7 +38,7 @@
   "name": "Article content",
   "tag": "section",
   "enabled_on": { "templates": ["article"] },
-  "settings": []
+  "settings": [{"type":"product_list","id":"products","label":"Products featured in this article","limit":4,"info":"Connect a product-list dynamic source to select relevant products for each article."}]
 }
 {% endschema %}
 
@@ -47,7 +59,7 @@
   {%- endif -%}
   "datePublished": {{ article.published_at | date: "%Y-%m-%dT%H:%M:%S%z" | json }},
   "dateModified": {{ article.updated_at | date: "%Y-%m-%dT%H:%M:%S%z" | json }},
-  "author": { "@type": "Person", "name": {{ article.author | json }} },
+  {% if show_author %}"author": { "@type": "Person", "name": {{ article.author | json }} },{% endif %}
   "publisher": { "@id": {{ shop.url | append: '/#organization' | json }} },
   "isPartOf": { "@type": "Blog", "name": {{ blog.title | json }}, "@id": {{ shop.url | append: blog.url | append: '#blog' | json }} },
   "mainEntityOfPage": { "@type": "WebPage", "@id": {{ shop.url | append: article.url | json }} }

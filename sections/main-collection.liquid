@@ -4,12 +4,13 @@
     {%- unless section.settings.hide_header -%}
     <header class="kk-plp__head">
       <h1 id="plp-title" class="kk-h2">{{ collection.title }}</h1>
-      {%- if collection.description != blank -%}<div class="kk-plp__desc rte">{{ collection.description }}</div>{%- endif -%}
+      {%- if collection.description != blank -%}<p class="kk-plp__intro">{{ collection.description | replace: '</p>', ' ' | replace: '</h2>', ' ' | replace: '</h3>', ' ' | strip_html | truncatewords: 16 }}</p>{%- endif -%}
     </header>
     {%- else -%}
       <h2 id="plp-title" class="kk-h2">{{ 'seasonal.shop_heading' | t }}</h2>
     {%- endunless -%}
 
+    {% render 'shop-navigation' %}
     {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
       <form class="kk-plp__tools" method="get" aria-label="Collection filters">
         {%- if section.settings.enable_filtering and collection.filters.size > 0 -%}
@@ -52,7 +53,12 @@
         {%- if collection.current_vendor or collection.current_type -%}<input type="hidden" name="q" value="{{ collection.current_vendor | default: collection.current_type }}">{%- endif -%}
       </form>
 
-      {%- if collection.filters.size > 0 -%}
+      {%- assign active_count = 0 -%}
+      {%- for filter in collection.filters -%}
+        {%- assign active_count = active_count | plus: filter.active_values.size -%}
+        {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}{%- assign active_count = active_count | plus: 1 -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if active_count > 0 -%}
         <div class="kk-plp__active" aria-label="Active filters">
           {%- for filter in collection.filters -%}
             {%- for value in filter.active_values -%}
@@ -72,7 +78,7 @@
     {%- paginate collection.products by 24 -%}
       <div class="kk-best__grid">
         {%- for product in collection.products -%}
-          {% render 'product-card', product: product, index: forloop.index, eager_count: 4 %}
+          {% render 'product-card', product: product, index: forloop.index, eager_count: 4, card_sizes: '(max-width:600px) 45vw, (max-width:990px) 45vw, 23vw' %}
         {%- else -%}
           <div class="kk-plp__empty">
             <h2>No products found</h2>
@@ -85,6 +91,7 @@
         <nav class="kk-plp__pager" aria-label="Pagination">{{ paginate | default_pagination }}</nav>
       {%- endif -%}
     {%- endpaginate -%}
+    {%- if collection.description != blank -%}<div class="kk-plp__editorial rte">{{ collection.description }}</div>{%- endif -%}
   </div>
 </section>
 

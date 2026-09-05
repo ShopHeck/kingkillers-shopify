@@ -53,7 +53,11 @@
     {% sections 'header-group' %}
 
     <main id="MainContent" role="main" tabindex="-1">
-      {{ content_for_layout }}
+      {% if request.page_type == 'page' and page.handle == 'contact' %}
+        {% section 'main-contact' %}
+      {% else %}
+        {{ content_for_layout }}
+      {% endif %}
     </main>
 
     {% sections 'footer-group' %}
@@ -70,12 +74,13 @@
           <div class="kk-drawer__bar"><span data-ship-bar style="width:0%"></span></div>
           <p data-ship-msg class="kk-drawer__shipmsg"></p>
         </div>
+        <p class="kk-form-error" data-drawer-error role="alert" hidden></p>
         <div data-drawer-body class="kk-drawer__body"></div>
         <div class="kk-drawer__upsell" data-drawer-upsell></div>
         <footer class="kk-drawer__foot">
           <div class="kk-drawer__total"><span>Subtotal</span><span data-drawer-total></span></div>
           <a href="{{ routes.cart_url }}/checkout" class="kk-btn kk-btn--primary kk-btn--full">Checkout</a>
-          <p class="kk-drawer__reassure">✓ Free shipping $100+ · ✓ 30-day money-back guarantee</p>
+          <p class="kk-drawer__reassure"><a href="{{ shop.shipping_policy.url }}">{{ 'storefront.shipping.details' | t }}</a> · <a href="{{ shop.refund_policy.url }}">{{ 'storefront.returns.details' | t }}</a></p>
         </footer>
       </aside>
     </div>
@@ -83,6 +88,8 @@
     {%- comment -%} Welcome email popup (position:fixed; renders nothing unless enabled in the editor). {%- endcomment -%}
     {% section 'kk-newsletter-popup' %}
 
+    <script>window.kkCurrency = {{ cart.currency.iso_code | json }}; window.kkShopCurrency = {{ shop.currency | json }};</script>
+    <script>window.kkStrings = {remaining: {{ 'storefront.product.remaining' | t: count: '__count__' | json }}, addError: {{ 'storefront.cart.error' | t | json }}, choose: {{ 'storefront.product.choose' | t | json }}, added: {{ 'storefront.cart.added' | t | json }}, adding: {{ 'storefront.cart.adding' | t | json }}, add: {{ 'products.product.add_to_cart' | t | json }}, soldOut: {{ 'products.product.sold_out' | t | json }}};</script>
     <script>window.kkFreeShipThreshold = {{ settings.free_ship_threshold | default: 100 | times: 100 }};</script>
     <script src="{{ 'kk.js' | asset_url }}" defer></script>
   </body>

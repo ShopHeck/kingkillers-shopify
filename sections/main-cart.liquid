@@ -16,7 +16,7 @@
   assign ship_threshold = settings.free_ship_threshold | default: 100
   assign ship_threshold_cents = ship_threshold | times: 100
   assign show_ship_progress = false
-  if ship_threshold_cents > 0
+  if ship_threshold_cents > 0 and cart.currency.iso_code == shop.currency
     assign show_ship_progress = true
     assign remaining = ship_threshold_cents | minus: cart.total_price
     assign ship_progress = cart.total_price | times: 100 | divided_by: ship_threshold_cents
@@ -103,7 +103,7 @@
             <button type="submit" name="checkout" class="kk-btn kk-btn--primary">Checkout</button>
           </div>
         </div>
-        <p class="kk-cartpage__reassure">✓ {% if show_ship_progress %}Free shipping ${{ ship_threshold }}+{% else %}Free shipping on every order{% endif %} · ✓ {{ settings.return_window_days | default: 30 }}-day money-back guarantee</p>
+        <div class="kk-cartpage__reassure">{% render 'purchase-policy' %}</div>
       </form>
     {%- endif -%}
   </div>

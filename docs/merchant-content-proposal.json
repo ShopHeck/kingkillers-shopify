@@ -1,0 +1,15 @@
+{
+  "status": "draft-not-applied",
+  "observedAt": "2026-09-05",
+  "store": "kingkillers.co",
+  "changes": [
+    {
+      "resource": "product",
+      "handle": "american-flag-athletic-shorts",
+      "field": "descriptionHtml",
+      "sourceSha256": "dfa1f0d6eb777cc124ea3d015ece0f7b033215c33e8273bcf36b38f88477f7a6",
+      "proposedValue": "\n<p><strong>Built for athletes who train hard and still need to move free.</strong></p>\n<p>The American Flag Athletic Shorts are King Killers fightwear energy for the gym, fight camp, and street. Lightweight two-way stretch fabric keeps you mobile through bag work, open mat, and conditioning — without bagging out after one session.</p>\n<h3>Why fighters grab these</h3>\n<ul>\n<li>Athletic cut that stops just above the knee for coverage without drag</li>\n<li>Two-way stretch fabric that moves with hips and knees</li>\n<li>Side pockets for phone/keys when you leave the gym</li>\n<li>Bold American flag graphic that reads fight-fan, not boardroom</li>\n<li>Pairs with King Killers tees, rash guards, and walkout layers</li>\n</ul>\n<p><strong>Choose your size:</strong> Compare the measurements for this product with a similar pair of shorts that fits you well. Contact us before ordering if you need help.</p>\n<p><strong>Delivery:</strong> Production time and delivery estimates vary. Read our <a href=\"/policies/shipping-policy\">shipping policy</a> before ordering. Shipping rates are confirmed at checkout.</p>\n",
+      "precondition": "Re-read the product and require the source hash to match. Confirm the exact supplier product before adding measurements."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{% doc %}
+  Shows the product-specific measurement image, with a useful fallback to published product details.
+  @param {product} product - Current product.
+  @param {section} section - Product section containing the optional chart image.
+{% enddoc %}
+{%- liquid
+  assign chart = section.settings.size_chart
+  if chart == blank
+    for image in product.images
+      assign image_label = image.alt | downcase
+      if image_label contains 'size chart' or image_label contains 'size guide'
+        assign chart = image
+        break
+      endif
+    endfor
+  endif
+-%}
+<div class="rte">
+  {%- if chart != blank -%}
+    <a href="{{ chart | image_url: width: 2000 }}" target="_blank" rel="noopener" aria-label="{{ 'storefront.fit.open' | t }}">
+      {% render 'responsive-image', image: chart, sizes: '(max-width:750px) 90vw, 45vw', widths: '480, 720, 960, 1440', class: 'kk-fit-chart', alt: chart.alt %}
+    </a>
+  {%- endif -%}
+  <p>{{ 'storefront.fit.guidance' | t }}</p>
+  <p><a href="#product-details">{{ 'storefront.fit.details' | t }}</a> · <a href="{{ pages.contact.url | default: '/pages/contact' }}">{{ 'storefront.fit.help' | t }}</a></p>
+</div>

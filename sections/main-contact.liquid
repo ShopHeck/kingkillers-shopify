@@ -1,0 +1,30 @@
+<section class="kk-section kk-contact" aria-labelledby="contact-title">
+  <div class="kk-wrap kk-contact__grid">
+    <div>
+      <p class="kk-eyebrow">{{ 'storefront.contact.eyebrow' | t }}</p>
+      <h1 class="kk-h2" id="contact-title">{{ 'storefront.contact.title' | t }}</h1>
+      <p class="kk-lead">{{ 'storefront.contact.intro' | t }}</p>
+      <nav class="kk-contact__links" aria-label="{{ 'storefront.contact.help' | t }}">
+        <a href="{{ pages.faq.url | default: '/pages/faq' }}">{{ 'storefront.contact.faq' | t }}</a>
+        <a href="{{ shop.shipping_policy.url }}">{{ 'storefront.shipping.details' | t }}</a>
+        <a href="{{ shop.refund_policy.url }}">{{ 'storefront.returns.details' | t }}</a>
+      </nav>
+    </div>
+    {% form 'contact', id: 'ContactForm', class: 'kk-contact__form' %}
+      {% if form.posted_successfully? %}<p role="status" tabindex="-1">{{ 'storefront.contact.success' | t }}</p>{% endif %}
+      {% if form.errors %}<div role="alert" tabindex="-1">{{ form.errors | default_errors }}</div>{% endif %}
+      <label for="ContactName">{{ 'storefront.contact.name' | t }}</label>
+      <input id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name | default: customer.name | escape }}" required>
+      <label for="ContactEmail">{{ 'storefront.contact.email' | t }}</label>
+      <input id="ContactEmail" type="email" name="contact[email]" autocomplete="email" value="{{ form.email | default: customer.email | escape }}" required {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}>
+      <label for="ContactOrder">{{ 'storefront.contact.order' | t }}</label>
+      <input id="ContactOrder" type="text" name="contact[order_number]" value="{{ form.order_number | escape }}">
+      <label for="ContactMessage">{{ 'storefront.contact.message' | t }}</label>
+      <textarea id="ContactMessage" name="contact[body]" rows="6" required>{{ form.body | escape }}</textarea>
+      <button class="kk-btn kk-btn--primary" type="submit">{{ 'storefront.contact.send' | t }}</button>
+    {% endform %}
+  </div>
+</section>
+{% schema %}
+{ "name": "Contact support", "settings": [], "enabled_on": {"templates": ["page"]} }
+{% endschema %}

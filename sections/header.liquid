@@ -20,11 +20,15 @@
     <nav class="kk-header__nav" aria-label="Primary">
       <ul class="kk-nav" data-nav-root>
         {%- for link in section.settings.menu.links -%}
+          {%- assign navigation_title = link.title -%}
+          {%- if link.url contains '/collections/tapered-jogger-sweatpants' and link.title == 'Shorts & Joggers' -%}
+            {%- assign navigation_title = 'storefront.navigation.joggers' | t -%}
+          {%- endif -%}
           {%- if link.links.size > 0 -%}
             {%- assign panel_id = 'kk-mega-' | append: section.id | append: '-' | append: forloop.index -%}
             <li class="kk-nav__item kk-nav__item--has">
-              <a href="{{ link.url }}" class="kk-nav__link kk-header__link"{% if link.active %} aria-current="page"{% elsif link.child_active %} data-child-active="true"{% endif %}>{{ link.title | escape }}</a>
-              <button type="button" class="kk-nav__toggle" aria-expanded="false" aria-controls="{{ panel_id }}" aria-label="Open {{ link.title | escape }} menu" data-mega-toggle>
+              <a href="{{ link.url }}" class="kk-nav__link kk-header__link"{% if link.active %} aria-current="page"{% elsif link.child_active %} data-child-active="true"{% endif %}>{{ navigation_title | escape }}</a>
+              <button type="button" class="kk-nav__toggle" aria-expanded="false" aria-controls="{{ panel_id }}" aria-label="Open {{ navigation_title | escape }} menu" data-mega-toggle>
                 <svg class="kk-nav__chev" width="11" height="7" viewBox="0 0 11 7" aria-hidden="true" focusable="false"><path d="M1 1l4.5 4.5L10 1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
 
@@ -71,7 +75,7 @@
             </li>
           {%- else -%}
             <li class="kk-nav__item">
-              <a href="{{ link.url }}" class="kk-nav__link kk-header__link"{% if link.active %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+              <a href="{{ link.url }}" class="kk-nav__link kk-header__link"{% if link.active %} aria-current="page"{% endif %}>{{ navigation_title | escape }}</a>
             </li>
           {%- endif -%}
         {%- endfor -%}
@@ -122,14 +126,19 @@
   {%- endif -%}
 
   <div class="kk-header__mobile" id="kk-mobile-{{ section.id }}" data-mobile-nav hidden>
+    {% render 'shop-navigation' %}
     <ul class="kk-mnav">
       {%- for link in section.settings.menu.links -%}
+          {%- assign navigation_title = link.title -%}
+          {%- if link.url contains '/collections/tapered-jogger-sweatpants' and link.title == 'Shorts & Joggers' -%}
+            {%- assign navigation_title = 'storefront.navigation.joggers' | t -%}
+          {%- endif -%}
         <li class="kk-mnav__item">
           {%- if link.links.size > 0 -%}
             {%- assign msub_id = 'kk-msub-' | append: section.id | append: '-' | append: forloop.index -%}
             <div class="kk-mnav__row">
-              <a href="{{ link.url }}" class="kk-mnav__link">{{ link.title | escape }}</a>
-              <button type="button" class="kk-mnav__toggle" aria-expanded="false" aria-controls="{{ msub_id }}" aria-label="Expand {{ link.title | escape }}" data-msub-toggle>
+              <a href="{{ link.url }}" class="kk-mnav__link">{{ navigation_title | escape }}</a>
+              <button type="button" class="kk-mnav__toggle" aria-expanded="false" aria-controls="{{ msub_id }}" aria-label="Expand {{ navigation_title | escape }}" data-msub-toggle>
                 <svg class="kk-nav__chev" width="12" height="8" viewBox="0 0 11 7" aria-hidden="true" focusable="false"><path d="M1 1l4.5 4.5L10 1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
             </div>
@@ -146,7 +155,7 @@
               {%- endfor -%}
             </div>
           {%- else -%}
-            <a href="{{ link.url }}" class="kk-mnav__link">{{ link.title | escape }}</a>
+            <a href="{{ link.url }}" class="kk-mnav__link">{{ navigation_title | escape }}</a>
           {%- endif -%}
         </li>
       {%- endfor -%}

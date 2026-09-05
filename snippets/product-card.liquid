@@ -11,6 +11,7 @@
   Usage: {% render 'product-card', product: product, index: forloop.index, eager_count: 4 %}
 {%- endcomment -%}
 {%- liquid
+  assign resolved_sizes = card_sizes | default: '(max-width:600px) 90vw, (max-width:990px) 50vw, 25vw'
   assign card_index = index | default: 99
   assign eager_budget = eager_count | default: 0
   assign above_fold = false
@@ -29,14 +30,14 @@
   assign on_sale = false
   if product.compare_at_price > product.price
     assign on_sale = true
-    assign save_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
+    assign save_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | floor
   endif
 -%}
 <article class="kk-pc" data-product-id="{{ product.id }}">
   <a class="kk-pc__media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
     {% render 'responsive-image',
        image: product.featured_media.preview_image,
-       sizes: '(max-width:600px) 90vw, (max-width:990px) 50vw, 25vw',
+       sizes: resolved_sizes,
        widths: '300, 450, 600, 900',
        class: 'kk-pc__img',
        alt: product.title,
@@ -50,7 +51,7 @@
     {%- elsif product.tags contains 'Limited Drop' -%}
       <span class="kk-pc__badge kk-pc__badge--gold">Limited Drop</span>
     {%- endif -%}
-    {%- if on_sale -%}<span class="kk-pc__save">Save {{ save_pct }}%</span>{%- endif -%}
+    {%- if on_sale and save_pct > 0 -%}<span class="kk-pc__save">Save {{ save_pct }}%</span>{%- endif -%}
   </a>
   <div class="kk-pc__info">
     {%- if has_rating -%}
@@ -62,13 +63,16 @@
     {%- endif -%}
     <h3 class="kk-pc__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
     <div class="kk-pc__pricerow">
-      <span class="kk-pc__price">{{ product.price | money }}</span>
+      <span class="kk-pc__price">{% if product.price_varies %}{{ 'storefront.product.from' | t }} {% endif %}{{ product.price | money }}</span>
       {%- if on_sale -%}<s class="kk-pc__was">{{ product.compare_at_price | money }}</s>{%- endif -%}
     </div>
-    {%- if product.available -%}
+    {%- if product.available and product.has_only_default_variant == false -%}
+      <a class="kk-btn kk-btn--primary kk-btn--full" href="{{ product.url }}">{{ 'storefront.product.choose' | t }}</a>
+    {%- elsif product.available -%}
     <form method="post" action="{{ routes.cart_add_url }}" class="kk-pc__form" data-quick-add>
       <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
       <button type="submit" class="kk-btn kk-btn--primary kk-btn--full">Add to Cart</button>
+      <p class="kk-form-error" data-cart-error role="alert" hidden></p>
     </form>
     {%- else -%}
     <div class="kk-notify" data-notify>

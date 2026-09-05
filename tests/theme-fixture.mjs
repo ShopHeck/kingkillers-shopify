@@ -1,0 +1,21 @@
+import { Liquid } from 'liquidjs';
+import fs from 'node:fs';
+import path from 'node:path';
+export const root = path.resolve(import.meta.dirname, '..');
+const locale=JSON.parse(fs.readFileSync(path.join(root,'locales/en.default.json'),'utf8'));
+const money=v=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(v)/100);
+// Emulates Shopify-only tags for local regression tests, not an Admin/checkout emulator.
+function prepare(s){return s.replace(/\n  comment\n[\s\S]*?\n  endcomment/g,'').replace(/{%[-]?\s*(schema|doc)\s*[-]?%}[\s\S]*?{%[-]?\s*end\1\s*[-]?%}/g,'').replace(/{%[-]?\s*form\s+'([^']+)'([^%]*?)[-]?%}/g,(_,type,args)=>`<form method="post" action="${type==='product'?'/cart/add':'/contact'}" class="${args.match(/class:\s*'([^']+)'/)?.[1]||''}" id="${args.match(/id:\s*'([^']+)'/)?.[1]||''}">`).replace(/{%[-]?\s*endform\s*[-]?%}/g,'</form>').replace(/{%[-]?\s*paginate\s+[^%]*?[-]?%}/g,'').replace(/{%[-]?\s*endpaginate\s*[-]?%}/g,'');}
+export const engine=new Liquid({root:[path.join(root,'snippets'),path.join(root,'sections')],extname:'.liquid',fs:{existsSync:fs.existsSync,exists:async p=>fs.existsSync(p),readFileSync:p=>prepare(fs.readFileSync(p,'utf8')),readFile:async p=>prepare(fs.readFileSync(p,'utf8')),resolve:(dir,file,ext)=>path.resolve(dir,file.endsWith(ext)?file:file+ext),dirname:path.dirname,sep:path.sep}});
+engine.registerFilter('t',key=>key.split('.').reduce((v,k)=>v?.[k],locale)??`MISSING:${key}`);
+engine.registerFilter('money',money);engine.registerFilter('money_without_currency',v=>(Number(v||0)/100).toFixed(2));
+engine.registerFilter('image_url',(img,...args)=>{const width=args.find(v=>Array.isArray(v)&&v[0]==='width')?.[1];return `${String(img?.src||img?.url||img).replace(/^https?:/,'')}${width?((img?.src||img?.url||String(img)).includes('?')?'&':'?')+'width='+width:''}`;});
+engine.registerFilter('asset_url',x=>'/assets/'+x);engine.registerFilter('time_tag',v=>`<time>${v}</time>`);
+engine.registerFilter('default_pagination',()=>'<a href="?page=2">2</a>');engine.registerFilter('link_to_tag',tag=>`<a href="/blogs/news/tagged/${tag}">${tag}</a>`);
+export function productFixture(){
+ const img={src:'https://kingkillers.co/cdn/shop/files/american-flag-athletic-shorts-front.jpg',alt:'Training shorts',width:1200,height:1200};
+ const variants=['M','L','XL'].map((title,i)=>({id:String(101+i),title,option1:title,price:3999+i*100,compare_at_price:4999,available:i!==2,inventory_management:'shopify',inventory_policy:'deny',inventory_quantity:i===2?0:3,url:'/products/test-shorts?variant='+(101+i),sku:'TEST-'+title}));
+ return {id:1,title:'Training Shorts',handle:'test-shorts',url:'/products/test-shorts',type:'Shorts',vendor:'King Killers',description:'<p>Product details for testing.</p>',price:3999,price_varies:true,compare_at_price:4999,available:true,has_only_default_variant:false,variants,selected_or_first_available_variant:variants[1],featured_media:{preview_image:img},images:[img],options_with_values:[{name:'Size'}],tags:[],metafields:{reviews:{},custom:{},judgeme:{}}};
+}
+export function context(overrides={}){const product=productFixture();const handles=['mens-athletic-shorts','tapered-jogger-sweatpants','womens','catalog'];const collections=Object.fromEntries(handles.map(handle=>[handle,{handle,url:'/collections/'+handle}]));return {product,section:{id:'test',settings:{},blocks:[]},shop:{name:'King Killers',url:'https://kingkillers.co',currency:'USD',refund_policy:{url:'/policies/refund-policy'},shipping_policy:{url:'/policies/shipping-policy'},metafields:{judgeme:{}}},cart:{currency:{iso_code:'USD'},items:[],item_count:0},routes:{root_url:'/',cart_url:'/cart',cart_add_url:'/cart/add',product_recommendations_url:'/recommendations/products',all_products_collection_url:'/collections/all'},settings:{free_ship_threshold:100},request:{page_type:'product',locale:{iso_code:'en'}},template:{suffix:''},form:{},customer:{},pages:{},collections,blogs:{news:{url:'/blogs/news'},gear:{url:'/blogs/gear'}},canonical_url:'https://kingkillers.co/products/test-shorts',current_page:1,paginate:{pages:2},...overrides};}
+export async function render(file,ctx=context()){engine.options.globals=ctx;return engine.parseAndRender(prepare(fs.readFileSync(path.join(root,file),'utf8')),ctx);}
