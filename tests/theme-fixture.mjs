@@ -2,7 +2,7 @@ import { Liquid } from 'liquidjs';
 import fs from 'node:fs';
 import path from 'node:path';
 export const root = path.resolve(import.meta.dirname, '..');
-const locale=JSON.parse(fs.readFileSync(path.join(root,'locales/en.default.json'),'utf8'));
+export const locale=JSON.parse(fs.readFileSync(path.join(root,'locales/en.default.json'),'utf8').replace(/^\s*\/\*[\s\S]*?\*\/\s*/,''));
 const money=v=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(v)/100);
 // Emulates Shopify-only tags for local regression tests, not an Admin/checkout emulator.
 function prepare(s){return s.replace(/\n  comment\n[\s\S]*?\n  endcomment/g,'').replace(/{%[-]?\s*(schema|doc)\s*[-]?%}[\s\S]*?{%[-]?\s*end\1\s*[-]?%}/g,'').replace(/{%[-]?\s*form\s+'([^']+)'([^%]*?)[-]?%}/g,(_,type,args)=>`<form method="post" action="${type==='product'?'/cart/add':'/contact'}" class="${args.match(/class:\s*'([^']+)'/)?.[1]||''}" id="${args.match(/id:\s*'([^']+)'/)?.[1]||''}">`).replace(/{%[-]?\s*endform\s*[-]?%}/g,'</form>').replace(/{%[-]?\s*paginate\s+[^%]*?[-]?%}/g,'').replace(/{%[-]?\s*endpaginate\s*[-]?%}/g,'');}
