@@ -21,9 +21,11 @@
     "nap_email": "sales@kingkillers.co",
     "nap_phone": "+1-620-704-7510",
     "twitter_handle": "@kingkillersco",
+    "social_instagram": "https://instagram.com/kingkillersco",
+    "social_tiktok": "https://tiktok.com/@kingkillersco",
+    "theme_color": "#070707",
     "free_ship_threshold": 100,
     "enable_google_font": true,
-    "theme_color": "#070707",
     "sections": {
       "header": {
         "type": "header",
