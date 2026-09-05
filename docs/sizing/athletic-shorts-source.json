@@ -1,0 +1,107 @@
+{
+  "catalogName": "Athletic Shorts - AOP",
+  "supplierSku": "SBMSHA",
+  "catalogUrl": "https://app.subliminator.com/#/editor/62?source=catalog",
+  "verifiedAt": "2026-09-05",
+  "note": "This size guide shows product measurements taken when products are laid flat. Actual product measurements may vary by up to 1\" because they’re custom-made by hand.",
+  "tables": [
+    {
+      "html": "<table class=\"size-table\">\n<thead>\n<tr>\n<th><strong>Inch</strong></th>\n<th>XS</th>\n<th>S</th>\n<th>M</th>\n<th>L</th>\n<th>XL</th>\n<th>2XL</th>\n<th>3XL</th>\n<th>4XL</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<th><strong>1/2 Waist</strong></th>\n<td>13 ½</td>\n<td>14 ½</td>\n<td>15 ½</td>\n<td>16 ½</td>\n<td>17 ½</td>\n<td>18 ½</td>\n<td>19 ½</td>\n<td>20 ½</td>\n</tr>\n<tr>\n<th><strong>1/2 Hips</strong></th>\n<td>20</td>\n<td>21</td>\n<td>22</td>\n<td>23</td>\n<td>24</td>\n<td>25</td>\n<td>26</td>\n<td>27</td>\n</tr>\n<tr>\n<th><strong>Inseam</strong></th>\n<td>6</td>\n<td>6</td>\n<td>6 ½</td>\n<td>6 ½</td>\n<td>7</td>\n<td>7</td>\n<td>7 ½</td>\n<td>7 ½</td>\n</tr>\n<tr>\n<th><strong>Total Length</strong></th>\n<td>16</td>\n<td>16 ½</td>\n<td>17 ½</td>\n<td>18</td>\n<td>19</td>\n<td>19 ½</td>\n<td>20 ½</td>\n<td>21</td>\n</tr>\n</tbody>\n</table>",
+      "text": "INCH\tXS\tS\tM\tL\tXL\t2XL\t3XL\t4XL\n1/2 WAIST\t13 ½\t14 ½\t15 ½\t16 ½\t17 ½\t18 ½\t19 ½\t20 ½\n1/2 HIPS\t20\t21\t22\t23\t24\t25\t26\t27\nINSEAM\t6\t6\t6 ½\t6 ½\t7\t7\t7 ½\t7 ½\nTOTAL LENGTH\t16\t16 ½\t17 ½\t18\t19\t19 ½\t20 ½\t21"
+    },
+    {
+      "html": "<table class=\"size-table\"><thead><tr><th><strong>Centimeters</strong></th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>2XL</th><th>3XL</th><th>4XL</th></tr></thead><tbody><tr><th><strong>1/2 Waist</strong></th><td>34.3</td><td>36.8</td><td>39.3</td><td>41.9</td><td>44.4</td><td>46.9</td><td>49.5</td><td>52</td></tr><tr><th><strong>1/2 Hips</strong></th><td>50.8</td><td>53.3</td><td>55.8</td><td>58.4</td><td>60.9</td><td>63.5</td><td>66</td><td>68.5</td></tr><tr><th><strong>Inseam</strong></th><td>15.2</td><td>15.2</td><td>16.5</td><td>16.5</td><td>17.7</td><td>17.7</td><td>19</td><td>19</td></tr><tr><th><strong>Total Length</strong></th><td>40.6</td><td>41.9</td><td>44.4</td><td>45.7</td><td>48.2</td><td>49.5</td><td>52</td><td>53.3</td></tr></tbody></table>",
+      "text": "CENTIMETERS\tXS\tS\tM\tL\tXL\t2XL\t3XL\t4XL\n1/2 WAIST\t34.3\t36.8\t39.3\t41.9\t44.4\t46.9\t49.5\t52\n1/2 HIPS\t50.8\t53.3\t55.8\t58.4\t60.9\t63.5\t66\t68.5\nINSEAM\t15.2\t15.2\t16.5\t16.5\t17.7\t17.7\t19\t19\nTOTAL LENGTH\t40.6\t41.9\t44.4\t45.7\t48.2\t49.5\t52\t53.3"
+    }
+  ],
+  "products": [
+    {
+      "handle": "red-leopard-print-athletic-shorts",
+      "skuPrefix": "SBMSHA-438269"
+    },
+    {
+      "handle": "american-flag-athletic-shorts",
+      "skuPrefix": "SBMSHA-440508"
+    },
+    {
+      "handle": "red-camouflage-athletic-shorts",
+      "skuPrefix": "SBMSHA-440510"
+    },
+    {
+      "handle": "gold-paisley-bandana-shorts",
+      "skuPrefix": "SBMSHA-440518"
+    },
+    {
+      "handle": "blood-money-athletic-shorts",
+      "skuPrefix": "SBMSHA-440723"
+    },
+    {
+      "handle": "purple-camo-mid-thigh-gym-shorts",
+      "skuPrefix": "SBMSHA-441042"
+    },
+    {
+      "handle": "neon-green-purple-swirl-gym-shorts",
+      "skuPrefix": "SBMSHA-441044"
+    },
+    {
+      "handle": "woodland-camouflage-athletic-shorts",
+      "skuPrefix": "SBMSHA-441157"
+    },
+    {
+      "handle": "blue-camo-athletic-shorts",
+      "skuPrefix": "SBMSHA-441162"
+    },
+    {
+      "handle": "athletic-shorts-aop",
+      "skuPrefix": "SBMSHA-441355"
+    },
+    {
+      "handle": "pink-green-camouflage-athletic-shorts",
+      "skuPrefix": "SBMSHA-441915"
+    },
+    {
+      "handle": "pineapples-hibiscus-athletic-shorts",
+      "skuPrefix": "SBMSHA-443261"
+    },
+    {
+      "handle": "heavens-gates-athletic-shorts",
+      "skuPrefix": "SBMSHA-443272"
+    },
+    {
+      "handle": "psychedelic-wolves-athletic-shorts",
+      "skuPrefix": "SBMSHA-443276"
+    },
+    {
+      "handle": "neon-werewolf-athletic-shorts",
+      "skuPrefix": "SBMSHA-443288"
+    },
+    {
+      "handle": "retro-tropical-athletic-shorts-for-men",
+      "skuPrefix": "SBMSHA-443571"
+    },
+    {
+      "handle": "blood-sport-athletic-shorts-for-men",
+      "skuPrefix": "SBMSHA-443576"
+    },
+    {
+      "handle": "red-white-blue-snakeskin-athletic-shorts",
+      "skuPrefix": "SBMSHA-443582"
+    },
+    {
+      "handle": "shark-tank-athletic-mid-thigh-shorts",
+      "skuPrefix": "SBMSHA-444357"
+    },
+    {
+      "handle": "patriotic-mid-thigh-cut-athletic-shorts",
+      "skuPrefix": "SBMSHA-447281"
+    },
+    {
+      "handle": "spring-flowers-athletic-shorts",
+      "skuPrefix": "SBMSHA-447694"
+    },
+    {
+      "handle": "oriental-flowers-mid-thigh-athletic-shorts",
+      "skuPrefix": "SBMSHA-447877"
+    }
+  ]
+}

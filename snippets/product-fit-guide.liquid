@@ -1,11 +1,22 @@
 {% doc %}
-  Shows the product-specific measurement image, with a useful fallback to published product details.
+  Shows a merchant chart or verified catalog measurements, with a fallback to published details.
   @param {product} product - Current product.
   @param {section} section - Product section containing the optional chart image.
 {% enddoc %}
 {%- liquid
   assign chart = section.settings.size_chart
-  if chart == blank
+  assign athletic_shorts = false
+  if product.variants.size > 0 and product.variants.size <= 50
+    assign athletic_shorts = true
+    for variant in product.variants
+      assign catalog_prefix = variant.sku | slice: 0, 7
+      unless catalog_prefix == 'SBMSHA-'
+        assign athletic_shorts = false
+        break
+      endunless
+    endfor
+  endif
+  if chart == blank and athletic_shorts == false
     for image in product.images
       assign image_label = image.alt | downcase
       if image_label contains 'size chart' or image_label contains 'size guide'
@@ -20,7 +31,47 @@
     <a href="{{ chart | image_url: width: 2000 }}" target="_blank" rel="noopener" aria-label="{{ 'storefront.fit.open' | t }}">
       {% render 'responsive-image', image: chart, sizes: '(max-width:750px) 90vw, 45vw', widths: '480, 720, 960, 1440', class: 'kk-fit-chart', alt: chart.alt %}
     </a>
+  {%- elsif athletic_shorts -%}
+    <div class="kk-fit-measurements">
+      <p>{{ 'storefront.fit.shorts_guidance' | t }}</p>
+      {%- assign units = 'inches,centimeters' | split: ',' -%}
+      {%- for unit in units -%}
+        {%- liquid
+          assign unit_key = 'storefront.fit.' | append: unit
+          if unit == 'inches'
+            assign measurements = 'XS|13½|20|6|16;S|14½|21|6|16½;M|15½|22|6½|17½;L|16½|23|6½|18;XL|17½|24|7|19;2XL|18½|25|7|19½;3XL|19½|26|7½|20½;4XL|20½|27|7½|21' | split: ';'
+          else
+            assign measurements = 'XS|34.3|50.8|15.2|40.6;S|36.8|53.3|15.2|41.9;M|39.3|55.8|16.5|44.4;L|41.9|58.4|16.5|45.7;XL|44.4|60.9|17.7|48.2;2XL|46.9|63.5|17.7|49.5;3XL|49.5|66|19|52;4XL|52|68.5|19|53.3' | split: ';'
+          endif
+        -%}
+        <details class="kk-fit-units" {% if forloop.first %}open{% endif %}>
+          <summary>{{ unit_key | t }}</summary>
+          <div class="kk-fit-table-wrap" role="region" aria-label="{{ unit_key | t }}" tabindex="0">
+            <table class="kk-fit-table">
+              <caption>{{ unit_key | t }}</caption>
+              <thead><tr>
+                <th scope="col">{{ 'storefront.fit.size' | t }}</th>
+                <th scope="col">{{ 'storefront.fit.waist_width' | t }}</th>
+                <th scope="col">{{ 'storefront.fit.hip_width' | t }}</th>
+                <th scope="col">{{ 'storefront.fit.inseam' | t }}</th>
+                <th scope="col">{{ 'storefront.fit.length' | t }}</th>
+              </tr></thead>
+              <tbody>
+                {%- for measurement in measurements -%}
+                  {%- assign values = measurement | split: '|' -%}
+                  <tr>
+                    <th scope="row">{{ values[0] }}</th>
+                    <td>{{ values[1] }}</td><td>{{ values[2] }}</td><td>{{ values[3] }}</td><td>{{ values[4] }}</td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      {%- endfor -%}
+      <p class="kk-fit-note">{{ 'storefront.fit.shorts_tolerance' | t }}</p>
+    </div>
   {%- endif -%}
-  <p>{{ 'storefront.fit.guidance' | t }}</p>
+  {%- if chart != blank or athletic_shorts == false -%}<p>{{ 'storefront.fit.guidance' | t }}</p>{%- endif -%}
   <p><a href="#product-details">{{ 'storefront.fit.details' | t }}</a> · <a href="{{ pages.contact.url | default: '/pages/contact' }}">{{ 'storefront.fit.help' | t }}</a></p>
 </div>

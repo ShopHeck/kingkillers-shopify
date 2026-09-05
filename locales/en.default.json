@@ -56,7 +56,16 @@
       "open": "Open the full size chart in a new tab",
       "guidance": "Compare the measurements for this exact product with a similar garment that fits you well. Lay the garment flat to measure it; sizing can differ between styles. Check the chart’s units and whether it lists garment or body measurements.",
       "details": "View product details and measurements",
-      "help": "Ask us about fit"
+      "help": "Ask us about fit",
+      "shorts_guidance": "Measure a pair of shorts that fits you well, laid flat. Waist width and hip width are measured across the garment, not around your body. Measure the inseam from the crotch to the hem and total length from the top of the waistband to the hem.",
+      "shorts_tolerance": "These are garment measurements, not body measurements. Handmade production can result in a variation of up to 1 inch (2.54 cm).",
+      "inches": "Measurements in inches",
+      "centimeters": "Measurements in centimeters",
+      "size": "Size",
+      "waist_width": "Waist width",
+      "hip_width": "Hip width",
+      "inseam": "Inseam",
+      "length": "Total length"
     },
     "contact": {
       "eyebrow": "In your corner",
