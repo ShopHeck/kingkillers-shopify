@@ -29,7 +29,10 @@
     if hung >= limit
       break
     endif
-    if product.gift_card? or product.featured_media == blank
+    if product.gift_card?
+      continue
+    endif
+    if product.metafields.custom.rack_image.value == blank and product.featured_media == blank
       continue
     endif
     assign ptype = product.type | downcase
@@ -51,6 +54,8 @@
   assign total_pad = hung | prepend: '00' | slice: -2, 2
 -%}
 
+{%- comment -%} Nothing to hang (e.g. drop still in draft): render nothing on the storefront. {%- endcomment -%}
+{%- if hung > 0 or request.design_mode -%}
 <section class="kk-rack kk-rack--{{ section.settings.scheme }}" data-kk-rack aria-labelledby="rack-{{ section.id }}">
   <svg width="0" height="0" class="kk-rack__defs" aria-hidden="true" focusable="false">
     <symbol id="kk-hanger-{{ section.id }}" viewBox="0 0 120 44">
@@ -74,7 +79,8 @@
             {%- assign pid = product.id | append: '' -%}
             {%- unless rack_ids contains pid -%}{%- continue -%}{%- endunless -%}
             {%- assign n = n | plus: 1 -%}
-            {%- assign rack_img = product.metafields.custom.rack_image.value | default: product.featured_media.preview_image -%}
+            {%- assign rack_ref = product.metafields.custom.rack_image.value -%}
+            {%- assign rack_img = rack_ref.preview_image | default: rack_ref | default: product.featured_media.preview_image -%}
             {%- assign cutout = false -%}{%- if product.metafields.custom.rack_image.value != blank -%}{%- assign cutout = true -%}{%- endif -%}
             <li class="kk-rack__item" style="--i:{{ n }}">
               <a class="kk-rack__garment{% unless cutout %} is-flat{% endunless %}" href="{{ product.url }}" data-rack-open="{{ n | minus: 1 }}" data-rack-name="{{ product.title | escape }}" data-product-id="{{ product.id }}">
@@ -124,7 +130,8 @@
             {%- assign pid = product.id | append: '' -%}
             {%- unless rack_ids contains pid -%}{%- continue -%}{%- endunless -%}
             {%- assign n = n | plus: 1 -%}
-            {%- assign rack_img = product.metafields.custom.rack_image.value | default: product.featured_media.preview_image -%}
+            {%- assign rack_ref = product.metafields.custom.rack_image.value -%}
+            {%- assign rack_img = rack_ref.preview_image | default: rack_ref | default: product.featured_media.preview_image -%}
             {%- assign n_pad = n | prepend: '00' | slice: -2, 2 -%}
             <article class="kk-rack__slide{% if product.metafields.custom.rack_image.value == blank %} is-flat{% endif %}" data-rack-slide hidden aria-roledescription="slide" aria-label="{{ n }} / {{ hung }}">
               <div class="kk-rack__hero">
@@ -170,6 +177,7 @@
     </dialog>
   {%- endif -%}
 </section>
+{%- endif -%}
 {%- endpaginate -%}
 {%- elsif request.design_mode -%}
   <p class="kk-rack__empty">Choose a collection with apparel to hang on the rack.</p>
@@ -186,7 +194,7 @@
     { "type": "text", "id": "heading", "label": "Heading", "info": "Defaults to the collection title." },
     { "type": "collection", "id": "collection", "label": "Collection" },
     { "type": "range", "id": "products_to_show", "label": "Garments on the rack", "min": 4, "max": 24, "step": 1, "default": 12 },
-    { "type": "text", "id": "exclude_types", "label": "Skip product types containing", "default": "hat, beanie, cap, necklace, pendant, print, flag, supplement", "info": "Comma separated. Keeps non-hangable items off the rail. The first 100 products in the collection are considered." },
+    { "type": "text", "id": "exclude_types", "label": "Skip product types containing", "default": "hat, beanie, cap, necklace, pendant, print, flag, supplement, legging, shorts, jogger, pant", "info": "Comma separated. Keeps non-hangable items (accessories, bottoms) off the rail. The first 100 products in the collection are considered." },
     { "type": "select", "id": "scheme", "label": "Stage", "default": "light",
       "options": [ { "value": "light", "label": "Light showroom" }, { "value": "dark", "label": "Dark (blood & bone)" } ],
       "info": "Light blends white-background product photos into the stage. For Dark, add transparent cut-outs in the custom.rack_image metafield." },

@@ -93,8 +93,8 @@
 .kk-rack__slide[data-dir="-1"]{--from:-28px}
 @keyframes kk-rack-in{from{opacity:0;transform:translateX(var(--from,28px)) scale(.97)}to{opacity:1;transform:none}}
 .kk-rack__hero{width:min(420px,70vw);color:var(--rack-hook)}
-.kk-rack__hero .kk-rack__hanger{width:58%}
-.kk-rack__hero-img{width:100%;aspect-ratio:4/5;object-fit:contain;object-position:50% 0;margin-top:-14%}
+.kk-rack__hero .kk-rack__hanger{width:64%}
+.kk-rack__hero-img{width:100%;aspect-ratio:4/5;object-fit:contain;object-position:50% 0;margin-top:-16%}
 .kk-rack--dark .kk-rack__slide.is-flat .kk-rack__hero-img{border-radius:14px}
 .kk-rack__count{margin:18px 0 4px;font-size:.72rem;letter-spacing:.2em;color:var(--rack-dim);font-variant-numeric:tabular-nums}
 .kk-rack__name{margin:0;font-family:var(--display);font-weight:800;font-style:italic;font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:1.15}

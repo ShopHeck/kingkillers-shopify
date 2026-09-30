@@ -92,3 +92,25 @@ test('availability lists every variant', async () => {
   const d = new JSDOM(await render('sections/kk-garment-rack.liquid', ctx)).window.document;
   assert.equal(d.querySelector('[data-rack-slide]').querySelectorAll('.kk-rack__size').length, 24);
 });
+
+test('a rack cut-out alone is enough to hang a product without a featured image', async () => {
+  const ctx = rackContext();
+  const p = ctx.section.settings.collection.products[0];
+  p.featured_media = null;
+  p.metafields = { custom: { rack_image: { value: { preview_image: { src: 'https://kingkillers.co/remi-cutout.png', width: 1200, height: 1500 } } } } };
+  const d = new JSDOM(await render('sections/kk-garment-rack.liquid', ctx)).window.document;
+  const first = d.querySelector('.kk-rack__garment');
+  assert.equal(first.dataset.rackName, 'Remi Long Sleeve');
+  assert.equal(first.classList.contains('is-flat'), false);
+  assert.match(first.querySelector('img').src, /remi-cutout\.png/);
+});
+
+test('nothing hangable renders no section on the storefront, a prompt in the editor', async () => {
+  const ctx = rackContext();
+  ctx.section.settings.collection.products.forEach(p => { p.featured_media = null; p.metafields = { custom: {} }; });
+  let d = new JSDOM(await render('sections/kk-garment-rack.liquid', ctx)).window.document;
+  assert.equal(d.querySelector('[data-kk-rack]'), null);
+  ctx.request.design_mode = true;
+  d = new JSDOM(await render('sections/kk-garment-rack.liquid', ctx)).window.document;
+  assert.match(d.querySelector('.kk-rack__empty').textContent, /Choose a collection/);
+});

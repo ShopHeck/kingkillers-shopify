@@ -271,11 +271,12 @@
         "eyebrow": "On the rack",
         "heading": "Fall / Winter 2026",
         "collection": "fall-winter-2026",
-        "products_to_show": 13,
+        "products_to_show": 12,
         "scheme": "light",
         "cta_label": "Shop the full drop",
         "cta_url": "shopify://collections/fall-winter-2026",
-        "marquee_text": "New drops weekly | Fighter owned | Join the list for early access"
+        "marquee_text": "New drops weekly | Fighter owned | Join the list for early access",
+        "exclude_types": "hat, beanie, cap, necklace, pendant, print, flag, supplement, legging, shorts, jogger, pant"
       }
     }
   },
