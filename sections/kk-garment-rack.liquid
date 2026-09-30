@@ -1,0 +1,193 @@
+{%- comment -%}
+  Garment rack: products hang side-on from a chrome rail. Hover/focus swings a
+  garment to face front and pushes its neighbours apart; clicking opens a focus
+  view (native <dialog>) with prev/next, a counter and per-size availability.
+
+  Images: set a transparent cut-out in the `custom.rack_image` product metafield
+  (file) for the cleanest hang. Without it the featured image is used and, on the
+  light stage, multiply-blended so white studio backgrounds disappear.
+
+  No-JS: every garment is a real link to its product page. kk-rack.js only
+  upgrades the click into the focus view, so crawlers and no-JS users lose nothing.
+{%- endcomment -%}
+{{ 'kk-rack.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'kk-rack.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign coll = section.settings.collection
+  assign limit = section.settings.products_to_show
+  assign skip_types = section.settings.exclude_types | downcase | split: ','
+  assign hung = 0
+  assign rack_ids = ''
+  for product in coll.products
+    if hung >= limit
+      break
+    endif
+    if product.gift_card? or product.featured_media == blank
+      continue
+    endif
+    assign ptype = product.type | downcase
+    assign skip = false
+    for t in skip_types
+      assign tt = t | strip
+      if tt != blank and ptype contains tt
+        assign skip = true
+        break
+      endif
+    endfor
+    if skip
+      continue
+    endif
+    assign rack_ids = rack_ids | append: product.id | append: ','
+    assign hung = hung | plus: 1
+  endfor
+  assign rack_ids = rack_ids | split: ','
+  assign total_pad = hung | prepend: '00' | slice: -2, 2
+-%}
+
+<section class="kk-rack kk-rack--{{ section.settings.scheme }}" data-kk-rack aria-labelledby="rack-{{ section.id }}">
+  <svg width="0" height="0" class="kk-rack__defs" aria-hidden="true" focusable="false">
+    <symbol id="kk-hanger-{{ section.id }}" viewBox="0 0 120 44">
+      <path d="M60 26V15.5c0-2.2 1.3-3.4 3.2-4.6C66.4 8.9 68 7.2 68 4.8 68 2 65.8 0 63 0s-5 2.1-5 4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M6 40 55 24.5c3.3-1 6.7-1 10 0L114 40" fill="none" stroke="var(--rack-wood)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
+  <div class="kk-wrap kk-rack__head">
+    {%- if section.settings.eyebrow != blank -%}<p class="kk-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    <h2 class="kk-rack__title" id="rack-{{ section.id }}">{{ section.settings.heading | default: coll.title | default: 'The rack' }}</h2>
+  </div>
+
+  {%- if hung > 0 -%}
+    <div class="kk-rack__scroller">
+      <div class="kk-rack__track">
+        <div class="kk-rack__rail" aria-hidden="true"></div>
+        <ul class="kk-rack__list" role="list">
+          {%- assign n = 0 -%}
+          {%- for product in coll.products -%}
+            {%- assign pid = product.id | append: '' -%}
+            {%- unless rack_ids contains pid -%}{%- continue -%}{%- endunless -%}
+            {%- assign n = n | plus: 1 -%}
+            {%- assign rack_img = product.metafields.custom.rack_image.value | default: product.featured_media.preview_image -%}
+            {%- assign cutout = false -%}{%- if product.metafields.custom.rack_image.value != blank -%}{%- assign cutout = true -%}{%- endif -%}
+            <li class="kk-rack__item" style="--i:{{ n }}">
+              <a class="kk-rack__garment{% unless cutout %} is-flat{% endunless %}" href="{{ product.url }}" data-rack-open="{{ n | minus: 1 }}" data-rack-name="{{ product.title | escape }}" data-product-id="{{ product.id }}">
+                <svg class="kk-rack__hanger" aria-hidden="true" focusable="false"><use href="#kk-hanger-{{ section.id }}"/></svg>
+                <span class="kk-rack__body">
+                  {% render 'responsive-image', image: rack_img, widths: '240, 360, 480', sizes: '220px', class: 'kk-rack__img', alt: product.title %}
+                </span>
+                <span class="kk-rack__sr">{{ product.title }}, {{ product.price | money }}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+    <p class="kk-rack__label" data-rack-label aria-hidden="true">{{ section.settings.hint }}</p>
+  {%- elsif request.design_mode -%}
+    <p class="kk-rack__empty">Choose a collection with apparel to hang on the rack.</p>
+  {%- endif -%}
+
+  {%- if section.settings.cta_label != blank -%}
+    <div class="kk-rack__foot">
+      <a class="kk-rack__pill" href="{{ section.settings.cta_url | default: coll.url }}">{{ section.settings.cta_label }}</a>
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.marquee_text != blank -%}
+    {%- assign phrases = section.settings.marquee_text | split: '|' -%}
+    {%- capture marquee_items -%}{%- for p in phrases -%}<span class="kk-rack__mq-item">{{ p | strip }}</span><span class="kk-rack__mq-sep">•</span>{%- endfor -%}{%- endcapture -%}
+    {%- if section.settings.marquee_url != blank -%}<a class="kk-rack__marquee" href="{{ section.settings.marquee_url }}">{%- else -%}<div class="kk-rack__marquee">{%- endif -%}
+      <span class="kk-rack__mq-track">
+        <span class="kk-rack__mq-group">{{ marquee_items }}{{ marquee_items }}</span>
+        <span class="kk-rack__mq-group" aria-hidden="true">{{ marquee_items }}{{ marquee_items }}</span>
+      </span>
+    {%- if section.settings.marquee_url != blank -%}</a>{%- else -%}</div>{%- endif -%}
+  {%- endif -%}
+
+  {%- if hung > 0 -%}
+    <dialog class="kk-rack__focus" data-rack-dialog aria-label="{{ section.settings.heading | default: coll.title | escape }}">
+      <button type="button" class="kk-rack__close" data-rack-close>{{ 'storefront.rack.close' | t }}</button>
+      <div class="kk-rack__stage">
+        <button type="button" class="kk-rack__nav kk-rack__nav--prev" data-rack-step="-1" aria-label="{{ 'storefront.rack.previous' | t }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+        </button>
+        <div class="kk-rack__slides">
+          {%- assign n = 0 -%}
+          {%- for product in coll.products -%}
+            {%- assign pid = product.id | append: '' -%}
+            {%- unless rack_ids contains pid -%}{%- continue -%}{%- endunless -%}
+            {%- assign n = n | plus: 1 -%}
+            {%- assign rack_img = product.metafields.custom.rack_image.value | default: product.featured_media.preview_image -%}
+            {%- assign n_pad = n | prepend: '00' | slice: -2, 2 -%}
+            <article class="kk-rack__slide{% if product.metafields.custom.rack_image.value == blank %} is-flat{% endif %}" data-rack-slide hidden aria-roledescription="slide" aria-label="{{ n }} / {{ hung }}">
+              <div class="kk-rack__hero">
+                <svg class="kk-rack__hanger" aria-hidden="true" focusable="false"><use href="#kk-hanger-{{ section.id }}"/></svg>
+                {% render 'responsive-image', image: rack_img, widths: '360, 540, 720, 960', sizes: '(max-width:750px) 72vw, 420px', class: 'kk-rack__hero-img', alt: product.title %}
+              </div>
+              <p class="kk-rack__count">{{ n_pad }} / {{ total_pad }}</p>
+              <h3 class="kk-rack__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+              {%- if section.settings.show_price -%}
+                <p class="kk-rack__price">
+                  {%- if product.price_varies -%}{{ 'storefront.product.from' | t }} {% endif -%}
+                  {{ product.price | money }}
+                  {%- if product.compare_at_price > product.price %} <s>{{ product.compare_at_price | money }}</s>{%- endif -%}
+                </p>
+              {%- endif -%}
+              <details class="kk-rack__avail">
+                <summary class="kk-rack__pill">{{ section.settings.availability_label }}</summary>
+                <ul class="kk-rack__sizes" role="list">
+                  {%- if product.has_only_default_variant -%}
+                    <li><span class="kk-rack__size{% unless product.available %} is-out{% endunless %}">{% if product.available %}{{ 'storefront.rack.in_stock' | t }}{% else %}{{ 'storefront.rack.sold_out' | t }}{% endif %}</span></li>
+                  {%- else -%}
+                    {%- for variant in product.variants limit: 16 -%}
+                      <li>
+                        {%- if variant.available -%}
+                          <a class="kk-rack__size" href="{{ variant.url }}">{{ variant.title }}</a>
+                        {%- else -%}
+                          <span class="kk-rack__size is-out"><s>{{ variant.title }}</s><span class="kk-rack__sr"> — {{ 'storefront.rack.sold_out' | t }}</span></span>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </ul>
+                <a class="kk-rack__shop" href="{{ product.url }}">{{ 'storefront.rack.shop' | t }} →</a>
+              </details>
+            </article>
+          {%- endfor -%}
+        </div>
+        <button type="button" class="kk-rack__nav kk-rack__nav--next" data-rack-step="1" aria-label="{{ 'storefront.rack.next' | t }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+        </button>
+      </div>
+      <p class="kk-rack__live kk-rack__sr" aria-live="polite" data-rack-live></p>
+    </dialog>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "KK Garment Rack",
+  "tag": "div",
+  "class": "kk-rack-section",
+  "enabled_on": { "templates": ["index", "collection", "page"] },
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "On the rack" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Defaults to the collection title." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "label": "Garments on the rack", "min": 4, "max": 24, "step": 1, "default": 12 },
+    { "type": "text", "id": "exclude_types", "label": "Skip product types containing", "default": "hat, beanie, cap, necklace, pendant, print, flag, supplement", "info": "Comma separated. Keeps non-hangable items off the rail." },
+    { "type": "select", "id": "scheme", "label": "Stage", "default": "light",
+      "options": [ { "value": "light", "label": "Light showroom" }, { "value": "dark", "label": "Dark (blood & bone)" } ],
+      "info": "Light blends white-background product photos into the stage. For Dark, add transparent cut-outs in the custom.rack_image metafield." },
+    { "type": "checkbox", "id": "show_price", "label": "Show price in focus view", "default": true },
+    { "type": "text", "id": "hint", "label": "Idle hint under rack", "default": "Hover the rack · click to try it on" },
+    { "type": "text", "id": "availability_label", "label": "Availability button", "default": "See availability" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop the full drop" },
+    { "type": "url", "id": "cta_url", "label": "Button link", "info": "Defaults to the collection." },
+    { "type": "text", "id": "marquee_text", "label": "Ticker text", "default": "New drops weekly | Fighter owned | Join the list for early access", "info": "Separate phrases with |. Leave blank to hide." },
+    { "type": "url", "id": "marquee_url", "label": "Ticker link" }
+  ],
+  "presets": [ { "name": "KK Garment Rack" } ]
+}
+{% endschema %}

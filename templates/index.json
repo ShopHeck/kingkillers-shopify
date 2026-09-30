@@ -264,12 +264,26 @@
         "cta_label": "View All Articles",
         "cta_url": ""
       }
+    },
+    "garment_rack": {
+      "type": "kk-garment-rack",
+      "settings": {
+        "eyebrow": "On the rack",
+        "heading": "Fall / Winter 2026",
+        "collection": "fall-winter-2026",
+        "products_to_show": 13,
+        "scheme": "light",
+        "cta_label": "Shop the full drop",
+        "cta_url": "shopify://collections/fall-winter-2026",
+        "marquee_text": "New drops weekly | Fighter owned | Join the list for early access"
+      }
     }
   },
   "order": [
     "hero",
     "kk_trust_Tf7aHf",
     "fall_winter_2026",
+    "garment_rack",
     "cats",
     "best",
     "entity",

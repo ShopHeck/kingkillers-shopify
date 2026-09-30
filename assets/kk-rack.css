@@ -1,0 +1,126 @@
+/* KK Garment Rack — loaded only by sections/kk-garment-rack.liquid. */
+.kk-rack{
+  --rack-bg:#e8e7e3;--rack-ink:#141416;--rack-dim:#5d5d66;--rack-line:rgba(20,20,22,.22);
+  --rack-wood:#7b4a2c;--rack-hook:#9a9ca3;--rack-accent:var(--blood);--rack-mq-bg:#141416;--rack-mq-ink:#e8e7e3;
+  --slot:50px;--open:220px;--turn:-78deg;--ease:cubic-bezier(.22,.9,.26,1);
+  position:relative;background:var(--rack-bg);color:var(--rack-ink);padding:clamp(56px,7vw,96px) 0 0;overflow:hidden
+}
+.kk-rack--dark{
+  --rack-bg:var(--bg-elev);--rack-ink:var(--ink);--rack-dim:var(--ink-dim);--rack-line:var(--line-strong);
+  --rack-wood:#a0673f;--rack-hook:#c4c6cc;--rack-mq-bg:var(--blood);--rack-mq-ink:#fff
+}
+.kk-rack__defs{position:absolute}
+.kk-rack__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+
+.kk-rack__head{text-align:center}
+.kk-rack__head .kk-eyebrow{justify-content:center}
+.kk-rack__title{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;font-size:clamp(1.6rem,3.6vw,2.6rem);line-height:1;margin:0}
+
+/* ---- Rail + garments ---- */
+.kk-rack__scroller{display:flex;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:28px 0 12px;-webkit-overflow-scrolling:touch}
+.kk-rack__scroller::-webkit-scrollbar{display:none}
+.kk-rack__track{position:relative;margin-inline:auto;padding:0 56px;flex:none}
+.kk-rack__rail{position:absolute;top:0;left:20px;right:20px;height:11px;border-radius:6px;z-index:3;
+  background:linear-gradient(180deg,#fbfbfc 0%,#d9dbe0 30%,#8c9098 58%,#c9ccd2 80%,#f2f3f5 100%);
+  box-shadow:0 3px 6px -2px rgba(0,0,0,.35)}
+.kk-rack__rail::before,.kk-rack__rail::after{content:"";position:absolute;top:-6px;width:14px;height:23px;border-radius:4px;
+  background:linear-gradient(90deg,#b9bcc3,#f5f6f8 45%,#9ea1a8)}
+.kk-rack__rail::before{left:-6px}.kk-rack__rail::after{right:-6px}
+
+.kk-rack__list{display:flex;list-style:none;margin:0;padding:0;align-items:flex-start}
+.kk-rack__item{flex:0 0 var(--slot);min-width:0;perspective:1600px;position:relative;transition:flex-basis .6s var(--ease)}
+.kk-rack__garment{position:relative;display:block;width:var(--open);left:50%;margin-left:calc(var(--open) / -2);padding-top:0;
+  color:var(--rack-hook);text-decoration:none;transform-origin:50% 0;transform:rotateY(var(--turn));
+  transition:transform .6s var(--ease);will-change:transform;-webkit-tap-highlight-color:transparent}
+.kk-rack__garment:focus-visible{outline:none}
+.kk-rack__garment:focus-visible .kk-rack__body{outline:2px solid var(--rack-accent);outline-offset:6px;border-radius:8px}
+.kk-rack__hanger{display:block;width:64%;aspect-ratio:120/44;margin:-6px auto 0;position:relative;z-index:2;overflow:visible}
+.kk-rack__body{display:block;margin-top:-16%;aspect-ratio:4/5;transform-origin:50% 0}
+.kk-rack__img{width:100%;height:100%;object-fit:contain;object-position:50% 0}
+.kk-rack__garment:not(.is-flat) .kk-rack__img{filter:drop-shadow(0 14px 18px rgba(0,0,0,.28))}
+/* 3D transforms isolate each garment, so blend the whole rack onto the stage:
+   white studio backgrounds vanish, cut-outs are unaffected. */
+.kk-rack--light .kk-rack__scroller{mix-blend-mode:multiply}
+.kk-rack--dark .is-flat .kk-rack__img{border-radius:10px}
+
+.kk-rack__item.is-active{flex-basis:calc(var(--open) + 18px);z-index:4}
+.kk-rack__item.is-active .kk-rack__garment{transform:rotateY(0)}
+.kk-rack__item.is-active .kk-rack__body{animation:kk-rack-sway 1.1s var(--ease)}
+@keyframes kk-rack-sway{0%{transform:rotate(2.4deg)}35%{transform:rotate(-1.6deg)}65%{transform:rotate(.7deg)}100%{transform:rotate(0)}}
+/* Natural variation so the rail doesn't look cloned. */
+.kk-rack__item:nth-child(3n+1) .kk-rack__body{rotate:.6deg}
+.kk-rack__item:nth-child(4n+2) .kk-rack__body{rotate:-.5deg}
+.kk-rack__item.is-active .kk-rack__body{rotate:0deg}
+
+.kk-rack__label{min-height:1.4em;margin:6px 16px 0;text-align:center;font-size:.8rem;letter-spacing:.04em;color:var(--rack-dim);transition:opacity .25s}
+.kk-rack__label.is-idle{opacity:.7}
+.kk-rack__empty{text-align:center;color:var(--rack-dim);padding:40px 16px}
+
+.kk-rack__foot{display:flex;justify-content:center;padding:24px 16px clamp(40px,5vw,64px)}
+.kk-rack__pill{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 20px;border:1px solid currentColor;border-radius:999px;
+  font-family:var(--display);font-weight:800;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--rack-ink);text-decoration:none;
+  background:transparent;cursor:pointer;list-style:none;transition:background .2s,color .2s}
+.kk-rack__pill::-webkit-details-marker{display:none}
+.kk-rack__pill:hover{background:var(--rack-ink);color:var(--rack-bg)}
+
+/* ---- Ticker ---- */
+.kk-rack__marquee{display:block;overflow:hidden;white-space:nowrap;background:var(--rack-mq-bg);color:var(--rack-mq-ink);text-decoration:none}
+.kk-rack__mq-track{display:inline-flex;animation:kk-marquee 38s linear infinite;will-change:transform}
+.kk-rack__marquee:hover .kk-rack__mq-track{animation-play-state:paused}
+.kk-rack__mq-group{display:inline-flex;align-items:center;padding:10px 0}
+.kk-rack__mq-item{font-family:var(--display);font-weight:800;font-style:italic;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding:0 22px}
+.kk-rack__mq-sep{opacity:.6}
+
+/* ---- Focus view ---- */
+.kk-rack__focus{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;color:var(--rack-ink);overflow-y:auto;overscroll-behavior:contain}
+/* The tint lives on the dialog (not ::backdrop) so the slide can multiply-blend against it;
+   it must be opaque on the light stage or white photo edges ghost through. */
+.kk-rack__focus::backdrop{background:transparent;-webkit-backdrop-filter:blur(16px) saturate(.5);backdrop-filter:blur(16px) saturate(.5)}
+.kk-rack--light .kk-rack__focus{background:var(--rack-bg)}
+.kk-rack--dark .kk-rack__focus{background:rgba(7,7,7,.86)}
+.kk-rack--light .kk-rack__slides{mix-blend-mode:multiply}
+.kk-rack__focus[open]{display:flex;flex-direction:column}
+.kk-rack__close{position:absolute;top:16px;right:16px;z-index:2;min-height:44px;padding:0 14px;background:none;border:0;color:inherit;cursor:pointer;
+  font-family:var(--display);font-weight:800;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase}
+.kk-rack__stage{flex:1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(8px,4vw,64px);
+  width:100%;max-width:980px;margin:0 auto;padding:64px 16px 40px}
+.kk-rack__nav{width:48px;height:48px;border-radius:50%;border:1px solid var(--rack-line);background:transparent;color:inherit;display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.kk-rack__nav svg{width:20px;height:20px}
+.kk-rack__nav:hover{background:var(--rack-ink);color:var(--rack-bg);border-color:var(--rack-ink)}
+.kk-rack__slides{display:grid;justify-items:center}
+.kk-rack__slide[hidden]{display:none}
+.kk-rack__slide{grid-area:1/1;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;animation:kk-rack-in .45s var(--ease)}
+.kk-rack__slide[data-dir="-1"]{--from:-28px}
+@keyframes kk-rack-in{from{opacity:0;transform:translateX(var(--from,28px)) scale(.97)}to{opacity:1;transform:none}}
+.kk-rack__hero{width:min(420px,70vw);color:var(--rack-hook)}
+.kk-rack__hero .kk-rack__hanger{width:58%}
+.kk-rack__hero-img{width:100%;aspect-ratio:4/5;object-fit:contain;object-position:50% 0;margin-top:-14%}
+.kk-rack--dark .kk-rack__slide.is-flat .kk-rack__hero-img{border-radius:14px}
+.kk-rack__count{margin:18px 0 4px;font-size:.72rem;letter-spacing:.2em;color:var(--rack-dim);font-variant-numeric:tabular-nums}
+.kk-rack__name{margin:0;font-family:var(--display);font-weight:800;font-style:italic;font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:1.15}
+.kk-rack__name a{text-decoration:none}
+.kk-rack__name a:hover{text-decoration:underline;text-underline-offset:4px}
+.kk-rack__price{margin:6px 0 0;font-weight:600;font-size:.95rem}
+.kk-rack__price s{color:var(--rack-dim);font-weight:400;margin-left:6px}
+.kk-rack__avail{margin-top:14px;display:flex;flex-direction:column;align-items:center}
+.kk-rack__avail[open] .kk-rack__pill{background:var(--rack-ink);color:var(--rack-bg)}
+.kk-rack__sizes{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;list-style:none;margin:14px 0 0;padding:0;max-width:420px}
+.kk-rack__size{display:inline-flex;align-items:center;min-height:40px;min-width:44px;justify-content:center;padding:0 12px;border:1px solid var(--rack-line);border-radius:8px;font-size:.8rem;font-weight:600;text-decoration:none;color:inherit}
+a.kk-rack__size:hover{border-color:var(--rack-ink)}
+.kk-rack__size.is-out{color:var(--rack-dim);opacity:.6}
+.kk-rack__shop{margin-top:12px;font-weight:700;font-size:.85rem;color:var(--rack-accent);text-decoration:none}
+.kk-rack__shop:hover{text-decoration:underline}
+html.kk-rack-locked{overflow:hidden}
+
+@media (max-width:749px){
+  .kk-rack{--slot:40px;--open:164px;--turn:-74deg}
+  .kk-rack__track{padding:0 36px}
+  .kk-rack__stage{grid-template-columns:1fr 1fr;align-content:center;row-gap:20px;padding:60px 16px 28px}
+  .kk-rack__slides{grid-column:1/-1;grid-row:1}
+  .kk-rack__nav{grid-row:2;justify-self:center}
+}
+@media (prefers-reduced-motion:reduce){
+  .kk-rack__item,.kk-rack__garment{transition:none}
+  .kk-rack__item.is-active .kk-rack__body,.kk-rack__slide{animation:none}
+  .kk-rack__mq-track{animation:none}
+}
