@@ -277,7 +277,22 @@
         "cta_url": "shopify://collections/fall-winter-2026",
         "marquee_text": "New drops weekly | Fighter owned | Join the list for early access",
         "exclude_types": "hat, beanie, cap, necklace, pendant, print, flag, supplement, legging, shorts, jogger, pant",
-        "initial_front": "middle"
+        "initial_front": "middle",
+        "product_list": [
+          "no-crown-given-heavyweight-hoodie",
+          "stealth-camo-compression-rash-guard",
+          "the-contender-heavyweight-tee",
+          "pretty-dangerous-sports-bra",
+          "pretty-dangerous-cropped-hoodie",
+          "the-contender-sleeveless-hoodie",
+          "pretty-dangerous-pump-cover-tee"
+        ],
+        "sort_order": "available_first",
+        "hide_sold_out": false,
+        "click_action": "focus",
+        "purchase_mode": "quick_add",
+        "label_show_price": true,
+        "show_price": true
       }
     }
   },

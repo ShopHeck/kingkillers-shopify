@@ -40,7 +40,16 @@
       list.addEventListener('pointerleave', function () { activate(initialItem); });
       list.addEventListener('focusout', function (e) { if (!list.contains(e.relatedTarget)) activate(initialItem); });
     }
-    if (initialItem) activate(initialItem);
+    if (initialItem) {
+      activate(initialItem);
+      // On narrow screens the rail scrolls sideways: centre the front-facing garment
+      // so it is actually in view (scrollLeft only, never scrolls the page).
+      var scroller = rack.querySelector('.kk-rack__scroller');
+      if (scroller && scroller.scrollWidth > scroller.clientWidth) {
+        var sr = scroller.getBoundingClientRect(), ir = initialItem.getBoundingClientRect();
+        scroller.scrollLeft += (ir.left + ir.width / 2) - (sr.left + sr.width / 2);
+      }
+    }
 
     // Older browsers without <dialog>: leave the product links alone.
     if (!dialog || typeof dialog.showModal !== 'function' || !slides.length) return;

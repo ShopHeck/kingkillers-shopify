@@ -197,3 +197,55 @@ test('blend is automatic on the light preset only and can be forced', async () =
   ctx.section.settings.photo_blend = 'on';
   assert.ok((await doc(ctx)).querySelector('.kk-rack--blend'));
 });
+
+// End to end with the theme's real cart script (kk.js) and drawer shell from layout/theme.liquid.
+const themeScript = fs.readFileSync(root + '/assets/kk.js', 'utf8');
+const drawerShell = fs.readFileSync(root + '/layout/theme.liquid', 'utf8').match(/<div id="CartDrawer"[\s\S]*?<\/aside>\s*<\/div>/)[0].replace(/{{[^}]*}}/g, '');
+
+async function storefront(settings = {}) {
+  const ctx = rackContext();
+  Object.assign(ctx.section.settings, { purchase_mode: 'quick_add' }, settings);
+  const html = (await render('sections/kk-garment-rack.liquid', ctx)) + drawerShell;
+  const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'https://kingkillers.co/' });
+  const w = dom.window, d = w.document;
+  w.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
+  w.HTMLDialogElement.prototype.close = function () { this.open = false; this.dispatchEvent(new w.Event('close')); };
+  const posts = [];
+  w.fetch = async (url, opts) => {
+    if (String(url).endsWith('cart/add.js')) { posts.push(Object.fromEntries(opts.body.entries())); return { ok: true, json: async () => ({}) }; }
+    return { ok: true, json: async () => ({ items: [], item_count: 1, total_price: 3999 }) };
+  };
+  w.kkStrings = { addError: 'Unable to add' }; w.kkCurrency = w.kkShopCurrency = 'USD';
+  w.eval(themeScript); w.eval(script);
+  await new Promise(r => setTimeout(r));
+  return { w, d, posts, settle: () => new Promise(r => setTimeout(r, 30)) };
+}
+
+test('try-on quick add: pick a size, add to cart, drawer opens and the view closes', async () => {
+  const { w, d, posts, settle } = await storefront();
+  d.querySelectorAll('.kk-rack__garment')[1].dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
+  const dialog = d.querySelector('[data-rack-dialog]');
+  const form = d.querySelector('[data-rack-slide]:not([hidden]) form');
+  const submit = () => form.dispatchEvent(new w.Event('submit', { bubbles: true, cancelable: true }));
+
+  submit(); await settle();
+  assert.equal(posts.length, 0, 'no size chosen: browser validation blocks the add');
+  assert.equal(dialog.open, true);
+
+  form.querySelector('input[value="102"]').checked = true;
+  submit(); await settle();
+  assert.deepEqual(posts, [{ id: '102', quantity: '1' }]);
+  assert.ok(d.getElementById('CartDrawer').classList.contains('is-open'), 'theme cart drawer opened');
+  assert.equal(dialog.open, false, 'try-on view closed so the drawer is visible');
+});
+
+test('a failed add keeps the try-on view open with the error shown', async () => {
+  const { w, d, settle } = await storefront();
+  w.fetch = async () => ({ ok: false, json: async () => ({ description: 'Only 2 left' }) });
+  d.querySelector('.kk-rack__garment').dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
+  const form = d.querySelector('[data-rack-slide]:not([hidden]) form');
+  form.querySelector('input[value="101"]').checked = true;
+  form.dispatchEvent(new w.Event('submit', { bubbles: true, cancelable: true })); await settle();
+  assert.equal(d.querySelector('[data-rack-dialog]').open, true);
+  assert.equal(form.querySelector('[data-cart-error]').textContent, 'Only 2 left');
+});
