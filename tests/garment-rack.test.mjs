@@ -71,3 +71,24 @@ test('modified clicks keep native link behaviour', async () => {
   assert.equal(click.defaultPrevented, false);
   assert.equal(d.querySelector('[data-rack-dialog]').open, false);
 });
+
+test('arrow keys from a focused slide control keep focus inside the dialog', async () => {
+  const { d, w } = await rack();
+  const dialog = d.querySelector('[data-rack-dialog]');
+  d.querySelector('.kk-rack__garment').dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
+  const slides = [...d.querySelectorAll('[data-rack-slide]')];
+  slides[0].querySelector('.kk-rack__name a').focus();
+  d.activeElement.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+  assert.equal(d.activeElement, slides[1].querySelector('.kk-rack__name a'));
+  d.activeElement.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+  assert.equal(slides[2].hidden, false, 'second arrow press still advances');
+  assert.ok(dialog.contains(d.activeElement));
+});
+
+test('availability lists every variant', async () => {
+  const ctx = rackContext();
+  const p = ctx.section.settings.collection.products[0];
+  p.variants = Array.from({ length: 24 }, (_, i) => ({ ...p.variants[0], id: String(500 + i), title: 'V' + i, url: '/v' + i }));
+  const d = new JSDOM(await render('sections/kk-garment-rack.liquid', ctx)).window.document;
+  assert.equal(d.querySelector('[data-rack-slide]').querySelectorAll('.kk-rack__size').length, 24);
+});

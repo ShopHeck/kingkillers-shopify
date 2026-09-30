@@ -13,8 +13,14 @@
 {{ 'kk-rack.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'kk-rack.js' | asset_url }}" defer></script>
 
+{%- comment -%}
+  Paginate so selection sees up to 100 products, not the 50 an unpaginated
+  collection exposes: skipped hats/accessories can't starve the rack.
+{%- endcomment -%}
+{%- assign coll = section.settings.collection -%}
+{%- if coll != blank -%}
+{%- paginate coll.products by 100 -%}
 {%- liquid
-  assign coll = section.settings.collection
   assign limit = section.settings.products_to_show
   assign skip_types = section.settings.exclude_types | downcase | split: ','
   assign hung = 0
@@ -140,7 +146,7 @@
                   {%- if product.has_only_default_variant -%}
                     <li><span class="kk-rack__size{% unless product.available %} is-out{% endunless %}">{% if product.available %}{{ 'storefront.rack.in_stock' | t }}{% else %}{{ 'storefront.rack.sold_out' | t }}{% endif %}</span></li>
                   {%- else -%}
-                    {%- for variant in product.variants limit: 16 -%}
+                    {%- for variant in product.variants -%}
                       <li>
                         {%- if variant.available -%}
                           <a class="kk-rack__size" href="{{ variant.url }}">{{ variant.title }}</a>
@@ -164,6 +170,10 @@
     </dialog>
   {%- endif -%}
 </section>
+{%- endpaginate -%}
+{%- elsif request.design_mode -%}
+  <p class="kk-rack__empty">Choose a collection with apparel to hang on the rack.</p>
+{%- endif -%}
 
 {% schema %}
 {
@@ -176,7 +186,7 @@
     { "type": "text", "id": "heading", "label": "Heading", "info": "Defaults to the collection title." },
     { "type": "collection", "id": "collection", "label": "Collection" },
     { "type": "range", "id": "products_to_show", "label": "Garments on the rack", "min": 4, "max": 24, "step": 1, "default": 12 },
-    { "type": "text", "id": "exclude_types", "label": "Skip product types containing", "default": "hat, beanie, cap, necklace, pendant, print, flag, supplement", "info": "Comma separated. Keeps non-hangable items off the rail." },
+    { "type": "text", "id": "exclude_types", "label": "Skip product types containing", "default": "hat, beanie, cap, necklace, pendant, print, flag, supplement", "info": "Comma separated. Keeps non-hangable items off the rail. The first 100 products in the collection are considered." },
     { "type": "select", "id": "scheme", "label": "Stage", "default": "light",
       "options": [ { "value": "light", "label": "Light showroom" }, { "value": "dark", "label": "Dark (blood & bone)" } ],
       "info": "Light blends white-background product photos into the stage. For Dark, add transparent cut-outs in the custom.rack_image metafield." },

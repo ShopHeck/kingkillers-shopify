@@ -48,6 +48,10 @@
 
     function show(i, dir) {
       i = (i + slides.length) % slides.length;
+      // Hiding a slide that holds focus would drop focus out of the dialog and
+      // strand arrow-key navigation; hand it to the incoming slide instead.
+      var active = document.activeElement;
+      var refocus = active && active.closest && active.closest('[data-rack-slide]');
       slides.forEach(function (s, n) {
         s.hidden = n !== i;
         if (n === i) s.setAttribute('data-dir', dir || 1);
@@ -55,6 +59,10 @@
         if (d && n !== i) d.open = false;
       });
       current = i;
+      if (refocus && refocus !== slides[i]) {
+        var target = slides[i].querySelector('.kk-rack__name a');
+        if (target) target.focus({ preventScroll: true });
+      }
       warm(i + 1); warm(i - 1);
       if (live) live.textContent = slides[i].getAttribute('aria-label') + ' — ' + (slides[i].querySelector('.kk-rack__name') || {}).textContent;
     }
