@@ -105,6 +105,17 @@
       "women": "Women",
       "all": "All gear",
       "rashguards": "Rash guards"
+    },
+    "rack": {
+      "close": "Close",
+      "previous": "Previous garment",
+      "next": "Next garment",
+      "in_stock": "In stock",
+      "sold_out": "Sold out",
+      "shop": "Shop this piece",
+      "add": "Add to cart",
+      "choose": "Choose a size",
+      "sale": "Sale"
     }
   }
 }

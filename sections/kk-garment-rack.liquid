@@ -1,0 +1,118 @@
+{%- comment -%}
+  KK Garment Rack: products hang side-on from a chrome rail. Hover/focus swings a
+  garment to face front and pushes its neighbours apart; clicking opens a focus
+  view (native <dialog>) with prev/next, a counter, price and quick add.
+
+  Source: hand-picked products win; otherwise the collection (first 100
+  products, paginated so skipped items can't starve the rack).
+  Markup lives in snippets/garment-rack.liquid. Image guide:
+  docs/garment-rack-image-spec.md.
+
+  No-JS: every garment is a real link to its product page. kk-rack.js only
+  upgrades the click into the focus view, so crawlers and no-JS users lose nothing.
+{%- endcomment -%}
+{{ 'kk-rack.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'kk-rack.js' | asset_url }}" defer></script>
+
+{%- assign coll = section.settings.collection -%}
+{%- assign more_url = coll.url | default: routes.all_products_collection_url -%}
+{%- if section.settings.product_list != blank -%}
+  {% render 'garment-rack', products: section.settings.product_list, s: section.settings, section_id: section.id, title: coll.title, more_url: more_url %}
+{%- elsif coll != blank -%}
+  {%- paginate coll.products by 100 -%}
+    {% render 'garment-rack', products: coll.products, s: section.settings, section_id: section.id, title: coll.title, more_url: more_url %}
+  {%- endpaginate -%}
+{%- elsif request.design_mode -%}
+  <p class="kk-rack__empty">KK Garment Rack: choose a collection or hand-pick products in the section settings.</p>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KK Garment Rack",
+  "tag": "div",
+  "class": "kk-rack-section",
+  "enabled_on": { "templates": ["index", "collection", "page", "product"] },
+  "settings": [
+    { "type": "header", "content": "Products" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "product_list", "id": "product_list", "label": "Or hand-pick products", "limit": 24, "info": "Overrides the collection. Garments hang in the order picked." },
+    { "type": "range", "id": "products_to_show", "label": "Garments on the rack", "min": 3, "max": 24, "step": 1, "default": 12 },
+    { "type": "select", "id": "sort_order", "label": "Order", "default": "source",
+      "options": [
+        { "value": "source", "label": "Collection / picked order" },
+        { "value": "available_first", "label": "In-stock first, sold out last" }
+      ] },
+    { "type": "checkbox", "id": "hide_sold_out", "label": "Hide sold-out products", "default": false },
+    { "type": "text", "id": "exclude_types", "label": "Skip product types containing", "default": "hat, beanie, cap, necklace, pendant, print, flag, supplement, legging, shorts, jogger, pant",
+      "info": "Comma separated. Keeps non-hangable items (accessories, bottoms) off the rail. Collections: the first 100 products are considered." },
+
+    { "type": "header", "content": "Heading" },
+    { "type": "checkbox", "id": "show_heading", "label": "Show heading", "default": true, "info": "When hidden it stays available to screen readers." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "On the rack" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Defaults to the collection title." },
+    { "type": "richtext", "id": "subheading", "label": "Subheading" },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "select", "id": "scheme", "label": "Color preset", "default": "light",
+      "options": [ { "value": "light", "label": "Light showroom" }, { "value": "dark", "label": "Dark (blood & bone)" } ],
+      "info": "Starting palette. Any color below overrides it." },
+    { "type": "color", "id": "color_bg", "label": "Background" },
+    { "type": "color", "id": "color_text", "label": "Text and outlines" },
+    { "type": "color", "id": "color_accent", "label": "Accent (links, sale badge, focus ring)" },
+    { "type": "color", "id": "color_button", "label": "Add to cart button" },
+    { "type": "color", "id": "color_ticker_bg", "label": "Ticker background" },
+    { "type": "color", "id": "color_ticker_text", "label": "Ticker text" },
+
+    { "type": "header", "content": "Rack" },
+    { "type": "select", "id": "rail_style", "label": "Rail finish", "default": "chrome",
+      "options": [ { "value": "chrome", "label": "Chrome" }, { "value": "black", "label": "Matte black" }, { "value": "brass", "label": "Brass" } ] },
+    { "type": "select", "id": "hanger_style", "label": "Hangers", "default": "wood",
+      "options": [ { "value": "wood", "label": "Walnut wood" }, { "value": "black", "label": "Black" }, { "value": "white", "label": "White" }, { "value": "red", "label": "Blood red" } ] },
+    { "type": "select", "id": "garment_size", "label": "Garment size", "default": "medium",
+      "options": [ { "value": "small", "label": "Small" }, { "value": "medium", "label": "Medium" }, { "value": "large", "label": "Large" } ] },
+    { "type": "range", "id": "spacing", "label": "Spacing between hangers", "min": 30, "max": 90, "step": 2, "unit": "px", "default": 50 },
+    { "type": "range", "id": "rest_angle", "label": "Side-on angle at rest", "min": 30, "max": 85, "step": 1, "unit": "°", "default": 78,
+      "info": "Higher shows more of a side profile, like a real rail." },
+    { "type": "select", "id": "initial_front", "label": "Garment facing front on load", "default": "none",
+      "options": [ { "value": "none", "label": "None" }, { "value": "first", "label": "First" }, { "value": "middle", "label": "Middle" } ],
+      "info": "Signals the rack is interactive, especially on phones without hover." },
+    { "type": "checkbox", "id": "sway", "label": "Swing animation on hover", "default": true },
+    { "type": "select", "id": "photo_blend", "label": "Blend white photo backgrounds", "default": "auto",
+      "options": [ { "value": "auto", "label": "Auto (light preset only)" }, { "value": "on", "label": "On" }, { "value": "off", "label": "Off" } ],
+      "info": "Makes white-background photos look cut out. Only works on light backgrounds; use Off with a dark background and transparent cut-outs." },
+
+    { "type": "header", "content": "Hover label" },
+    { "type": "text", "id": "hint", "label": "Idle hint under rack", "default": "Hover the rack · click to try it on" },
+    { "type": "checkbox", "id": "label_show_price", "label": "Show price in hover label", "default": true },
+
+    { "type": "header", "content": "Shopping" },
+    { "type": "select", "id": "click_action", "label": "Clicking a garment", "default": "focus",
+      "options": [ { "value": "focus", "label": "Opens the try-on view" }, { "value": "product", "label": "Goes to the product page" } ] },
+    { "type": "select", "id": "purchase_mode", "label": "In the try-on view", "default": "quick_add",
+      "options": [
+        { "value": "quick_add", "label": "Pick a size and add to cart" },
+        { "value": "size_links", "label": "Show availability, link to product" },
+        { "value": "link", "label": "Product link only" }
+      ] },
+    { "type": "checkbox", "id": "show_price", "label": "Show price and sale badge", "default": true },
+    { "type": "checkbox", "id": "show_description", "label": "Show short description", "default": false },
+    { "type": "text", "id": "availability_label", "label": "Availability button label", "default": "See availability", "info": "Used with \"Show availability\"." },
+    { "type": "text", "id": "view_label", "label": "Product link label", "default": "View details" },
+
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "cta_label", "label": "Label", "default": "Shop the full drop", "info": "Leave blank to hide." },
+    { "type": "url", "id": "cta_url", "label": "Link", "info": "Defaults to the collection." },
+    { "type": "select", "id": "cta_style", "label": "Style", "default": "outline",
+      "options": [ { "value": "outline", "label": "Outline" }, { "value": "solid", "label": "Solid" } ] },
+
+    { "type": "header", "content": "Ticker" },
+    { "type": "text", "id": "marquee_text", "label": "Text", "default": "New drops weekly | Fighter owned | Join the list for early access", "info": "Separate phrases with |. Leave blank to hide." },
+    { "type": "url", "id": "marquee_url", "label": "Link" },
+
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 56 }
+  ],
+  "presets": [ { "name": "KK Garment Rack", "category": "Products" } ]
+}
+{% endschema %}

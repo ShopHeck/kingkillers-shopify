@@ -264,12 +264,43 @@
         "cta_label": "View All Articles",
         "cta_url": ""
       }
+    },
+    "garment_rack": {
+      "type": "kk-garment-rack",
+      "settings": {
+        "eyebrow": "On the rack",
+        "heading": "Fall / Winter 2026",
+        "collection": "fall-winter-2026",
+        "products_to_show": 12,
+        "scheme": "light",
+        "cta_label": "Shop the full drop",
+        "cta_url": "shopify://collections/fall-winter-2026",
+        "marquee_text": "New drops weekly | Fighter owned | Join the list for early access",
+        "exclude_types": "hat, beanie, cap, necklace, pendant, print, flag, supplement, legging, shorts, jogger, pant",
+        "initial_front": "middle",
+        "product_list": [
+          "no-crown-given-heavyweight-hoodie",
+          "stealth-camo-compression-rash-guard",
+          "the-contender-heavyweight-tee",
+          "pretty-dangerous-sports-bra",
+          "pretty-dangerous-cropped-hoodie",
+          "the-contender-sleeveless-hoodie",
+          "pretty-dangerous-pump-cover-tee"
+        ],
+        "sort_order": "available_first",
+        "hide_sold_out": false,
+        "click_action": "focus",
+        "purchase_mode": "quick_add",
+        "label_show_price": true,
+        "show_price": true
+      }
     }
   },
   "order": [
     "hero",
     "kk_trust_Tf7aHf",
     "fall_winter_2026",
+    "garment_rack",
     "cats",
     "best",
     "entity",
