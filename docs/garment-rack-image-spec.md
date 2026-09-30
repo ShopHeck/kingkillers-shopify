@@ -169,10 +169,11 @@ The effect depends on the garments looking like one photoshoot:
 3. Set the product to **Active** and make sure it's published to the **Online Store** channel.
 4. Also give it a normal featured image for the product page and grid. The rack does not need it, but the rest of the store does.
 
-**Section settings** (*Online Store → Customize → Home page → KK Garment Rack*)
-- **Collection:** `fall-winter-2026`
-- **Stage:** Light showroom. Switch to Dark only after **every** hung product has a cutout.
-- **Garments on the rack:** 12. It shows fewer if fewer qualify.
+**Section settings** (*Online Store → Customize → Home page → KK Garment Rack*; full list in the section itself)
+- **Products → Collection:** `fall-winter-2026`, or **Hand-pick products** to curate the rail in your own order.
+- **Colors → Color preset:** Light showroom. With **Blend white photo backgrounds** on *Auto*, flat photos work here. Switch to Dark, or a dark custom **Background**, only after **every** hung product has a cutout, and set blending to *Off*.
+- **Rack → Garment facing front on load:** *Middle*, so phone shoppers (no hover) see a front-facing garment immediately.
+- **Shopping → In the try-on view:** *Pick a size and add to cart* for the shortest path to checkout.
 
 ---
 

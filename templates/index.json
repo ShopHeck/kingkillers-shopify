@@ -276,7 +276,8 @@
         "cta_label": "Shop the full drop",
         "cta_url": "shopify://collections/fall-winter-2026",
         "marquee_text": "New drops weekly | Fighter owned | Join the list for early access",
-        "exclude_types": "hat, beanie, cap, necklace, pendant, print, flag, supplement, legging, shorts, jogger, pant"
+        "exclude_types": "hat, beanie, cap, necklace, pendant, print, flag, supplement, legging, shorts, jogger, pant",
+        "initial_front": "middle"
       }
     }
   },

@@ -2,6 +2,8 @@
  * KK Garment Rack — progressive enhancement for sections/kk-garment-rack.liquid.
  * Without JS every garment is a plain product link; this adds the swing-to-front
  * hover state, the name label and the <dialog> focus view (arrows, keys, swipe).
+ * Quick-add forms in the focus view are submitted by kk.js ([data-quick-add]);
+ * on success we close the dialog so the cart drawer is visible.
  */
 (function () {
   'use strict';
@@ -18,6 +20,7 @@
     var live = dialog && dialog.querySelector('[data-rack-live]');
     var current = -1;
     var opener = null;
+    var initialItem = items[parseInt(rack.getAttribute('data-rack-initial'), 10)] || null;
 
     function activate(item) {
       items.forEach(function (el) { el.classList.toggle('is-active', el === item); });
@@ -33,9 +36,11 @@
     });
     var list = rack.querySelector('.kk-rack__list');
     if (list) {
-      list.addEventListener('pointerleave', function () { activate(null); });
-      list.addEventListener('focusout', function (e) { if (!list.contains(e.relatedTarget)) activate(null); });
+      // Leaving the rail returns to the merchant's "facing front on load" garment, if any.
+      list.addEventListener('pointerleave', function () { activate(initialItem); });
+      list.addEventListener('focusout', function (e) { if (!list.contains(e.relatedTarget)) activate(initialItem); });
     }
+    if (initialItem) activate(initialItem);
 
     // Older browsers without <dialog>: leave the product links alone.
     if (!dialog || typeof dialog.showModal !== 'function' || !slides.length) return;
@@ -97,8 +102,20 @@
     });
 
     dialog.addEventListener('keydown', function (e) {
+      // Arrow keys move between sizes inside a radio group; leave them alone there.
+      if (e.target.type === 'radio') return;
       if (e.key === 'ArrowRight') { e.preventDefault(); show(current + 1, 1); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); show(current - 1, -1); }
+    });
+
+    [].forEach.call(dialog.querySelectorAll('[data-rack-buy]'), function (form) {
+      form.addEventListener('kk:cart-settled', function () {
+        var error = form.querySelector('[data-cart-error]');
+        if (error && !error.hidden) return;
+        // Added: hand focus to the cart drawer kk.js just opened, not back to the rack.
+        opener = null;
+        close();
+      });
     });
 
     var startX = null, startY = 0;
