@@ -164,6 +164,7 @@
     var btn = form.querySelector('button[type="submit"]');
     if (btn && btn.disabled) return;
     var label = btn ? btn.textContent : '';
+    var submitFocused = btn && d.activeElement === btn;
     var error = form.querySelector('[data-cart-error]');
     if (error) { error.hidden = true; error.textContent = ''; }
     form.dataset.pending = 'true';
@@ -180,7 +181,7 @@
         });
       })
       .then(fetchCart)
-      .then(function () { openDrawer(); })
+      .then(function () { form.dispatchEvent(new CustomEvent('kk:cart-added')); openDrawer(); })
       .catch(function (err) {
         // The add succeeded: do not invite a second add when the drawer refresh fails.
         if (added) { window.location.assign(root + 'cart'); return; }
@@ -191,6 +192,14 @@
         form.removeAttribute('aria-busy');
         if (btn) { btn.disabled = false; btn.textContent = label; }
         form.dispatchEvent(new CustomEvent('kk:cart-settled'));
+        // Native browsers blur a focused button when it is disabled. After an
+        // unsuccessful add, restore it only if focus was lost and the shopper
+        // has not moved to another control, slide, or closed the dialog.
+        var active = d.activeElement;
+        if (!added && submitFocused && btn && !btn.disabled &&
+            (active === d.body || active === d.documentElement) && btn.getClientRects().length) {
+          btn.focus({ preventScroll: true });
+        }
       });
   });
 
@@ -198,11 +207,16 @@
     if (updatingItems[key]) return;
     updatingItems[key] = true;
     var error = drawer && drawer.querySelector('[data-drawer-error]');
+    var focusSelector = null;
     if (error) error.hidden = true;
     if (drawer) {
       var panel = drawer.querySelector('.kk-drawer__panel');
       var item = null;
       drawer.querySelectorAll('[data-key]').forEach(function (el) { if (el.getAttribute('data-key') === key) item = el; });
+      if (item && item.contains(d.activeElement)) {
+        if (d.activeElement.hasAttribute('data-qty-change')) focusSelector = '[data-qty-change="' + d.activeElement.getAttribute('data-qty-change') + '"]';
+        else if (d.activeElement.hasAttribute('data-remove-item')) focusSelector = '[data-remove-item]';
+      }
       if (panel) panel.style.opacity = '0.6';
       if (item) item.querySelectorAll('button').forEach(function (btn) { btn.disabled = true; });
     }
@@ -223,10 +237,21 @@
       .finally(function () {
         if (drawer) {
           var panel = drawer.querySelector('.kk-drawer__panel');
+          var focusTarget = null;
           if (panel) panel.style.opacity = '';
           drawer.querySelectorAll('[data-key]').forEach(function (item) {
-            if (item.getAttribute('data-key') === key) item.querySelectorAll('button').forEach(function (button) { button.disabled = false; });
+            if (item.getAttribute('data-key') === key) {
+              item.querySelectorAll('button').forEach(function (button) { button.disabled = false; });
+              if (focusSelector) focusTarget = item.querySelector(focusSelector);
+            }
           });
+          // Re-rendering a cart line removes its focused button. Keep keyboard
+          // users in the open drawer, without undoing any intervening focus move.
+          var active = d.activeElement;
+          if (focusSelector && drawer.classList.contains('is-open') && (active === d.body || active === d.documentElement)) {
+            focusTarget = focusTarget || drawer.querySelector('button[data-drawer-close]');
+            if (focusTarget) focusTarget.focus({ preventScroll: true });
+          }
         }
         delete updatingItems[key];
       });
